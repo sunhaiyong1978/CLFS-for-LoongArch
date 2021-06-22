@@ -266,12 +266,12 @@ popd
 
 　　以下是本次制作所需补丁文件的下载地址：
 
-　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/patches/automake-1.16.3-add-loongarch.patch  
-　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/patches/gcc-8-loongarch-fix-libdir.patch  
-　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/patches/glibc-2.28-fix-loongarch_pr_uid_and_pr_gid.patch  
-　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/patches/kbd-2.4.0-backspace-1.patch  
-　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/patches/libffi-3.3-add-loongarch.patch  
-　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/patches/systemd-248-add-loongarch64.patch  
+　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/patches/automake-1.16.3-add-loongarch.patch  
+　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/patches/gcc-8-loongarch-fix-libdir.patch  
+　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/patches/glibc-2.28-fix-loongarch_pr_uid_and_pr_gid.patch  
+　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/patches/kbd-2.4.0-backspace-1.patch  
+　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/patches/libffi-3.3-add-loongarch.patch  
+　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/patches/systemd-248-add-loongarch64.patch  
 
 　　都下载完成后，离开"downloads"目录:
 
