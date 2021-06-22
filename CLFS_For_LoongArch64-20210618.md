@@ -382,16 +382,16 @@ pushd ${BUILDDIR}/gcc-8.3.0
 	pushd build
 		AR=ar LDFLAGS="-Wl,-rpath,${SYSDIR}/cross-tools/lib" \
 		../configure --prefix=${SYSDIR}/cross-tools --build=${CROSS_HOST} --host=${CROSS_HOST} \
-					--target=${CROSS_TARGET} --disable-nls \
-					--with-mpfr=${SYSDIR}/cross-tools --with-gmp=${SYSDIR}/cross-tools \
-					--with-mpc=${SYSDIR}/cross-tools \
-					--with-newlib --disable-shared --with-sysroot=${SYSDIR}/sysroot \
-					--disable-decimal-float --disable-libgomp --disable-libitm \
-					--disable-libsanitizer --disable-libquadmath --disable-threads \
-					--disable-target-zlib \
-					--with-system-zlib --enable-checking=release \
-					--with-abi=${MABI} --with-fix-loongson3-llsc --with-arch=loongarch \
-					--enable-languages=c --enable-tls
+		             --target=${CROSS_TARGET} --disable-nls \
+		             --with-mpfr=${SYSDIR}/cross-tools --with-gmp=${SYSDIR}/cross-tools \
+		             --with-mpc=${SYSDIR}/cross-tools \
+		             --with-newlib --disable-shared --with-sysroot=${SYSDIR}/sysroot \
+		             --disable-decimal-float --disable-libgomp --disable-libitm \
+		             --disable-libsanitizer --disable-libquadmath --disable-threads \
+		             --disable-target-zlib \
+		             --with-system-zlib --enable-checking=release \
+		             --with-abi=${MABI} --with-fix-loongson3-llsc --with-arch=loongarch \
+		             --enable-languages=c --enable-tls
 		make all-gcc all-target-libgcc
 		make install-gcc install-target-libgcc
 	popd
@@ -427,11 +427,11 @@ popd
 		BUILD_CC="gcc" CC="${CROSS_TARGET}-gcc ${BUILD64}" \
 		CXX="${CROSS_TARGET}-gcc ${BUILD64}" \
 		AR="${CROSS_TARGET}-ar" RANLIB="${CROSS_TARGET}-ranlib" \
-			../configure --prefix=/usr --host=${CROSS_TARGET} --build=${CROSS_HOST} \
-						--libdir=/usr/lib64 --libexecdir=/usr/lib64/glibc --enable-add-ons \
-						--with-tls --with-binutils=${SYSDIR}/cross-tools/bin \
-						--with-headers=${SYSDIR}/sysroot/usr/include \
-						--enable-obsolete-rpc --disable-werror
+		../configure --prefix=/usr --host=${CROSS_TARGET} --build=${CROSS_HOST} \
+		             --libdir=/usr/lib64 --libexecdir=/usr/lib64/glibc --enable-add-ons \
+		             --with-tls --with-binutils=${SYSDIR}/cross-tools/bin \
+		             --with-headers=${SYSDIR}/sysroot/usr/include \
+		             --enable-obsolete-rpc --disable-werror
 			make
 			make DESTDIR=${SYSDIR}/sysroot install
 		popd
@@ -450,13 +450,13 @@ pushd ${BUILDDIR}/gcc-8.3.0
 	pushd build-all
 		AR=ar LDFLAGS="-Wl,-rpath,${SYSDIR}/cross-tools/lib" \
 		../configure --prefix=${SYSDIR}/cross-tools --build=${CROSS_HOST} \
-			--host=${CROSS_HOST} --target=${CROSS_TARGET} \
-			--with-sysroot=${SYSDIR}/sysroot --with-mpfr=${SYSDIR}/cross-tools \
-			--with-gmp=${SYSDIR}/cross-tools --with-mpc=${SYSDIR}/cross-tools \
-			--enable-__cxa_atexit --enable-threads=posix --with-system-zlib \
-			--enable-libstdcxx-time --enable-checking=release \
-			--with-abi=${MABI} --with-arch=loongarch --enable-tls \
-			--enable-languages=c,c++,fortran,objc,obj-c++,lto
+		             --host=${CROSS_HOST} --target=${CROSS_TARGET} \
+		             --with-sysroot=${SYSDIR}/sysroot --with-mpfr=${SYSDIR}/cross-tools \
+		             --with-gmp=${SYSDIR}/cross-tools --with-mpc=${SYSDIR}/cross-tools \
+		             --enable-__cxa_atexit --enable-threads=posix --with-system-zlib \
+		             --enable-libstdcxx-time --enable-checking=release \
+		             --with-abi=${MABI} --with-arch=loongarch --enable-tls \
+		             --enable-languages=c,c++,fortran,objc,obj-c++,lto
 		make
 		make install
 	popd
@@ -496,8 +496,8 @@ popd
 	tar xvf ${DOWNLOADDIR}/pkg-config-0.29.2.tar.gz -C ${BUILDDIR}/
 	pushd ${BUILDDIR}/pkg-config-0.29.2
 		./configure --prefix=${SYSDIR}/cross-tools \
-					--with-pc_path=${SYSDIR}/sysroot/usr/lib64/pkgconfig:${SYSDIR}/sysroot/usr/share/pkgconfig \
-					--program-prefix=${CROSS_TARGET}- --with-internal-glib --disable-host-tool
+		            --with-pc_path=${SYSDIR}/sysroot/usr/lib64/pkgconfig:${SYSDIR}/sysroot/usr/share/pkgconfig \
+		            --program-prefix=${CROSS_TARGET}- --with-internal-glib --disable-host-tool
 		make
 		make install
 	popd
@@ -555,9 +555,9 @@ pushd ${BUILDDIR}/grub-2.06
 	pushd build
 		TARGET_CC="${CROSS_TARGET}-gcc" \
 		../configure --build=${CROSS_HOST} --host=${CROSS_HOST} \
-			--target=${CROSS_TARGET} --prefix=${SYSDIR}/cross-tools \
-			--program-transform-name=s,grub,${CROSS_TARGET}-grub, \
-			--with-platform=efi --with-utils=host --disable-werror
+		             --target=${CROSS_TARGET} --prefix=${SYSDIR}/cross-tools \
+		             --program-transform-name=s,grub,${CROSS_TARGET}-grub, \
+		             --with-platform=efi --with-utils=host --disable-werror
 		make
 		make install
 	popd
@@ -634,7 +634,7 @@ EOF
 		rm config.guess config.sub
 		automake --add-missing
 		./configure --build=${CROSS_HOST} --host=${CROSS_TARGET} \
-	            --prefix=/usr --libdir=/usr/lib64 --enable-cxx
+	                --prefix=/usr --libdir=/usr/lib64 --enable-cxx
 		make 
 		make DESTDIR=${SYSDIR}/sysroot install
 		rm -v ${SYSDIR}/sysroot/usr/lib64/lib{gmp,gmpxx}.la
