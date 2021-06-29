@@ -43,7 +43,7 @@ export DISTRO_URL=https://mirrors.bfsu.edu.cn/fedora/releases/34/Everything/x86_
 sudo dnf install @core @c-development rpm-build git python3-devel texinfo \
                  zlib-devel xz-lzma-compat gettext-devel perl-FindBin \
                  perl-Pod-Html rpm-devel tcl ncurses-devel openssl-devel bc \
-                 wget meson ninja-build gperf \
+                 wget meson ninja-build gperf rsync \
                  --installroot ${HOME}/la-clfs --disablerepo="*" \
                  --repofrompath base,${DISTRO_URL} \
                  --releasever 34 --nogpgcheck
@@ -53,31 +53,39 @@ sudo dnf install @core @c-development rpm-build git python3-devel texinfo \
 
 　　复制当前系统的域名解析配置文件到新建立的系统中，以便该系统可以访问网络资源。
 
-    cp -a /etc/resolv.conf ${HOME}/la-clfs
+```
+cp -a /etc/resolv.conf ${HOME}/la-clfs/etc/
+```
 
 　　接下来切换到该目录中:
 
-    sudo chroot ${HOME}/la-clfs
+```
+sudo chroot ${HOME}/la-clfs
+```
 
 　　挂载必要的文件系统：
 
-    mount -t proc proc proc
-    mount -t sysfs sys sys
-    mount -t devtmpfs dev dev 
-    mount -t devpts devpts dev/pts 
-    mount -t tmpfs shm dev/shm
+```
+mount -t proc proc proc
+mount -t sysfs sys sys
+mount -t devtmpfs dev dev 
+mount -t devpts devpts dev/pts 
+mount -t tmpfs shm dev/shm
+```
 
 ### 2.2 制作环境的设置
 
 #### 创建必要的目录
 　　使用如下命令创建几个目录，后续的制作过程都将在这些目录中进行。
 
-    export SYSDIR=/opt/mylaos
-    mkdir -pv ${SYSDIR}
-    mkdir -pv ${SYSDIR}/downloads
-    mkdir -pv ${SYSDIR}/build
-    install -dv ${SYSDIR}/cross-tools
-    install -dv ${SYSDIR}/sysroot
+```
+export SYSDIR=/opt/mylaos
+mkdir -pv ${SYSDIR}
+mkdir -pv ${SYSDIR}/downloads
+mkdir -pv ${SYSDIR}/build
+install -dv ${SYSDIR}/cross-tools
+install -dv ${SYSDIR}/sysroot
+```
 
 　　简单说明一下这几个目录的用处：
 
@@ -95,20 +103,25 @@ sudo dnf install @core @c-development rpm-build git python3-devel texinfo \
 
 　　为了防止制作过程中意外的对系统本身造成破坏，创建一个普通用户的账号，后续的制作过程除非需要特殊权限操作，否则对于目标系统的一切操作都使用该用户进行。
 
-    groupadd lauser
-    useradd -s /bin/bash -g lauser -m -k /dev/null lauser
-
+```
+groupadd lauser
+useradd -s /bin/bash -g lauser -m -k /dev/null lauser
+```
 　　设置目录为新创建用户所属：
 
-    chown -Rv lauser ${SYSDIR}
-    chmod -v a+wt ${SYSDIR}/{sysroot,cross-tools,downloads,build}
+```
+chown -Rv lauser ${SYSDIR}
+chmod -v a+wt ${SYSDIR}/{sysroot,cross-tools,downloads,build}
+```
 
 
 ##### 切换到制作用户
 
 　　使用命令切换到新创建的用户：  
 
-    su - lauser
+```
+su - lauser
+```
 
 　　使用“su”命令进行切换时加上“-”参数可以防止切换前的用户环境变量带到新用户环境中。
 
@@ -116,28 +129,31 @@ sudo dnf install @core @c-development rpm-build git python3-devel texinfo \
 
 　　为制作用户设置最精简和必要的环境变量，以帮助后续制作过程的开展，以下为用户的环境变量进行长期设置。
 
-    cat > ~/.bash_profile << "EOF"
-    exec env -i HOME=${HOME} TERM=${TERM} PS1='\u:\w\$ ' /bin/bash
-    EOF
+```
+cat > ~/.bash_profile << "EOF"
+exec env -i HOME=${HOME} TERM=${TERM} PS1='\u:\w\$ ' /bin/bash
+EOF
+```
 
-    cat > ~/.bashrc << "EOF"
-    set +h
-    umask 022
-    export SYSDIR="/opt/mylaos"
-    export BUILDDIR="${SYSDIR}/build"
-    export DOWNLOADDIR="${SYSDIR}/downloads"
-    export LC_ALL=POSIX
-    export CROSS_HOST="$(echo $MACHTYPE | sed "s/$(echo $MACHTYPE | cut -d- -f2)/cross/")"
-    export CROSS_TARGET="loongarch64-unknown-linux-gnu"
-    export MABI="lp64"
-    export BUILD_ARCH="-march=loongarch"
-    export BUILD_MABI="-mabi=${MABI}"
-    export BUILD64="-mabi=lp64"
-    export PATH=${SYSDIR}/cross-tools/bin:/bin:/usr/bin
-    unset CFLAGS
-    unset CXXFLAGS
-    EOF
-
+```
+cat > ~/.bashrc << "EOF"
+set +h
+umask 022
+export SYSDIR="/opt/mylaos"
+export BUILDDIR="${SYSDIR}/build"
+export DOWNLOADDIR="${SYSDIR}/downloads"
+export LC_ALL=POSIX
+export CROSS_HOST="$(echo $MACHTYPE | sed "s/$(echo $MACHTYPE | cut -d- -f2)/cross/")"
+export CROSS_TARGET="loongarch64-unknown-linux-gnu"
+export MABI="lp64"
+export BUILD_ARCH="-march=loongarch"
+export BUILD_MABI="-mabi=${MABI}"
+export BUILD64="-mabi=lp64"
+export PATH=${SYSDIR}/cross-tools/bin:/bin:/usr/bin
+unset CFLAGS
+unset CXXFLAGS
+EOF
+```
 
 　　这里设置了几个环境变量，下面简单介绍这些变量的含义：
 
@@ -153,7 +169,9 @@ sudo dnf install @core @c-development rpm-build git python3-devel texinfo \
 
 　　设置好用户环境配置文件后通过source命令使环境设置生效，使用命令：
 
-    source ~/.bash_profile
+```
+source ~/.bash_profile
+```
 
 
 
@@ -189,11 +207,15 @@ popd
 
 　　为了使用最新的软件包构建目标系统，这可能需要从网络中下载软件包源代码及补丁文件，下载的文件建议存放在“downloads”目录中。
 
-	pushd ${SYSDIR}/downloads
+```
+pushd ${SYSDIR}/downloads
+```
 
 　　然后可以使用wget工具下载相应版本的软件包，例如下载coreutils-8.32这个软件包，可使用命令：
 
-		wget https://ftp.gnu.org/gnu/coreutils/coreutils-8.32.tar.xz
+```
+	wget https://ftp.gnu.org/gnu/coreutils/coreutils-8.32.tar.xz
+```
 
 　　下载后软件包存放在“downloads”目录中。
 
@@ -237,7 +259,7 @@ popd
 　　**Libffi:** https://sourceware.org/pub/libffi/libffi-3.3.tar.gz  
 　　**Libpipeline:** https://download.savannah.gnu.org/releases/libpipeline/libpipeline-1.5.3.tar.gz  
 　　**Libtool:** https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.xz  
-　　**Linux:** *暂无下载*  
+　　**Linux:** ```https://github.com/loongson/linux.git 分支名“loongarch-next”```  
 　　**Linux-Firmware:** https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/linux-firmware-20210511.tar.xz  
 　　**M4:** https://ftp.gnu.org/gnu/m4/m4-1.4.18.tar.xz  
 　　**Make:** https://ftp.gnu.org/gnu/make/make-4.3.tar.gz  
@@ -255,7 +277,7 @@ popd
 　　**Readline:** https://ftp.gnu.org/gnu/readline/readline-8.1.tar.gz  
 　　**Sed:** https://ftp.gnu.org/gnu/sed/sed-4.8.tar.xz  
 　　**Shadow:** https://github.com/shadow-maint/shadow/releases/download/4.8.1/shadow-4.8.1.tar.xz  
-　　**Systemd:** https://github.com/systemd/systemd/archive/v246/systemd-246.tar.gz  
+　　**Systemd:** https://github.com/systemd/systemd/archive/v248/systemd-248.tar.gz  
 　　**Tar:** https://ftp.gnu.org/gnu/tar/tar-1.34.tar.xz  
 　　**Texinfo:** https://ftp.gnu.org/gnu/texinfo/texinfo-6.7.tar.xz  
 　　**Util-Linux:** https://www.kernel.org/pub/linux/utils/util-linux/v2.36/util-linux-2.36.2.tar.xz  
@@ -275,7 +297,9 @@ popd
 
 　　都下载完成后，离开"downloads"目录:
 
-	popd
+```
+popd
+```
 
 
 ## 3 制作交叉工具链及相关工具
@@ -286,15 +310,24 @@ popd
 　　Linux内核需要进行扩充式移植的软件包，在没有软件官方支持的情况下需要专门的获取代码的方式进行，以下是获取方式：
 
 ```
-略
+git clone https://github.com/loongson/linux.git -b loongarch-next --depth 1
+pushd linux
+git archive --format=tar --output ../linux-5.13.0.tar "loongarch-next"
+popd
+mkdir linux-5.13.0
+pushd linux-5.13.0
+tar xvf ../linux-5.13.0.tar
+popd
+tar -czf ${DOWNLOADDIR}/linux-5.13.0.tar.gz linux-5.13.0
+
 ```
 
 * 制作步骤  
 　　按以下步骤制作Linux内核头文件并安装到目标系统目录中。
 
 ```
-tar xvf ${DOWNLOADDIR}/linux-4.19.167.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-4.19.167
+tar xvf ${DOWNLOADDIR}/linux-5.13.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-5.13.0
 	make mrproper
 	make ARCH=loongarch INSTALL_HDR_PATH=dest headers_install
 	find dest/include -name '.*' -delete
@@ -335,33 +368,38 @@ popd
 ### 3.3 GMP
 　　制作交叉工具链中所使用的GMP软件包。
 
-	tar xvf ${DOWNLOADDIR}/gmp-6.2.1.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/gmp-6.2.1
-		./configure --prefix=${SYSDIR}/cross-tools --enable-cxx --disable-static
-		make
-		make install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/gmp-6.2.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gmp-6.2.1
+	./configure --prefix=${SYSDIR}/cross-tools --enable-cxx --disable-static
+	make
+	make install
+popd
+```
 
 ### 3.4 MPFR
 　　制作交叉工具链中所使用的MPFR软件包。  
 
-	tar xvf ${DOWNLOADDIR}/mpfr-4.1.0.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/mpfr-4.1.0
-		./configure --prefix=${SYSDIR}/cross-tools --disable-static --with-gmp=${SYSDIR}/cross-tools
-		make
-		make install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/mpfr-4.1.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/mpfr-4.1.0
+	./configure --prefix=${SYSDIR}/cross-tools --disable-static --with-gmp=${SYSDIR}/cross-tools
+	make
+	make install
+popd
+```
 
 ### 3.5 MPC
 　　制作交叉工具链中所使用的MPC软件包。
 
-	tar xvf ${DOWNLOADDIR}/mpc-1.2.1.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/mpc-1.2.1 
-		./configure --prefix=${SYSDIR}/cross-tools --disable-static --with-gmp=${SYSDIR}/cross-tools
-		make
-		make install
-		popd
-
+```
+tar xvf ${DOWNLOADDIR}/mpc-1.2.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/mpc-1.2.1 
+	./configure --prefix=${SYSDIR}/cross-tools --disable-static --with-gmp=${SYSDIR}/cross-tools
+	make
+	make install
+popd
+```
 
 ### 3.6 交叉编译器之GCC（精简版）
 * 代码准备  
@@ -471,60 +509,71 @@ popd
 ### 3.9 File
 　　File软件包的官方最新版已经集成了LoongArch的支持，可以识别出LoongArch架构的二进制文件，因此制作时使用5.40以上的版本。
 
-	tar xvf ${DOWNLOADDIR}/file-5.40.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/file-5.40
-		./configure --prefix=${SYSDIR}/cross-tools
-		make
-		make install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/file-5.40.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/file-5.40
+	./configure --prefix=${SYSDIR}/cross-tools
+	make
+	make install
+popd
+```
 
 ### 3.10 Automake
 　　Automake软件包中提供了许多软件包集成用来生成Makefile文件的脚本，但该脚本目标尚未增加对LoongArch架构的支持，因此需要对软件包打补丁文件来增加支持，制作步骤如下：
 
-	tar xvf ${DOWNLOADDIR}/automake-1.16.3.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/automake-1.16.3
-		patch -Np1 -i ${DOWNLOADDIR}/automake-1.16.3-add-loongarch.patch
-		./configure --prefix=${SYSDIR}/cross-tools
-		make
-		make install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/automake-1.16.3.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/automake-1.16.3
+	patch -Np1 -i ${DOWNLOADDIR}/automake-1.16.3-add-loongarch.patch
+	./configure --prefix=${SYSDIR}/cross-tools
+	make
+	make install
+popd
+```
+
 　　打上补丁并安装到交叉工具链的目录中，这样当后续有软件包需要更新脚本文件时就可以通过本次安装的Automake中的脚本文件来进行替换。
 
 ### 3.11 Pkg-Config
 　　为了能在交叉编译目标系统的过程中使用目标系统中已经安装的“pc”文件，我们在交叉工具链的目录中安装一个专门用来从目标系统目录中的查询“pc”文件的pkg-config命令，制作过程如下：
 
-	tar xvf ${DOWNLOADDIR}/pkg-config-0.29.2.tar.gz -C ${BUILDDIR}/
-	pushd ${BUILDDIR}/pkg-config-0.29.2
-		./configure --prefix=${SYSDIR}/cross-tools \
-		            --with-pc_path=${SYSDIR}/sysroot/usr/lib64/pkgconfig:${SYSDIR}/sysroot/usr/share/pkgconfig \
-		            --program-prefix=${CROSS_TARGET}- --with-internal-glib --disable-host-tool
-		make
-		make install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/pkg-config-0.29.2.tar.gz -C ${BUILDDIR}/
+pushd ${BUILDDIR}/pkg-config-0.29.2
+	./configure --prefix=${SYSDIR}/cross-tools \
+	            --with-pc_path=${SYSDIR}/sysroot/usr/lib64/pkgconfig:${SYSDIR}/sysroot/usr/share/pkgconfig \
+	            --program-prefix=${CROSS_TARGET}- --with-internal-glib --disable-host-tool
+	make
+	make install
+popd
+```
 
 ### 3.12 Ninja
 
-	tar xvf ${DOWNLOADDIR}/ninja-1.10.2.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/ninja-1.10.2
-		python3 configure.py --bootstrap
-		install -vm755 ninja ${SYSDIR}/cross-tools/bin/
-	popd
+```
+tar xvf ${DOWNLOADDIR}/ninja-1.10.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/ninja-1.10.2
+	python3 configure.py --bootstrap
+	install -vm755 ninja ${SYSDIR}/cross-tools/bin/
+popd
+```
 
 ### 3.13 Groff
 	编译目标系统的过程中会对Groff版本有一定要求，因此在交叉工具链的目录中安装一个版本较新的Groff。
 
-	tar xvf ${DOWNLOADDIR}/groff-1.22.4.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/groff-1.22.4
-		PAGE=A4 ./configure --prefix=${SYSDIR}/cross-tools
-		make
-		make install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/groff-1.22.4.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/groff-1.22.4
+	PAGE=A4 ./configure --prefix=${SYSDIR}/cross-tools
+	make
+	make install
+popd
+```
 
 ### 3.14 Grub2
 　　为了在交叉编译的环境下可以制作生成LoongArch机器上使用的EFI启动文件，我们在交叉工具链目录中存放一个可以生成目标机器EFI的Grub软件包。
 
 * 代码准备  
-　　Glibc需要进行扩充式移植的软件包，在没有软件官方支持的情况下需要专门的获取代码的方式进行，以下是获取方式：
+　　Grub2需要进行扩充式移植的软件包，在没有软件官方支持的情况下需要专门的获取代码的方式进行，以下是获取方式：
 
 ```
 git clone -b "dev-la64" https://github.com/loongarch64/grub.git
@@ -575,14 +624,18 @@ popd
 　　在制作目标系统的过程中会经常遇到configure阶段提示不识别loongarch64架构的字样，这通常是软件包自带的架构探测脚本没有增加对loongarch64架构的识别，因此需要去对该问题进行处理，处理的方式通常有两种：  
 　　1. 删除配置脚本，然后通过automake命令自动将新的探测脚本加入到软件包中，具体的操作方式为：  
 
-    rm config.guess config.sub
-    automake --add-missing
+```
+rm config.guess config.sub
+automake --add-missing
+```
 
 　　这里假定config.guess和config.sub两个脚本文件在软件包的第一级目录下，也可能是在build-aux之类的目录，找到文件并删除，然后使用automake命令的“--add-missing”参数来运行，该参数会自动确认是否缺少探测架构的脚本，如果缺少会从Automake软件包安装的目录中复制过来，因automake运行的是我们在交叉工具链目录中的，所以已经增加了LoongArch架构的判断，这样软件包就可以正常运行了。
 
 　　2.直接替换文件，具体的操作方式为：
 
-    cp ${SYSDIR}/sysroot/usr/share/automake-1.16/config.* config/
+```
+cp ${SYSDIR}/sysroot/usr/share/automake-1.16/config.* config/
+```
 
 　　如果使用automake命令无法解决，可以直接复制Automake软件包安装的脚本文件，以我们安装的Automake-1.16版本为例，从${SYSDIR}/sysroot/usr/share/automake-1.16/中复制config开头的文件覆盖当前要编译的软件包中的同名文件即可，这里假定需要覆盖的文件在config目录中，也可能是在其它目录，可根据需要进行覆盖。
 
@@ -615,270 +668,311 @@ EOF
 ### 4.2 软件包的制作
 
 #### Man-Pages
-	tar xvf ${DOWNLOADDIR}/man-pages-5.11.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/man-pages-5.11
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/man-pages-5.11.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/man-pages-5.11
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 　　Man-Pages软件包没有配置阶段，直接安装到目标系统的目录中即可。
 
 ##### Iana-Etc
-	tar xvf ${DOWNLOADDIR}/iana-etc-20210407.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/iana-etc-20210407
-		cp services protocols ${SYSDIR}/sysroot/etc
-	popd
+```
+tar xvf ${DOWNLOADDIR}/iana-etc-20210407.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/iana-etc-20210407
+	cp services protocols ${SYSDIR}/sysroot/etc
+popd
+```
 　　Iana-Etc软件包无需配置编译，只要将包含的文件复制到目标系统的目录中即可。
 
 #### GMP
-	tar xvf ${DOWNLOADDIR}/gmp-6.2.1.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/gmp-6.2.1
-		rm config.guess config.sub
-		automake --add-missing
-		./configure --build=${CROSS_HOST} --host=${CROSS_TARGET} \
-	                --prefix=/usr --libdir=/usr/lib64 --enable-cxx
-		make 
-		make DESTDIR=${SYSDIR}/sysroot install
-		rm -v ${SYSDIR}/sysroot/usr/lib64/lib{gmp,gmpxx}.la
-	popd
+```
+tar xvf ${DOWNLOADDIR}/gmp-6.2.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gmp-6.2.1
+	rm config.guess config.sub
+	automake --add-missing
+	./configure --build=${CROSS_HOST} --host=${CROSS_TARGET} \
+                --prefix=/usr --libdir=/usr/lib64 --enable-cxx
+	make 
+	make DESTDIR=${SYSDIR}/sysroot install
+	rm -v ${SYSDIR}/sysroot/usr/lib64/lib{gmp,gmpxx}.la
+popd
+```
 　　GMP软件包自带的探测架构脚本不支持LoongArch，因此删除探测脚本并用automake命令重新安装探测脚本。
 
 #### MPFR
-	tar xvf ${DOWNLOADDIR}/mpfr-4.1.0.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/mpfr-4.1.0
-		./configure --build=${CROSS_HOST} --host=${CROSS_TARGET} --prefix=/usr --libdir=/usr/lib64
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-		rm -v ${SYSDIR}/sysroot/usr/lib64/libmpfr.la
-	popd
+```
+tar xvf ${DOWNLOADDIR}/mpfr-4.1.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/mpfr-4.1.0
+	./configure --build=${CROSS_HOST} --host=${CROSS_TARGET} --prefix=/usr --libdir=/usr/lib64
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+	rm -v ${SYSDIR}/sysroot/usr/lib64/libmpfr.la
+popd
+```
 
 #### MPC
-	tar xvf ${DOWNLOADDIR}/mpc-1.2.1.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/mpc-1.2.1
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		./configure --build=${CROSS_HOST} --host=${CROSS_TARGET} --prefix=/usr --libdir=/usr/lib64
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-		rm -v ${SYSDIR}/sysroot/usr/lib64/libmpc.la
-	popd
+```
+tar xvf ${DOWNLOADDIR}/mpc-1.2.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/mpc-1.2.1
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	./configure --build=${CROSS_HOST} --host=${CROSS_TARGET} --prefix=/usr --libdir=/usr/lib64
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+	rm -v ${SYSDIR}/sysroot/usr/lib64/libmpc.la
+popd
+```
 
 #### Zlib
-	tar xvf ${DOWNLOADDIR}/zlib-1.2.11.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/zlib-1.2.11
-		CC="${CROSS_TARGET}-gcc" ./configure --prefix=/usr --libdir=/usr/lib64
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/zlib-1.2.11.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/zlib-1.2.11
+	CC="${CROSS_TARGET}-gcc" ./configure --prefix=/usr --libdir=/usr/lib64
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Binutils
 　　这次编译的Binutils是目标系统中使用的，在交叉编译阶段不会使用到它。
 
-	tar xvf ${DOWNLOADDIR}/binutils-2.31.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/binutils-2.31
-		rm -rf gdb libdecnumber readline sim
-		mkdir build
-		pushd build
-			../configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-			             --host=${CROSS_TARGET} --enable-shared --disable-werror \
-			             --with-system-zlib --enable-64-bit-bfd
-			make tooldir=/usr
-			make DESTDIR=${SYSDIR}/sysroot tooldir=/usr install
-		popd
+```
+tar xvf ${DOWNLOADDIR}/binutils-2.31.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/binutils-2.31
+	rm -rf gdb libdecnumber readline sim
+	mkdir build
+	pushd build
+		../configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+		             --host=${CROSS_TARGET} --enable-shared --disable-werror \
+		             --with-system-zlib --enable-64-bit-bfd
+		make tooldir=/usr
+		make DESTDIR=${SYSDIR}/sysroot tooldir=/usr install
 	popd
+popd
+```
 
 #### GCC
 　　与上面编译的Binutils一样，这次编译的GCC也是在目标系统中使用的编译器，在交叉编译阶段不会使用到它，但是其提供的libgcc、libstdc++等库可以为后续软件包的编译提供链接用的库。
 
-	tar xvf ${DOWNLOADDIR}/gcc-8.3.0.tar.gz -C ${BUILDDIR} 
-	pushd ${BUILDDIR}/gcc-8.3.0
-		patch -Np1 -i ${DOWNLOADDIR}/gcc-8-loongarch-fix-libdir.patch
-		mkdir build
-		pushd build
-			../configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-			             --host=${CROSS_TARGET} --target=${CROSS_TARGET} \
-			             --enable-__cxa_atexit --enable-threads=posix \
-			             --with-system-zlib --enable-libstdcxx-time \
-			             --enable-checking=release --enable-tls \
-			             --with-abi=lp64 --with-arch=loongarch \
-			             --enable-languages=c,c++,fortran,objc,obj-c++,lto
-			make
-			make DESTDIR=${SYSDIR}/sysroot install
-			ln -sv /usr/bin/cpp ${SYSDIR}/sysroot/lib
-			ln -sv gcc ${SYSDIR}/sysroot/usr/bin/cc
-		popd
+```
+tar xvf ${DOWNLOADDIR}/gcc-8.3.0.tar.gz -C ${BUILDDIR} 
+pushd ${BUILDDIR}/gcc-8.3.0
+	patch -Np1 -i ${DOWNLOADDIR}/gcc-8-loongarch-fix-libdir.patch
+	mkdir build
+	pushd build
+		../configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+		             --host=${CROSS_TARGET} --target=${CROSS_TARGET} \
+		             --enable-__cxa_atexit --enable-threads=posix \
+		             --with-system-zlib --enable-libstdcxx-time \
+		             --enable-checking=release --enable-tls \
+		             --with-abi=lp64 --with-arch=loongarch \
+		             --enable-languages=c,c++,fortran,objc,obj-c++,lto
+		make
+		make DESTDIR=${SYSDIR}/sysroot install
+		ln -sv /usr/bin/cpp ${SYSDIR}/sysroot/lib
+		ln -sv gcc ${SYSDIR}/sysroot/usr/bin/cc
 	popd
+popd
+```
 
 　　因在目标系统中使用，所以编译的完整一些，将C、C++以及Fortran等语言的支持加上。
 
 #### Bzip2
-	tar xvf ${DOWNLOADDIR}/bzip2-1.0.8.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/bzip2-1.0.8
-		sed -i.orig -e "/^all:/s/ test//" Makefile
-		make CC=${CROSS_TARGET}-gcc -f Makefile-libbz2_so
-		make clean
-		make CC=${CROSS_TARGET}-gcc
-		make PREFIX=${SYSDIR}/sysroot/usr install
-		cp -v bzip2-shared ${SYSDIR}/sysroot/bin/bzip2
-		cp -av libbz2.so* ${SYSDIR}/sysroot/lib64
-		ln -sfv ../../lib64/libbz2.so.1.0 ${SYSDIR}/sysroot/usr/lib64/libbz2.so
-		rm -v ${SYSDIR}/sysroot/usr/bin/{bunzip2,bzcat,bzip2}
-		ln -sfv bzip2 ${SYSDIR}/sysroot/bin/bunzip2
-		ln -sfv bzip2 ${SYSDIR}/sysroot/bin/bzcat
-		rm -fv ${SYSDIR}/sysroot/usr/lib/libbz2.a
-	popd
+```
+tar xvf ${DOWNLOADDIR}/bzip2-1.0.8.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/bzip2-1.0.8
+	sed -i.orig -e "/^all:/s/ test//" Makefile
+	make CC=${CROSS_TARGET}-gcc -f Makefile-libbz2_so
+	make clean
+	make CC=${CROSS_TARGET}-gcc
+	make PREFIX=${SYSDIR}/sysroot/usr install
+	cp -v bzip2-shared ${SYSDIR}/sysroot/bin/bzip2
+	cp -av libbz2.so* ${SYSDIR}/sysroot/lib64
+	ln -sfv ../../lib64/libbz2.so.1.0 ${SYSDIR}/sysroot/usr/lib64/libbz2.so
+	rm -v ${SYSDIR}/sysroot/usr/bin/{bunzip2,bzcat,bzip2}
+	ln -sfv bzip2 ${SYSDIR}/sysroot/bin/bunzip2
+	ln -sfv bzip2 ${SYSDIR}/sysroot/bin/bzcat
+	rm -fv ${SYSDIR}/sysroot/usr/lib/libbz2.a
+popd
+```
 
 　　由于Bzip2软件包没有configure的配置脚本，因此在编译的时候直接给make命令指定CC参数，该参数用来设置编译程序时使用的编译器命令名，这里设置了交叉编译器的命令名，使得接下来的编译采用交叉编译器进行。
 　　安装Bzip2软件包时因没有DESTDIR参数用来设置安装根目录，所以在PREFIX参数中加入目标系统存放目录的路径。
 
 #### XZ
-	tar xvf ${DOWNLOADDIR}/xz-5.2.5.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/xz-5.2.5
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/xz-5.2.5.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/xz-5.2.5
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Zstd
-	tar xvf ${DOWNLOADDIR}/zstd-1.5.0.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/zstd-1.5.0
-		make CC="${CROSS_TARGET}-gcc" PREFIX=/usr LIBDIR=/usr/lib64
-		make CC="${CROSS_TARGET}-gcc" PREFIX=/usr LIBDIR=/usr/lib64 DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/zstd-1.5.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/zstd-1.5.0
+	make CC="${CROSS_TARGET}-gcc" PREFIX=/usr LIBDIR=/usr/lib64
+	make CC="${CROSS_TARGET}-gcc" PREFIX=/usr LIBDIR=/usr/lib64 DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### File
-	tar xvf ${DOWNLOADDIR}/file-5.40.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/file-5.40
-		rm config.{sub,guess}
-		automake --add-missing
-		./configure --prefix=/usr  --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/file-5.40.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/file-5.40
+	rm config.{sub,guess}
+	automake --add-missing
+	./configure --prefix=/usr  --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Ncurses
-	tar xvf ${DOWNLOADDIR}/ncurses-6.2.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/ncurses-6.2
-		rm config.{sub,guess}
-		automake --add-missing
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-		            --host=${CROSS_TARGET} --with-shared --without-debug \
-		            --without-normal --enable-pc-files \
-		            --with-pkg-config-libdir=/usr/lib64/pkgconfig --enable-widec \
-		            --disable-stripping
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-		
-		for lib in ncurses form panel menu ; do
-		    rm -vf                    ${SYSDIR}/sysroot/usr/lib64/lib${lib}.so
-		    echo "INPUT(-l${lib}w)" > ${SYSDIR}/sysroot/usr/lib64/lib${lib}.so
-		    ln -sfv ${lib}w.pc        ${SYSDIR}/sysroot/usr/lib64/pkgconfig/${lib}.pc
-		done
-		
-		rm -vf  ${SYSDIR}/sysroot/usr/lib64/libcursesw.so
-		echo "INPUT(-lncursesw)" > ${SYSDIR}/sysroot/usr/lib64/libcursesw.so
-		ln -sfv libncurses.so      ${SYSDIR}/sysroot/usr/lib64/libcurses.so
-		rm -fv ${SYSDIR}/sysroot/usr/lib64/libncurses++w.a
-	popd
+```
+tar xvf ${DOWNLOADDIR}/ncurses-6.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/ncurses-6.2
+	rm config.{sub,guess}
+	automake --add-missing
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+	            --host=${CROSS_TARGET} --with-shared --without-debug \
+	            --without-normal --enable-pc-files \
+	            --with-pkg-config-libdir=/usr/lib64/pkgconfig --enable-widec \
+	            --disable-stripping
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+	
+	for lib in ncurses form panel menu ; do
+	    rm -vf                    ${SYSDIR}/sysroot/usr/lib64/lib${lib}.so
+	    echo "INPUT(-l${lib}w)" > ${SYSDIR}/sysroot/usr/lib64/lib${lib}.so
+	    ln -sfv ${lib}w.pc        ${SYSDIR}/sysroot/usr/lib64/pkgconfig/${lib}.pc
+	done
+	
+	rm -vf  ${SYSDIR}/sysroot/usr/lib64/libcursesw.so
+	echo "INPUT(-lncursesw)" > ${SYSDIR}/sysroot/usr/lib64/libcursesw.so
+	ln -sfv libncurses.so      ${SYSDIR}/sysroot/usr/lib64/libcurses.so
+	rm -fv ${SYSDIR}/sysroot/usr/lib64/libncurses++w.a
+popd
 
-	cp  ${SYSDIR}/sysroot/usr/bin/ncursesw6-config ${SYSDIR}/cross-tools/bin/
-	sed -i "s@-L\$libdir@@g" ${SYSDIR}/cross-tools/bin/ncursesw6-config
-
+cp  ${SYSDIR}/sysroot/usr/bin/ncursesw6-config ${SYSDIR}/cross-tools/bin/
+sed -i "s@-L\$libdir@@g" ${SYSDIR}/cross-tools/bin/ncursesw6-config
+```
 　　在安装完目标系统的Ncurses后，复制了一个ncursesw6-config脚本命令到交叉编译目录中，这是因为后续编译一些软件包时会调用该命令来获取安装到目标系统中的Nucrses库链接信息，而如果主系统中的库与目标系统中的库链接不一致可能导致链接失败，因此提供一个可以正确链接信息的脚本是有效的解决方案。
 
 #### Readline
-	tar xvf ${DOWNLOADDIR}/readline-8.1.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/readline-8.1
-		sed -i '/MV.*old/d' Makefile.in
-		sed -i '/{OLDSUFF}/c:' support/shlib-install
-		rm support/config.{sub,guess}
-		automake --add-missing
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET} \
-					--disable-static --with-curses
-		make SHLIB_LIBS="-lncursesw"
-		make SHLIB_LIBS="-lncursesw" DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/readline-8.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/readline-8.1
+	sed -i '/MV.*old/d' Makefile.in
+	sed -i '/{OLDSUFF}/c:' support/shlib-install
+	rm support/config.{sub,guess}
+	automake --add-missing
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET} \
+				--disable-static --with-curses
+	make SHLIB_LIBS="-lncursesw"
+	make SHLIB_LIBS="-lncursesw" DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 　　因交叉编译的原因，Redaline的配置脚本无法正确的探测目标系统中安装的Ncurses软件包，因此在配置中加入```--with-curses```参数保证加入Ncurses的支持以及在编译阶段加入```SHLIB_LIBS="-lncursesw"```以保证正确链接库文件。
 
 #### M4
-	tar xvf ${DOWNLOADDIR}/m4-1.4.18.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/m4-1.4.18
-		sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
-		echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
-		./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/m4-1.4.18.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/m4-1.4.18
+	sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
+	echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
+	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### BC
-	tar xvf ${DOWNLOADDIR}/bc-4.0.2.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/bc-4.0.2
-		CC="${CROSS_TARGET}-gcc" HOSTCC="gcc" ./configure --prefix=/usr
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/bc-4.0.2.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/bc-4.0.2
+	CC="${CROSS_TARGET}-gcc" HOSTCC="gcc" ./configure --prefix=/usr
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Flex
-	tar xvf ${DOWNLOADDIR}/flex-2.6.4.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/flex-2.6.4
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-		            --host=${CROSS_TARGET} --disable-static
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-		ln -sv flex ${SYSDIR}/sysroot/usr/bin/lex
-	popd
+```
+tar xvf ${DOWNLOADDIR}/flex-2.6.4.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/flex-2.6.4
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+	            --host=${CROSS_TARGET} --disable-static
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+	ln -sv flex ${SYSDIR}/sysroot/usr/bin/lex
+popd
+```
 
 #### Attr
-	tar xvf ${DOWNLOADDIR}/attr-2.5.1.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/attr-2.5.1
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-		            --host=${CROSS_TARGET} --disable-static --sysconfdir=/etc
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-		rm ${SYSDIR}/sysroot/usr/lib64/libattr.la
-	popd
+```
+tar xvf ${DOWNLOADDIR}/attr-2.5.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/attr-2.5.1
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+	            --host=${CROSS_TARGET} --disable-static --sysconfdir=/etc
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+	rm ${SYSDIR}/sysroot/usr/lib64/libattr.la
+popd
+```
 
 #### Acl
-	tar xvf ${DOWNLOADDIR}/acl-2.3.1.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/acl-2.3.1
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-		            --host=${CROSS_TARGET} --disable-static
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-		rm ${SYSDIR}/sysroot/usr/lib64/libacl.la
-	popd
+```
+tar xvf ${DOWNLOADDIR}/acl-2.3.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/acl-2.3.1
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+	            --host=${CROSS_TARGET} --disable-static
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+	rm ${SYSDIR}/sysroot/usr/lib64/libacl.la
+popd
+```
 
 #### Libcap
-	tar xvf ${DOWNLOADDIR}/libcap-2.49.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/libcap-2.49
-		make CROSS_COMPILE="${CROSS_TARGET}-" BUILD_CC="gcc" GOLANG=no prefix=/usr lib=lib64
-		make CROSS_COMPILE="${CROSS_TARGET}-" BUILD_CC="gcc" GOLANG=no prefix=/usr lib=lib64 \
-			 DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/libcap-2.49.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libcap-2.49
+	make CROSS_COMPILE="${CROSS_TARGET}-" BUILD_CC="gcc" GOLANG=no prefix=/usr lib=lib64
+	make CROSS_COMPILE="${CROSS_TARGET}-" BUILD_CC="gcc" GOLANG=no prefix=/usr lib=lib64 \
+		 DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 　　因为该软件包没有配置脚本，所以直接在make命令上增加指定编译器的参数```CROSS_COMPILE="${CROSS_TARGET}-"```，这里要注意CROSS_COMPILE指定的是交叉编译工具的前缀而不是具体命令名，这样在编译过程中各种编译、汇编和链接相关的命令都会自动加上这个指定的前缀。
 
 　　另外在编译过程中会编译在主系统中运行的程序，这个时候不能使用交叉编译器编译，所以还需要指定```BUILD_CC="gcc"```这个参数来保证编译这些要运行的程序使用的是本地编译器。
 
 #### Shadow
-	tar xvf ${DOWNLOADDIR}/shadow-4.8.1.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/shadow-4.8.1
-		sed -i 's/groups$(EXEEXT) //' src/Makefile.in
-		find man -name Makefile.in -exec sed -i 's/groups\.1 / /'   {} \;
-		find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \;
-		find man -name Makefile.in -exec sed -i 's/passwd\.5 / /'   {} \;
-		sed -e 's:#ENCRYPT_METHOD DES:ENCRYPT_METHOD SHA512:' \
-		    -e 's:/var/spool/mail:/var/mail:'                 \
-		    -e '/PATH=/{s@/sbin:@@;s@/bin:@@}'                \
-		    -i etc/login.defs
-		sed -i 's/1000/999/' etc/useradd
-		./configure --sysconfdir=/etc --build=${CROSS_HOST} --host=${CROSS_TARGET} \
-					--with-group-name-max-length=32
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-		sed -i 's/yes/no/' ${SYSDIR}/sysroot/etc/default/useradd
-	popd
+```
+tar xvf ${DOWNLOADDIR}/shadow-4.8.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/shadow-4.8.1
+	sed -i 's/groups$(EXEEXT) //' src/Makefile.in
+	find man -name Makefile.in -exec sed -i 's/groups\.1 / /'   {} \;
+	find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \;
+	find man -name Makefile.in -exec sed -i 's/passwd\.5 / /'   {} \;
+	sed -e 's:#ENCRYPT_METHOD DES:ENCRYPT_METHOD SHA512:' \
+	    -e 's:/var/spool/mail:/var/mail:'                 \
+	    -e '/PATH=/{s@/sbin:@@;s@/bin:@@}'                \
+	    -i etc/login.defs
+	sed -i 's/1000/999/' etc/useradd
+	./configure --sysconfdir=/etc --build=${CROSS_HOST} --host=${CROSS_TARGET} \
+				--with-group-name-max-length=32
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+	sed -i 's/yes/no/' ${SYSDIR}/sysroot/etc/default/useradd
+popd
+```
 
 　　该软件包修改了一些默认的设置，下面介绍以下主要修改的内容：  
 　　1、将用户密码的加密模式从DES改为SHA512，后者相对前者更难破解。  
@@ -886,382 +980,440 @@ EOF
 　　3、修改useradd命令创建用户时默认创建mail目录的设置，该目录目前已很少使用，所以修改为默认不创建。
 
 #### Sed
-	tar xvf ${DOWNLOADDIR}/sed-4.8.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/sed-4.8
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/sed-4.8.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/sed-4.8
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### PSmisc
-	tar xvf ${DOWNLOADDIR}/psmisc-23.4.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/psmisc-23.4
-		sed -i.orig "/rpl_malloc/d" configure
-		sed -i.orig "/rpl_realloc/d" configure
-		./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/psmisc-23.4.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/psmisc-23.4
+	sed -i.orig "/rpl_malloc/d" configure
+	sed -i.orig "/rpl_realloc/d" configure
+	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Gettext
-	tar xvf ${DOWNLOADDIR}/gettext-0.21.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/gettext-0.21
-		for i in $(dirname $(find -name "config.sub"))
-		do
-			rm ./$i/config.{sub,guess}
-			pushd $(dirname ./$i)
-			    automake --add-missing
-			popd
-		done
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-		            --host=${CROSS_TARGET} --disable-static \
-		            --with-libncurses-prefix=${SYSDIR}/sysroot
-		make
-		sed -i "/hello-c++-kde/d" gettext-tools/examples/Makefile
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/gettext-0.21.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gettext-0.21
+	for i in $(dirname $(find -name "config.sub"))
+	do
+		rm ./$i/config.{sub,guess}
+		pushd $(dirname ./$i)
+		    automake --add-missing
+		popd
+	done
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+	            --host=${CROSS_TARGET} --disable-static \
+	            --with-libncurses-prefix=${SYSDIR}/sysroot
+	make
+	sed -i "/hello-c++-kde/d" gettext-tools/examples/Makefile
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 　　Gettext软件包的源码中有多处探测架构的脚本，这些脚本在当前的版本中均不支持LoongArch架构，所以找到全部探测脚本并进行替换。
 
 #### Bison
-	tar xvf ${DOWNLOADDIR}/bison-3.7.6.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/bison-3.7.6
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/bison-3.7.6.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/bison-3.7.6
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Grep
-	tar xvf ${DOWNLOADDIR}/grep-3.6.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/grep-3.6
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/grep-3.6.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/grep-3.6
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Bash
-	tar xvf ${DOWNLOADDIR}/bash-5.1.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/bash-5.1
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		
-		cat > config.cache << "EOF"
-		ac_cv_func_mmap_fixed_mapped=yes
-		ac_cv_func_strcoll_works=yes
-		ac_cv_func_working_mktime=yes
-		bash_cv_func_sigsetjmp=present
-		bash_cv_getcwd_malloc=yes
-		bash_cv_job_control_missing=present
-		bash_cv_printf_a_format=yes
-		bash_cv_sys_named_pipes=present
-		bash_cv_ulimit_maxfds=yes
-		bash_cv_under_sys_siglist=yes
-		bash_cv_unusable_rtsigs=no
-		gt_cv_int_divbyzero_sigfpe=yes
-		EOF
-		
-		sed -i  '/^bashline.o:.*shmbchar.h/a bashline.o: ${DEFDIR}/builtext.h' Makefile.in
-		
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-		            --host=${CROSS_TARGET} --without-bash-malloc \
-		            --with-installed-readline --cache-file=config.cache
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/bash-5.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/bash-5.1
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	
+	cat > config.cache << "EOF"
+	ac_cv_func_mmap_fixed_mapped=yes
+	ac_cv_func_strcoll_works=yes
+	ac_cv_func_working_mktime=yes
+	bash_cv_func_sigsetjmp=present
+	bash_cv_getcwd_malloc=yes
+	bash_cv_job_control_missing=present
+	bash_cv_printf_a_format=yes
+	bash_cv_sys_named_pipes=present
+	bash_cv_ulimit_maxfds=yes
+	bash_cv_under_sys_siglist=yes
+	bash_cv_unusable_rtsigs=no
+	gt_cv_int_divbyzero_sigfpe=yes
+	EOF
+	
+	sed -i  '/^bashline.o:.*shmbchar.h/a bashline.o: ${DEFDIR}/builtext.h' Makefile.in
+	
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+	            --host=${CROSS_TARGET} --without-bash-malloc \
+	            --with-installed-readline --cache-file=config.cache
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 　　Bash软件在交叉编译时的配置阶段会有大量的参数探测错误，需要我们手工指定这些参数的真实取值，创建一个文本文件，将这些参数的取值写进去，并在configure配置中增加```--cache-file=config.cache```参数（其中config.cache就是保存参数的文本文件名）。
 
 #### Libtool
-	tar xvf ${DOWNLOADDIR}/libtool-2.4.6.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/libtool-2.4.6
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/libtool-2.4.6.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libtool-2.4.6
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### GDBM
-	tar xvf ${DOWNLOADDIR}/gdbm-1.19.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/gdbm-1.19
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-		            --host=${CROSS_TARGET} --disable-static --enable-libgdbm-compat
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
-
+```
+tar xvf ${DOWNLOADDIR}/gdbm-1.19.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gdbm-1.19
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+	            --host=${CROSS_TARGET} --disable-static --enable-libgdbm-compat
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 #### GPerf
-	tar xvf ${DOWNLOADDIR}/gperf-3.1.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/gperf-3.1
-		./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/gperf-3.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gperf-3.1
+	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Expat
-	tar xvf ${DOWNLOADDIR}/expat-2.3.0.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/expat-2.3.0
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET} \
-					--disable-static
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/expat-2.3.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/expat-2.3.0
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET} \
+				--disable-static
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Autoconf
-	tar xvf ${DOWNLOADDIR}/autoconf-2.71.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/autoconf-2.71
-		./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
-
+```
+tar xvf ${DOWNLOADDIR}/autoconf-2.71.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/autoconf-2.71
+	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 #### Automake
-	tar xvf ${DOWNLOADDIR}/automake-1.16.3.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/automake-1.16.3
-		patch -Np1 -i ${DOWNLOADDIR}/automake-1.16.3-add-loongarch.patch
-		./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/automake-1.16.3.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/automake-1.16.3
+	patch -Np1 -i ${DOWNLOADDIR}/automake-1.16.3-add-loongarch.patch
+	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 　　在交叉编译目录中我们安装了一个Automake软件包，该软件包提供了增加LoongArch支持的探测脚本，有很多软件都会需要用这些脚本来覆盖自己源代码中的脚本。
 
 　　在制作的目标系统中当然也需要改其中的Automake软件包，也使其支持LoongArch，这样将来在目标系统中配置编译一些软件包时就可以使用上。
 
 #### Kmod
-	tar xvf ${DOWNLOADDIR}/kmod-28.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/kmod-28
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		./configure --prefix=/usr --libdir=/usr/lib64 --bindir=/bin \
-		            --sysconfdir=/etc --build=${CROSS_HOST} --host=${CROSS_TARGET} \
-		            --with-xz --with-zstd --with-zlib
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-		
-		for target in depmod insmod lsmod modinfo modprobe rmmod; do
-			ln -sfv ../bin/kmod ${SYSDIR}/sysroot/sbin/$target
-		done
-		ln -sfv kmod ${SYSDIR}/sysroot/bin/lsmod
-	popd
-
+```
+tar xvf ${DOWNLOADDIR}/kmod-28.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/kmod-28
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	./configure --prefix=/usr --libdir=/usr/lib64 --bindir=/bin \
+	            --sysconfdir=/etc --build=${CROSS_HOST} --host=${CROSS_TARGET} \
+	            --with-xz --with-zstd --with-zlib
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+	
+	for target in depmod insmod lsmod modinfo modprobe rmmod; do
+		ln -sfv ../bin/kmod ${SYSDIR}/sysroot/sbin/$target
+	done
+	ln -sfv kmod ${SYSDIR}/sysroot/bin/lsmod
+popd
+```
 
 #### Libelf
-	tar xvf ${DOWNLOADDIR}/elfutils-0.183.tar.bz2 -C ${BUILDDIR}
-	pushd ${BUILDDIR}/elfutils-0.183
-		LIBS="-lpthread -llzma -lz -lbz2 -lzstd" \
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-					--host=${CROSS_TARGET} --disable-libdebuginfod --disable-debuginfod \
-					 ac_cv_search_lzma_auto_decoder=-llzma ac_cv_search_ZSTD_decompress=-lzstd
-		make
-		make -C libelf DESTDIR=${SYSDIR}/sysroot install
-		make -C libelf DESTDIR=${SYSDIR}/sysroot install-data
-	popd
+```
+tar xvf ${DOWNLOADDIR}/elfutils-0.183.tar.bz2 -C ${BUILDDIR}
+pushd ${BUILDDIR}/elfutils-0.183
+	LIBS="-lpthread -llzma -lz -lbz2 -lzstd" \
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+				--host=${CROSS_TARGET} --disable-libdebuginfod --disable-debuginfod \
+				 ac_cv_search_lzma_auto_decoder=-llzma ac_cv_search_ZSTD_decompress=-lzstd
+	make
+	make -C libelf DESTDIR=${SYSDIR}/sysroot install
+	make -C libelf DESTDIR=${SYSDIR}/sysroot install-data
+popd
+```
 
 　　该软件包使用交叉编译会有个别功能探测错误，使用指定参数和取值的方式来解决，该制作步骤上采用了另一种设置参数取值的方式，若要指定的参数数值不多的情况下可以直接在configure的参数中进行设置,如```ac_cv_search_lzma_auto_decoder=-llzma```和```ac_cv_search_ZSTD_decompress=-lzstd```这就是这种设置方式，也可以通过将这两个参数写到“config.cache”，然后通过“--cache-file=config.cache”来使用。
 
 #### Libffi
-	tar xvf ${DOWNLOADDIR}/libffi-3.3.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/libffi-3.3
-		patch -Np1 -i ${DOWNLOADDIR}/libffi-3.3-add-loongarch.patch
-		aclocal
-		automake -fi
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-		            --host=${CROSS_TARGET} --disable-static --with-gcc-arch=native
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/libffi-3.3.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libffi-3.3
+	patch -Np1 -i ${DOWNLOADDIR}/libffi-3.3-add-loongarch.patch
+	aclocal
+	automake -fi
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+	            --host=${CROSS_TARGET} --disable-static --with-gcc-arch=native
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 　　Libffi也是一个要增加架构支持的软件包，这里通过打补丁的方式加入LoongArch架构的支持。
 
 #### OpenSSL
-	tar xvf ${DOWNLOADDIR}/openssl-1.1.1k.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/openssl-1.1.1k
-		CC="${CROSS_TARGET}-gcc" \
-		./Configure --prefix=/usr --openssldir=/etc/ssl \
-					--libdir=lib64 shared zlib linux-generic64
-		make
-		sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/openssl-1.1.1k.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/openssl-1.1.1k
+	CC="${CROSS_TARGET}-gcc" \
+	./Configure --prefix=/usr --openssldir=/etc/ssl \
+				--libdir=lib64 shared zlib linux-generic64
+	make
+	sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 　　OpenSSL是一个十分重要的安全算法库，通常对不同的架构可以使用汇编对算法进行优化，但其也提供了通用的C实现，因此可以采用```linux-generic64```来指定用通用实现进行编译，当然通用实现的性能是相对较低的，在今后如果有了针对LoongArch64的优化支持则可以修改该参数来达到优化编译的目的。
 
 #### Coreutils
-	tar xvf ${DOWNLOADDIR}/coreutils-8.32.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/coreutils-8.32
-		sed -i "s@SYS_getdents@SYS_getdents64@g" src/ls.c
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		FORCE_UNSAFE_CONFIGURE=1 \
-		./configure --prefix=/usr  --build=${CROSS_HOST} --host=${CROSS_TARGET} \
-					--enable-no-install-program=kill,uptime
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-		mv -v ${SYSDIR}/sysroot/usr/bin/chroot ${SYSDIR}/sysroot/usr/sbin
-	popd
+```
+tar xvf ${DOWNLOADDIR}/coreutils-8.32.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/coreutils-8.32
+	sed -i "s@SYS_getdents@SYS_getdents64@g" src/ls.c
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	FORCE_UNSAFE_CONFIGURE=1 \
+	./configure --prefix=/usr  --build=${CROSS_HOST} --host=${CROSS_TARGET} \
+				--enable-no-install-program=kill,uptime
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+	mv -v ${SYSDIR}/sysroot/usr/bin/chroot ${SYSDIR}/sysroot/usr/sbin
+popd
+```
 
 #### Diffutils
-	tar xvf ${DOWNLOADDIR}/diffutils-3.7.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/diffutils-3.7
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		./configure --prefix=/usr  --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/diffutils-3.7.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/diffutils-3.7
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	./configure --prefix=/usr  --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Gawk
-	tar xvf ${DOWNLOADDIR}/gawk-5.1.0.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/gawk-5.1.0
-		sed -i 's/extras//' Makefile.in
-		for i in $(dirname $(find -name "config.sub"))
-		do
-			rm ./$i/config.{sub,guess}
-			pushd $(dirname ./$i)
-				automake --add-missing
-			popd
-		done
-		./configure --prefix=/usr  --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/gawk-5.1.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gawk-5.1.0
+	sed -i 's/extras//' Makefile.in
+	for i in $(dirname $(find -name "config.sub"))
+	do
+		rm ./$i/config.{sub,guess}
+		pushd $(dirname ./$i)
+			automake --add-missing
+		popd
+	done
+	./configure --prefix=/usr  --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Findutils
-	tar xvf ${DOWNLOADDIR}/findutils-4.8.0.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/findutils-4.8.0
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-		            --host=${CROSS_TARGET} --localstatedir=/var/lib/locate
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/findutils-4.8.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/findutils-4.8.0
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+	            --host=${CROSS_TARGET} --localstatedir=/var/lib/locate
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Groff
-	tar xvf ${DOWNLOADDIR}/groff-1.22.4.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/groff-1.22.4
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		PAGE=A4 ./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make TROFFBIN=troff GROFFBIN=groff GROFF_BIN_PATH=
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/groff-1.22.4.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/groff-1.22.4
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	PAGE=A4 ./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make TROFFBIN=troff GROFFBIN=groff GROFF_BIN_PATH=
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Less
-	tar xvf ${DOWNLOADDIR}/less-581.2.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/less-581.2
-		./configure --prefix=/usr --sysconfdir=/etc --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/less-581.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/less-581.2
+	./configure --prefix=/usr --sysconfdir=/etc --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Gzip
-	tar xvf ${DOWNLOADDIR}/gzip-1.10.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/gzip-1.10
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/gzip-1.10.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gzip-1.10
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### IPRoute2
-	tar xvf ${DOWNLOADDIR}/iproute2-5.12.0.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/iproute2-5.12.0
-		sed -i /ARPD/d Makefile
-		rm -fv man/man8/arpd.8
-		sed -i 's/.m_ipt.o//' tc/Makefile
-		make CC="${CROSS_TARGET}-gcc" HOSTCC="gcc" KERNEL_INCLUDE=${SYSDIR}/sysroot/usr/include
-		make CC="${CROSS_TARGET}-gcc" HOSTCC="gcc" KERNEL_INCLUDE=${SYSDIR}/sysroot/usr/include \
-				DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/iproute2-5.12.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/iproute2-5.12.0
+	sed -i /ARPD/d Makefile
+	rm -fv man/man8/arpd.8
+	sed -i 's/.m_ipt.o//' tc/Makefile
+	make CC="${CROSS_TARGET}-gcc" HOSTCC="gcc" KERNEL_INCLUDE=${SYSDIR}/sysroot/usr/include
+	make CC="${CROSS_TARGET}-gcc" HOSTCC="gcc" KERNEL_INCLUDE=${SYSDIR}/sysroot/usr/include \
+			DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 　　IPRoute2软件包没有配置阶段，直接在make命令中使用“CC”变量指定交叉编译器，而对于在编译过程中会临时编译一些在本地运行的程序时就需要使用“HOSTCC”变量来指定本地编译器，否则“HOSTCC”会使用“CC”变量的指定编译器，那么编译出来的程序就无法在交叉编译的主系统中运行了。
 
 ### KBD
-	tar xvf ${DOWNLOADDIR}/kbd-2.4.0.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/kbd-2.4.0
-		patch -Np1 -i ${DOWNLOADDIR}/kbd-2.4.0-backspace-1.patch
-		sed -i '/RESIZECONS_PROGS=/s/yes/no/' configure
-		sed -i 's/resizecons.8 //' docs/man/man8/Makefile.in
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		LIBS="-lrt -lpthread" \
-		./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET} --disable-vlock
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/kbd-2.4.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/kbd-2.4.0
+	patch -Np1 -i ${DOWNLOADDIR}/kbd-2.4.0-backspace-1.patch
+	sed -i '/RESIZECONS_PROGS=/s/yes/no/' configure
+	sed -i 's/resizecons.8 //' docs/man/man8/Makefile.in
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	LIBS="-lrt -lpthread" \
+	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET} --disable-vlock
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 　　交叉编译KBD时可能会缺少链接库而导致制作失败，此时可以通过LIBS变量指定缺少链接的库而完成KBD软件包的制作。
 
 #### Libpipeline
-	tar xvf ${DOWNLOADDIR}/libpipeline-1.5.3.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/libpipeline-1.5.3
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/libpipeline-1.5.3.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libpipeline-1.5.3
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Make
-	tar xvf ${DOWNLOADDIR}/make-4.3.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/make-4.3
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/make-4.3.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/make-4.3
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Patch
-	tar xvf ${DOWNLOADDIR}/patch-2.7.6.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/patch-2.7.6
-		./configure --prefix=/usr -build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/patch-2.7.6.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/patch-2.7.6
+	./configure --prefix=/usr -build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Man-DB
-	tar xvf ${DOWNLOADDIR}/man-db-2.9.4.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/man-db-2.9.4
-		rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
-		automake --add-missing
-		LIBS="-lpipeline" \
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-		            --host=${CROSS_TARGET} --sysconfdir=/etc --disable-setuid \
-		            --enable-cache-owner=bin 	--with-browser=/usr/bin/lynx \
-		            --with-vgrind=/usr/bin/vgrind --with-grap=/usr/bin/grap
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/man-db-2.9.4.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/man-db-2.9.4
+	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
+	automake --add-missing
+	LIBS="-lpipeline" \
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+	            --host=${CROSS_TARGET} --sysconfdir=/etc --disable-setuid \
+	            --enable-cache-owner=bin 	--with-browser=/usr/bin/lynx \
+	            --with-vgrind=/usr/bin/vgrind --with-grap=/usr/bin/grap
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 #### Tar
-	tar xvf ${DOWNLOADDIR}/tar-1.34.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/tar-1.34
-		FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
-
+```
+tar xvf ${DOWNLOADDIR}/tar-1.34.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/tar-1.34
+	FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 #### Texinfo
-	tar xvf ${DOWNLOADDIR}/texinfo-6.7.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/texinfo-6.7
-		for i in $(dirname $(find -name "config.sub"))
-		do
-			rm ./$i/config.{sub,guess}
-			pushd $(dirname ./$i)
-				automake --add-missing
-			popd
-		done
-		./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-		make DESTDIR=${SYSDIR}/sysroot TEXMF=/usr/share/texmf install-tex
-	popd
+```
+tar xvf ${DOWNLOADDIR}/texinfo-6.7.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/texinfo-6.7
+	for i in $(dirname $(find -name "config.sub"))
+	do
+		rm ./$i/config.{sub,guess}
+		pushd $(dirname ./$i)
+			automake --add-missing
+		popd
+	done
+	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+	make DESTDIR=${SYSDIR}/sysroot TEXMF=/usr/share/texmf install-tex
+popd
+```
 
 #### VIM
 ```
@@ -1302,21 +1454,23 @@ EOF
 　　改设置内容主要是设置了一些基本的界面和操作特性，如Tab转换成几个空格显示，不同的终端下背景颜色等等。
 
 #### Util-Linux
-	tar xvf ${DOWNLOADDIR}/util-linux-2.36.2.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/util-linux-2.36.2
-		cp ${SYSDIR}/sysroot/usr/share/automake-1.16/config.* config/
-		LDFLAGS="-lpthread" \
-		./configure  --build=${CROSS_HOST} --host=${CROSS_TARGET} \
-            ADJTIME_PATH=/var/lib/hwclock/adjtime \
-            --libdir=/usr/lib64 \
-            --disable-chfn-chsh --disable-login --disable-nologin \
-            --disable-su --disable-setpriv --disable-runuser \
-            --disable-pylibmount --disable-static --without-python \
-            --without-systemd --disable-makeinstall-chown \
-            runstatedir=/run
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/util-linux-2.36.2.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/util-linux-2.36.2
+	cp ${SYSDIR}/sysroot/usr/share/automake-1.16/config.* config/
+	LDFLAGS="-lpthread" \
+	./configure  --build=${CROSS_HOST} --host=${CROSS_TARGET} \
+        ADJTIME_PATH=/var/lib/hwclock/adjtime \
+        --libdir=/usr/lib64 \
+        --disable-chfn-chsh --disable-login --disable-nologin \
+        --disable-su --disable-setpriv --disable-runuser \
+        --disable-pylibmount --disable-static --without-python \
+        --without-systemd --disable-makeinstall-chown \
+        runstatedir=/run
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 　　Util-Linux带有大量的命令和库，由于部分命令已经在其它软件包中提供了，所以使用选项参数来关闭这些命令的编译和安装。
 
@@ -1388,61 +1542,69 @@ popd
 
 
 #### D-Bus
-	tar xvf ${DOWNLOADDIR}/dbus-1.12.20.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/dbus-1.12.20
-		./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-		            --host=${CROSS_TARGET} --sysconfdir=/etc --localstatedir=/var \
-		            --disable-static --disable-doxygen-docs --disable-xml-docs \
-		            --with-console-auth-dir=/run/console \
-		            --with-system-pid-file=/run/dbus/pid \
-		            --with-system-socket=/run/dbus/system_bus_socket
-		make
-		make DESTDIR=${SYSDIR}/sysroot install
-		ln -sfv /etc/machine-id ${SYSDIR}/sysroot/var/lib/dbus
-	popd
+```
+tar xvf ${DOWNLOADDIR}/dbus-1.12.20.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/dbus-1.12.20
+	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+	            --host=${CROSS_TARGET} --sysconfdir=/etc --localstatedir=/var \
+	            --disable-static --disable-doxygen-docs --disable-xml-docs \
+	            --with-console-auth-dir=/run/console \
+	            --with-system-pid-file=/run/dbus/pid \
+	            --with-system-socket=/run/dbus/system_bus_socket
+	make
+	make DESTDIR=${SYSDIR}/sysroot install
+	ln -sfv /etc/machine-id ${SYSDIR}/sysroot/var/lib/dbus
+popd
+```
 
 #### Procps-ng
-	tar xvf ${DOWNLOADDIR}/procps-ng-3.3.17.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/procps-3.3.17
-		./configure --prefix=/usr --libdir=/usr/lib64  --build=${CROSS_HOST} \
-		            --host=${CROSS_TARGET} --disable-static --disable-kill \
-		            --with-systemd NCURSES_LIBS="-lncursesw" \
-		            ac_cv_func_malloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes
-		make 
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/procps-ng-3.3.17.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/procps-3.3.17
+	./configure --prefix=/usr --libdir=/usr/lib64  --build=${CROSS_HOST} \
+	            --host=${CROSS_TARGET} --disable-static --disable-kill \
+	            --with-systemd NCURSES_LIBS="-lncursesw" \
+	            ac_cv_func_malloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes
+	make 
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 　　Procps-ng软件包也是在交叉编译方式上会出现参数判断错误的情况，需要在配置阶段指定参数和取值。
 
 #### E2fsprogs
-	tar xvf ${DOWNLOADDIR}/e2fsprogs-1.46.2.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/e2fsprogs-1.46.2
-		cp ${SYSDIR}/sysroot/usr/share/automake-1.16/config.* config/
-		mkdir -v build
-		pushd build
-			LDFLAGS="-Wl,-rpath-link,/opt/mylaos/sysroot/usr/lib64" \
-			../configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
-			             --host=${CROSS_TARGET} --sysconfdir=/etc \
-			             --enable-elf-shlibs--disable-libblkid \
-			             --disable-libuuid --disable-uuidd --disable-fsck
-			make 
-			make DESTDIR=${SYSDIR}/sysroot install
-			rm -fv ${SYSDIR}/sysroot/usr/lib64/{libcom_err,libe2p,libext2fs,libss}.a
-		popd
+```
+tar xvf ${DOWNLOADDIR}/e2fsprogs-1.46.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/e2fsprogs-1.46.2
+	cp ${SYSDIR}/sysroot/usr/share/automake-1.16/config.* config/
+	mkdir -v build
+	pushd build
+		LDFLAGS="-Wl,-rpath-link,/opt/mylaos/sysroot/usr/lib64" \
+		../configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
+		             --host=${CROSS_TARGET} --sysconfdir=/etc \
+		             --enable-elf-shlibs--disable-libblkid \
+		             --disable-libuuid --disable-uuidd --disable-fsck
+		make 
+		make DESTDIR=${SYSDIR}/sysroot install
+		rm -fv ${SYSDIR}/sysroot/usr/lib64/{libcom_err,libe2p,libext2fs,libss}.a
 	popd
+popd
+```
 
 #### Linux
-	tar xvf ${DOWNLOADDIR}/linux-4.19.167.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/linux-4.19.167
-		make mrproper
-		make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}- defconfig
-		make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}- menuconfig
-		make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}-
-		make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}- INSTALL_MOD_PATH=dest modules_install
-		mkdir -pv ${SYSDIR}/sysroot/lib/modules/
-		cp -a dest/lib/modules/* ${SYSDIR}/sysroot/lib/modules/
-		cp -a vmlinuz ${SYSDIR}/sysroot/boot/vmlinuz
-	popd
+```
+tar xvf ${DOWNLOADDIR}/linux-5.13.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-5.13.0
+	make mrproper
+	make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}- defconfig
+	make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}- menuconfig
+	make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}-
+	make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}- INSTALL_MOD_PATH=dest modules_install
+	mkdir -pv ${SYSDIR}/sysroot/lib/modules/
+	cp -a dest/lib/modules/* ${SYSDIR}/sysroot/lib/modules/
+	cp -a vmlinux ${SYSDIR}/sysroot/boot/vmlinux
+popd
+```
 
 　　因为是交叉编译的原因，Linux内核需要指定“ARCH”变量才能知道目标机器的架构，通过设置“CROSS_COMPILE”变量来指定命令前缀的方式来使用交叉编译工具的命令。
 
@@ -1451,29 +1613,33 @@ popd
 　　* ```menuconfig```，进入到交互式选择内核功能的界面，这需要主系统安装了Ncurses的开发库，该步骤可用来调整Linux内核选择，如果使用默认的就足够了，那么该步骤可以跳过。  
 　　* ```modules_install```，安装模块文件，模块安装的根目录由“INSTALL_MOD_PATH”变量指定，这里指定了“dest”，代表安装到当前目录中的dest目录里，若没有该目录将自动创建。
 
-　　当Linux内核编译完成后，我们可以将内核文件“vmlinuz”和对应的模块复制到目标系统存放的目录中。
+　　当Linux内核编译完成后，我们可以将内核文件“vmlinux”和对应的模块复制到目标系统存放的目录中。
 
 
 #### Linux-Firmware
-	tar xvf ${DOWNLOADDIR}/linux-firmware-20210511.tar.xz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/linux-firmware-20210511
-		make DESTDIR=${SYSDIR}/sysroot install
-	popd
+```
+tar xvf ${DOWNLOADDIR}/linux-firmware-20210511.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-firmware-20210511
+	make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
 
 　　安装Linux-Firmware软件包主要是因为当目标机器搭配了某些独显后需要相应的固件支持才能正常显示。
 
 #### Grub2
-	tar -xvf ${DOWNLOADDIR}/grub-2.06.tar.gz -C ${BUILDDIR}
-	pushd ${BUILDDIR}/grub-2.06
-		mkdir build
-		pushd build
-			../configure --prefix=/usr  --libdir=/usr/lib64  --build=${CROSS_HOST} \
-			             --host=${CROSS_TARGET} -with-platform=efi \
-			             --with-utils=host --disable-werror
-			make 
-			make DESTDIR=${SYSDIR}/sysroot install
-		popd
+```
+tar -xvf ${DOWNLOADDIR}/grub-2.06.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/grub-2.06
+	mkdir build
+	pushd build
+		../configure --prefix=/usr  --libdir=/usr/lib64  --build=${CROSS_HOST} \
+		             --host=${CROSS_TARGET} -with-platform=efi \
+		             --with-utils=host --disable-werror
+		make 
+		make DESTDIR=${SYSDIR}/sysroot install
 	popd
+popd
+```
 
 　　为目标系统安装Grub2的命令及模块，这样在启动目标架构机器上启动目标系统后也可以制作对应的EFI文件和设置启动相关的文件了。
 
@@ -1576,12 +1742,13 @@ EOF
 　　通过创建输入配置文件，可以使终端输入时更加符合常见系统中的习惯，不创建该文件也不会对系统造成影响。
 
 ### 设置时间文件
-
-	cat > ${SYSDIR}/sysroot/etc/adjtime << "EOF"
-	0.0 0 0.0
-	0
-	LOCAL
-	EOF
+```
+cat > ${SYSDIR}/sysroot/etc/adjtime << "EOF"
+0.0 0 0.0
+0
+LOCAL
+EOF
+```
 
 　　这里设置为使用BIOS提供的时间，如果使用UTC时间，可以将文件中的“LOCAL”改成“UTC”。
 
@@ -1662,7 +1829,9 @@ popd
 ### 打包系统
 　　制作完成后就可以退出制作用户环境了，使用命令:
 
-	exit
+```
+exit
+```
 
 　　接着可以使用root权限对目标系统进行打包，打包步骤如下：
 
@@ -1684,35 +1853,47 @@ popd
 　　第二分区：boot分区，文件系统为ext2，容量500M即可；  
 　　第三分区：根分区，文件系统建议为xfs，剩余容量可以都分给该分区。
 
-　　假设U盘设备名为sdb,以下为实际制作步骤如下：
+　　假设U盘设备名为```sdb```,以下为实际制作步骤如下：
 
-    sudo cfdisk -z /dev/sdb
- 
+```
+sudo cfdisk -z /dev/sdb
+```
+
 　　该命令将出现交互式操作模式，`-z`参数将强制进入分区类型选择（这会导致U盘上原有数据全部丢失，请再次确认没有要保留的数据后再继续），这里选择“gpt”，然后在分区的界面中对U盘按照上述的分区进行，保存退出，此时系统中将有“/dev/sdb1”、“/dev/sdb2”和"/dev/sdb3"这三个分区名，接下来就开始处理这三个分区。
 
 　　首先，创建一个目录用于制作LiveUSB，命令如下：  
 
-    mkdir /tmp/liveusb
+```
+mkdir /tmp/liveusb
+```
 
 　　挂载U盘的第三个分区既根分区到该目录上，命令如下：
 
-    sudo mount /dev/sdb3 /tmp/liveusb
+```
+sudo mount /dev/sdb3 /tmp/liveusb
+```
 
 　　然后，创建一个boot分区，用于挂载第二分区既boot分区，命令如下：
 
-	sudo mkdir /tmp/liveusb/boot
-	sudo mount /dev/sdb2 /tmp/liveusb/boot
+```
+sudo mkdir /tmp/liveusb/boot
+sudo mount /dev/sdb2 /tmp/liveusb/boot
+```
 
 　　接着创建efi分区，用于挂载第一分区既EFI分区，命令如下：
 
-	sudo mkdir /tmp/liveusb/boot/efi
-	sudo mount /dev/sdb1 /tmp/liveusb/boot/efi
+```
+sudo mkdir /tmp/liveusb/boot/efi
+sudo mount /dev/sdb1 /tmp/liveusb/boot/efi
+```
 
 　　此时USB的分区挂载准备好了，接下来就是将目标系统解压到该目录即可，命令如下：
 
-	pushd /tmp/liveusb
-	    sudo tar -xvpf ${SYSDIR}/loongarch64-clfs-system-1.0.tar.bz2
-	popd
+```
+pushd /tmp/liveusb
+    sudo tar -xvpf ${SYSDIR}/loongarch64-clfs-system-1.0.tar.bz2
+popd
+```
 
 　　解压完目标系统后先不要着急卸载和拔下U盘，因为还需要一些工作。
 
@@ -1724,22 +1905,34 @@ pushd /tmp/liveusb
 cat > boot/grub/grub.cfg << "EOF"
 menuentry 'My GNU/Linux System for LoongArch64' {
 echo 'Loading Linux Kernel ...'
-linux /vmlinuz root=/dev/sda3 rootdelay=5 rw
+linux /vmlinux root=<PARTUUID> rootdelay=5 rw
 boot
 }
 EOF
 popd
 ```
-
 　　grub.cfg存放的目录是由生成EFI文件时```--prefix```参数设置决定的，按照参数设置的目录并命名为grub.cfg即可。
 下面简单介绍一下菜单文件的设置内容：  
 　　* ```menuentry```，该设置项设置启动菜单显示的条目，一个条目对应一个`menuentry`。  
 　　* `echo`，输入内容，就是在屏幕上打印该行的内容。  
-　　* `linux`，加载Linux内核，因当前加载的grub.cfg与Linux内核vmlinuz文件在同一个分区，则可以直接使用路径，若不在同一个分区中则需要设置磁盘和分区来指定内核文件路径。后面的`root=/dev/sda3 rootdelay=5 rw`都是提供给Linux内核启动时的参数：`root`指定启动根分区名，这里假定U盘的设备名会是sda，这里需要根据U盘插入到目标机器上时的设备名进行修改；`rootdelay`设置等待时间，这通常在用U盘作为启动盘时使用，因为U盘会需要一小段的初始化，如果没有等待会导致找不到设备而启动失败；`rw`设置根分区按照可读写的方式挂载。
+　　* `linux`，加载Linux内核，因当前加载的grub.cfg与Linux内核vmlinux文件在同一个分区，则可以直接使用路径，若不在同一个分区中则需要设置磁盘和分区来指定内核文件路径。后面的`root=<PARTUUID> rootdelay=5 rw`都是提供给Linux内核启动时的参数：`root`指定启动根分区名，这里设置了待转换的```<PARTUUID>```，接下来会用到，也可以时用确定的设备名，假定U盘的设备名是sdb，根分区是sdb3，则在可以写成root=/dev/sdb3，当然这里需要根据U盘插入到目标机器上时的设备名进行修改；`rootdelay`设置等待时间，这通常在用U盘作为启动盘时使用，因为U盘会需要一小段的初始化，如果没有等待会导致找不到设备而启动失败；`rw`设置根分区按照可读写的方式挂载。
+
+当设置根分区为待转换的```<PARTUUID>```时，就需要根据根分区的实际PARTUUID进行替换，替换步骤如下：
+
+```
+pushd /tmp/liveusb
+	ROOTPARTUUID=$(sudo blkid /dev/sdb3 | awk -F'PARTUUID=' '{ print $2 }')
+	sed -i "s@<PARTUUID>@PARTUUID=${ROOTPARTUUID}@g" boot/grub/grub.cfg
+popd
+```
+　　我们可以看到替换步骤就是通过blkid命令获取到实际分区的“PARTUUID”，“PARTUUID”通常是由5段字母和数字组成的32个字符的字符串，每段字符使用“-”进行链接，例如：b2c2bd57-82e4-1c25-b87a-0e9caf919053。  
+　　内核启动时可以通过给root参数传递“PARTUUID”的参数来查找根分区，这样可以使U盘具备更好的通用性。
 
 　　做到这里，我们基本完成了LiveUSB的制作过程，接下来先卸载U盘：
 
-	sudo umount -R /tmp/liveusb
+```
+sudo umount -R /tmp/liveusb
+```
 	
 　　umount命令使用‵-R‵参数可以一次行把指定目录中多个挂载都卸载掉。
 
