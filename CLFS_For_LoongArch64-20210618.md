@@ -135,7 +135,7 @@ exec env -i HOME=${HOME} TERM=${TERM} PS1='\u:\w\$ ' /bin/bash
 EOF
 ```
 
-```
+```sh
 cat > ~/.bashrc << "EOF"
 set +h
 umask 022
