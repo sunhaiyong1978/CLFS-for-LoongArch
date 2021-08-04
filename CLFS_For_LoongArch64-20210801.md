@@ -278,7 +278,7 @@ pushd ${SYSDIR}/downloads
 　　**Readline:** https://ftp.gnu.org/gnu/readline/readline-8.1.tar.gz  
 　　**Sed:** https://ftp.gnu.org/gnu/sed/sed-4.8.tar.xz  
 　　**Shadow:** https://github.com/shadow-maint/shadow/releases/download/4.8.1/shadow-4.8.1.tar.xz  
-　　**Systemd:** https://github.com/systemd/systemd/archive/v248/systemd-248.tar.gz  
+　　**Systemd:** https://github.com/systemd/systemd/archive/v249/systemd-249.tar.gz  
 　　**Tar:** https://ftp.gnu.org/gnu/tar/tar-1.34.tar.xz  
 　　**Texinfo:** https://ftp.gnu.org/gnu/texinfo/texinfo-6.7.tar.xz  
 　　**Util-Linux:** https://www.kernel.org/pub/linux/utils/util-linux/v2.36/util-linux-2.36.2.tar.xz  
@@ -293,7 +293,7 @@ pushd ${SYSDIR}/downloads
 　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/patches/gcc-12-loongarch-fix-libdir.patch  
 　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/patches/kbd-2.4.0-backspace-1.patch  
 　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/patches/libffi-3.3-add-loongarch.patch  
-　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/patches/systemd-248-add-loongarch64.patch  
+　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/patches/systemd-249-add-loongarch64.patch  
 
 　　都下载完成后，离开"downloads"目录:
 
@@ -312,11 +312,11 @@ popd
 ```sh
 git clone https://github.com/loongson/linux.git -b loongarch-next --depth 1
 pushd linux
-git archive --format=tar --output ../linux-5.git.tar "loongarch-next"
+    git archive --format=tar --output ../linux-5.git.tar "loongarch-next"
 popd
 mkdir linux-5.git
 pushd linux-5.git
-tar xvf ../linux-5.git.tar
+    tar xvf ../linux-5.git.tar
 popd
 tar -czf ${DOWNLOADDIR}/linux-5.git.tar.gz linux-5.git
 
@@ -345,11 +345,11 @@ popd
 ```sh
 git clone https://github.com/loongson/binutils-gdb.git -b loongarch-2_37 --depth 1
 pushd binutils-gdb
-git archive --format=tar --output ../binutils-2.37.tar "loongarch-2_37"
+    git archive --format=tar --output ../binutils-2.37.tar "loongarch-2_37"
 popd
 mkdir binutils-2.37
 pushd binutils-2.37
-tar xvf ../binutils-2.37.tar
+    tar xvf ../binutils-2.37.tar
 popd
 tar -czf ${DOWNLOADDIR}/binutils-2.37.tar.gz binutils-2.37
 ```
@@ -417,11 +417,11 @@ popd
 ```sh
 git clone https://github.com/loongson/gcc.git -b loongarch-12 --depth 1
 pushd gcc
-git archive --format=tar --output ../gcc-12.tar "loongarch-12"
+    git archive --format=tar --output ../gcc-12.tar "loongarch-12"
 popd
 mkdir gcc-12.0.0
 pushd gcc-12.0.0
-tar xvf ../gcc-12.0.0.tar
+    tar xvf ../gcc-12.0.0.tar
 popd
 tar -czf ${DOWNLOADDIR}/gcc-12.0.0.tar.gz gcc-12.0.0
 ```
@@ -469,11 +469,11 @@ popd
 ```sh
 git clone https://github.com/loongson/glibc.git -b loongarch_2_33 --depth 1
 pushd glibc
-git archive --format=tar --output ../glibc-2.33.tar "loongarch_2_33"
+    git archive --format=tar --output ../glibc-2.33.tar "loongarch_2_33"
 popd
 mkdir glibc-2.33
 pushd glibc-2.33
-tar xvf ../glibc-2.33.tar
+    tar xvf ../glibc-2.33.tar
 popd
 tar -czf ${DOWNLOADDIR}/glibc-2.33.tar.gz glibc-2.33
 ```
