@@ -819,7 +819,6 @@ pushd ${BUILDDIR}/bzip2-1.0.8
 	cp -v bzip2-shared ${SYSDIR}/sysroot/bin/bzip2
 	cp -av libbz2.so* ${SYSDIR}/sysroot/lib64
 	ln -sfv ../../lib64/libbz2.so.1.0 ${SYSDIR}/sysroot/usr/lib64/libbz2.so
-	rm -v ${SYSDIR}/sysroot/usr/bin/{bunzip2,bzcat,bzip2}
 	ln -sfv bzip2 ${SYSDIR}/sysroot/bin/bunzip2
 	ln -sfv bzip2 ${SYSDIR}/sysroot/bin/bzcat
 	rm -fv ${SYSDIR}/sysroot/usr/lib/libbz2.a
