@@ -1347,7 +1347,7 @@ popd
 
 　　IPRoute2软件包没有配置阶段，直接在make命令中使用“CC”变量指定交叉编译器，而对于在编译过程中会临时编译一些在本地运行的程序时就需要使用“HOSTCC”变量来指定本地编译器，否则“HOSTCC”会使用“CC”变量的指定编译器，那么编译出来的程序就无法在交叉编译的主系统中运行了。
 
-### KBD
+#### KBD
 ```sh
 tar xvf ${DOWNLOADDIR}/kbd-2.4.0.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/kbd-2.4.0
