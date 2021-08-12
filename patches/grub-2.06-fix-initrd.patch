@@ -1,0 +1,76 @@
+diff -Nurp grub-2.06.orig/grub-core/loader/loongarch64/linux.c grub-2.06/grub-core/loader/loongarch64/linux.c
+--- grub-2.06.orig/grub-core/loader/loongarch64/linux.c	2021-05-27 08:13:22.000000000 +0000
++++ grub-2.06/grub-core/loader/loongarch64/linux.c	2021-08-12 20:15:07.861042533 +0000
+@@ -50,6 +50,7 @@ static grub_addr_t target_addr, entry_ad
+ static int linux_argc;
+ static grub_uint8_t *linux_args_addr;
+ static grub_off_t rd_addr_arg_off, rd_size_arg_off;
++static grub_off_t initrd_addr_arg_off;
+ static int initrd_loaded = 0;
+ 
+ static grub_uint32_t j = 0;
+@@ -58,7 +59,7 @@ grub_uint64_t tempMemsize = 0;
+ grub_uint32_t free_index = 0;
+ grub_uint32_t reserve_index = 0;
+ grub_uint32_t acpi_table_index = 0;
+-grub_uint32_t acpi_nvs_index = 0;  
++grub_uint32_t acpi_nvs_index = 0;
+ 
+ static inline grub_size_t
+ page_align (grub_size_t size)
+@@ -396,8 +397,8 @@ grub_cmd_linux (grub_command_t cmd __att
+   linux_argc = argc;
+   /* Main arguments.  */
+   size = (linux_argc) * sizeof (grub_uint64_t);
+-  /* Initrd address and size.  */
+-  size += 2 * sizeof (grub_uint64_t);
++  /* Initrd address/size and initrd  */
++  size += 3 * sizeof (grub_uint64_t);
+   /* NULL terminator.  */
+   size += sizeof (grub_uint64_t);
+   /* First argument is always "a0".  */
+@@ -409,6 +410,7 @@ grub_cmd_linux (grub_command_t cmd __att
+   /* rd arguments.  */
+   size += ALIGN_UP (sizeof ("rd_start=0xXXXXXXXXXXXXXXXX"), 4);
+   size += ALIGN_UP (sizeof ("rd_size=0xXXXXXXXXXXXXXXXX"), 4);
++  size += ALIGN_UP (sizeof ("initrd=0xXXXXXXXXXXXXXXXX,0xXXXXXXXXXXXXXXXX"), 4);
+ 
+   size = ALIGN_UP (size, 8);
+ 
+@@ -437,7 +439,7 @@ grub_cmd_linux (grub_command_t cmd __att
+   }
+ 
+   linux_argv = (grub_uint64_t *) linux_args_addr;
+-  linux_args = (char *) (linux_argv + (linux_argc + 1 + 2));
++  linux_args = (char *) (linux_argv + (linux_argc + 1 + 3));
+ 
+   grub_memcpy (linux_args, "a0", sizeof ("a0"));
+   *linux_argv = (grub_uint64_t) (grub_addr_t) linux_args;
+@@ -463,6 +465,12 @@ grub_cmd_linux (grub_command_t cmd __att
+   *linux_argv = 0;
+   linux_argv++;
+ 
++  /* Reserve space for initrd arguments.  */
++  initrd_addr_arg_off = (grub_uint8_t *) linux_args - linux_args_addr;
++  linux_args += ALIGN_UP (sizeof ("initrd=0xXXXXXXXXXXXXXXXX,0xXXXXXXXXXXXXXXXX"), 4);
++  *linux_argv = 0;
++  linux_argv++;
++
+   *linux_argv = 0;
+ 
+   grub_loader_set (grub_linux_boot, grub_linux_unload, 0);
+@@ -525,6 +533,14 @@ grub_cmd_initrd (grub_command_t cmd __at
+     = (grub_uint64_t) ((grub_addr_t) linux_args_addr + rd_size_arg_off);
+   linux_argc++;
+ 
++
++  grub_snprintf ((char *) linux_args_addr + initrd_addr_arg_off,
++		 sizeof ("initrd=0xXXXXXXXXXXXXXXXX,0xXXXXXXXXXXXXXXXX"), "initrd=0x%lx,0x%lx",
++		((grub_uint64_t) initrd_dest & 0xffffffff), (grub_uint64_t) size);
++  ((grub_uint64_t *) linux_args_addr)[linux_argc]
++    = (grub_uint64_t) ((grub_addr_t) linux_args_addr + initrd_addr_arg_off);
++  linux_argc++;
++
+   initrd_loaded = 1;
+ 
+  fail:

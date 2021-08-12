@@ -1,0 +1,15 @@
+diff -Nurp gcc-12.0.0.orig/gcc/config/loongarch/linux.h gcc-12.0.0/gcc/config/loongarch/linux.h
+--- gcc-12.0.0.orig/gcc/config/loongarch/linux.h	2021-08-07 14:26:58.000000000 +0000
++++ gcc-12.0.0/gcc/config/loongarch/linux.h	2021-08-07 03:59:18.151405666 +0000
+@@ -30,9 +30,9 @@ along with GCC; see the file COPYING3.
+ #define GNU_USER_LINK_EMULATION64 "elf64loongarch"
+ 
+ #define GLIBC_DYNAMIC_LINKERLP32 \
+-  "/lib32/ld.so.1"
++  "/lib32/ld-linux-loongarch32.so.1"
+ #define GLIBC_DYNAMIC_LINKERLP64 \
+-  "/lib64/ld.so.1"
++  "/lib64/ld-linux-loongarch64.so.1"
+ 
+ #define GNU_USER_DYNAMIC_LINKERLP32 GLIBC_DYNAMIC_LINKERLP32
+ #define GNU_USER_DYNAMIC_LINKERLP64 GLIBC_DYNAMIC_LINKERLP64
