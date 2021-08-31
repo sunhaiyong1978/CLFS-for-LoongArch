@@ -1,0 +1,200 @@
+diff --git a/arch/loongarch/include/uapi/asm/ucontext.h b/arch/loongarch/include/uapi/asm/ucontext.h
+index e3814b5fbce8..54017ce555a1 100644
+--- a/arch/loongarch/include/uapi/asm/ucontext.h
++++ b/arch/loongarch/include/uapi/asm/ucontext.h
+@@ -2,26 +2,6 @@
+ #ifndef __LOONGARCH_UAPI_ASM_UCONTEXT_H
+ #define __LOONGARCH_UAPI_ASM_UCONTEXT_H
+ 
+-/**
+- * struct extcontext - extended context header structure
+- * @magic:	magic value identifying the type of extended context
+- * @size:	the size in bytes of the enclosing structure
+- *
+- * Extended context structures provide context which does not fit within struct
+- * sigcontext. They are placed sequentially in memory at the end of struct
+- * ucontext and struct sigframe, with each extended context structure beginning
+- * with a header defined by this struct. The type of context represented is
+- * indicated by the magic field. Userland may check each extended context
+- * structure against magic values that it recognises. The size field allows any
+- * unrecognised context to be skipped, allowing for future expansion. The end
+- * of the extended context data is indicated by the magic value
+- * END_EXTCONTEXT_MAGIC.
+- */
+-struct extcontext {
+-	unsigned int		magic;
+-	unsigned int		size;
+-};
+-
+ /**
+  * struct ucontext - user context structure
+  * @uc_flags:
+@@ -32,15 +12,25 @@ struct extcontext {
+  * @uc_extcontext:	holds extended processor state
+  */
+ struct ucontext {
+-	/* Historic fields matching asm-generic */
+ 	unsigned long		uc_flags;
+ 	struct ucontext		*uc_link;
+ 	stack_t			uc_stack;
+-	struct sigcontext	uc_mcontext;
+ 	sigset_t		uc_sigmask;
++	/* There's some padding here to allow sigset_t to be expanded in the
++	 * future.  Though this is unlikely, other architectures put uc_sigmask
++	 * at the end of this structure and explicitly state it can be
++	 * expanded, so we didn't want to box ourselves in here. */
++	__u8		  __unused[1024 / 8 - sizeof(sigset_t)];
++	/* We can't put uc_sigmask at the end of this structure because we need
++	 * to be able to expand sigcontext in the future.  For example, the
++	 * vector ISA extension will almost certainly add ISA state.  We want
++	 * to ensure all user-visible ISA state can be saved and restored via a
++	 * ucontext, so we're putting this at the end in order to allow for
++	 * infinite extensibility.  Since we know this will be extended and we
++	 * assume sigset_t won't be extended an extreme amount, we're
++	 * prioritizing this. */
++	struct sigcontext	uc_mcontext;
+ 
+-	/* Extended context structures may follow ucontext */
+-	unsigned long long	uc_extcontext[0];
+ };
+ 
+ #endif /* __LOONGARCH_UAPI_ASM_UCONTEXT_H */
+diff --git a/arch/loongarch/kernel/signal.c b/arch/loongarch/kernel/signal.c
+index 8513ef01b0ce..b14072fd3133 100644
+--- a/arch/loongarch/kernel/signal.c
++++ b/arch/loongarch/kernel/signal.c
+@@ -49,7 +49,6 @@ struct sigframe {
+ 	/* Matches struct ucontext from its uc_mcontext field onwards */
+ 	struct sigcontext sf_sc;
+ 	sigset_t sf_mask;
+-	unsigned long long sf_extcontext[0];
+ };
+ 
+ struct rt_sigframe {
+@@ -128,40 +127,13 @@ static int restore_hw_fp_context(void __user *sc)
+ 	return _restore_fp_context(fpregs, fcc, csr);
+ }
+ 
+-/*
+- * Extended context handling.
+- */
+-
+-static inline void __user *sc_to_extcontext(void __user *sc)
+-{
+-	struct ucontext __user *uc;
+-
+-	/*
+-	 * We can just pretend the sigcontext is always embedded in a struct
+-	 * ucontext here, because the offset from sigcontext to extended
+-	 * context is the same in the struct sigframe case.
+-	 */
+-	uc = container_of(sc, struct ucontext, uc_mcontext);
+-	return &uc->uc_extcontext;
+-}
+-
+-static int save_extcontext(void __user *buf)
+-{
+-	return 0;
+-}
+-
+-static int restore_extcontext(void __user *buf)
+-{
+-	return 0;
+-}
+-
+ /*
+  * Helper routines
+  */
+ static int protected_save_fp_context(void __user *sc)
+ {
+ 	int err = 0;
+-	unsigned int used, ext_sz;
++	unsigned int used;
+ 	struct loongarch_abi *abi = current->thread.abi;
+ 	uint64_t __user *fpregs = sc + abi->off_sc_fpregs;
+ 	uint32_t __user *fcc = sc + abi->off_sc_fcsr;
+@@ -193,11 +165,6 @@ static int protected_save_fp_context(void __user *sc)
+ 	}
+ 
+ fp_done:
+-	ext_sz = err = save_extcontext(sc_to_extcontext(sc));
+-	if (err < 0)
+-		return err;
+-	used |= ext_sz ? USED_EXTCONTEXT : 0;
+-
+ 	return __put_user(used, flags);
+ }
+ 
+@@ -252,9 +219,6 @@ static int protected_restore_fp_context(void __user *sc)
+ 	}
+ 
+ fp_done:
+-	if (!err && (used & USED_EXTCONTEXT))
+-		err = restore_extcontext(sc_to_extcontext(sc));
+-
+ 	return err ?: sig;
+ }
+ 
+@@ -278,25 +242,6 @@ static int setup_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc)
+ 	return err;
+ }
+ 
+-static size_t extcontext_max_size(void)
+-{
+-	size_t sz = 0;
+-
+-	/*
+-	 * The assumption here is that between this point & the point at which
+-	 * the extended context is saved the size of the context should only
+-	 * ever be able to shrink (if the task is preempted), but never grow.
+-	 * That is, what this function returns is an upper bound on the size of
+-	 * the extended context for the current task at the current time.
+-	 */
+-
+-	/* If any context is saved then we'll append the end marker */
+-	if (sz)
+-		sz += sizeof(((struct extcontext *)NULL)->magic);
+-
+-	return sz;
+-}
+-
+ int fpcsr_pending(unsigned int __user *fpcsr)
+ {
+ 	int err, sig = 0;
+@@ -337,18 +282,9 @@ void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
+ {
+ 	unsigned long sp;
+ 
+-	/* Leave space for potential extended context */
+-	frame_size += extcontext_max_size();
+-
+ 	/* Default to using normal stack */
+ 	sp = regs->regs[3];
+-
+-	/*
+-	 * FPU emulator may have it's own trampoline active just
+-	 * above the user stack, 16-bytes before the next lowest
+-	 * 16 byte boundary.  Try to avoid trashing it.
+-	 */
+-	sp -= 32;
++	sp -= 32;   /* Reserve 32-bytes. */
+ 
+ 	sp = sigsp(sp, ksig);
+ 
+@@ -542,16 +478,6 @@ static int smp_restore_fp_context(void __user *sc)
+ 
+ static int signal_setup(void)
+ {
+-	/*
+-	 * The offset from sigcontext to extended context should be the same
+-	 * regardless of the type of signal, such that userland can always know
+-	 * where to look if it wishes to find the extended context structures.
+-	 */
+-	BUILD_BUG_ON((offsetof(struct sigframe, sf_extcontext) -
+-		      offsetof(struct sigframe, sf_sc)) !=
+-		     (offsetof(struct rt_sigframe, rs_uc.uc_extcontext) -
+-		      offsetof(struct rt_sigframe, rs_uc.uc_mcontext)));
+-
+ #ifdef CONFIG_SMP
+ 	/* For now just do the cpu_has_fpu check when the functions are invoked */
+ 	save_fp_context = smp_save_fp_context;

@@ -1,0 +1,52 @@
+diff --git a/sysdeps/loongarch/bsd-_setjmp.c b/sysdeps/loongarch/bsd-_setjmp.c
+new file mode 100644
+index 0000000000..32f49441c3
+--- /dev/null
++++ b/sysdeps/loongarch/bsd-_setjmp.c
+@@ -0,0 +1 @@
++/* _setjmp is implemented in setjmp.S.  */
+diff --git a/sysdeps/loongarch/bsd-setjmp.c b/sysdeps/loongarch/bsd-setjmp.c
+new file mode 100644
+index 0000000000..45fd802aac
+--- /dev/null
++++ b/sysdeps/loongarch/bsd-setjmp.c
+@@ -0,0 +1 @@
++/* setjmp is implemented in setjmp.S.  */
+diff --git a/sysdeps/loongarch/setjmp.S b/sysdeps/loongarch/setjmp.S
+index 589a35c11a..e7fec53a3a 100644
+--- a/sysdeps/loongarch/setjmp.S
++++ b/sysdeps/loongarch/setjmp.S
+@@ -19,6 +19,15 @@
+ #include <sysdep.h>
+ #include <sys/asm.h>
+ 
++ENTRY (_setjmp)
++	li.w		a1,0
++	b		__sigsetjmp
++END (_setjmp)
++
++ENTRY (setjmp)
++	li.w		a1,1
++END (setjmp)
++
+ ENTRY (__sigsetjmp)
+ 	REG_S ra, a0, 0*SZREG
+ 	REG_S sp, a0, 1*SZREG
+@@ -43,11 +52,13 @@ ENTRY (__sigsetjmp)
+ 	FREG_S $f30, a0, 13*SZREG + 6*SZFREG
+ 	FREG_S $f31, a0, 13*SZREG + 7*SZFREG
+ 
+-#if IS_IN(rtld)
+-	li.w	v0, 0
+-	jirl	zero,ra,0
++#if !IS_IN (libc) && IS_IN(rtld)
++	li.w		v0, 0
++	jirl		zero,ra,0
+ #else
+-	b	C_SYMBOL_NAME(__sigjmp_save)
++	b		__sigjmp_save
+ #endif
+ END (__sigsetjmp)
++
+ hidden_def (__sigsetjmp)
++weak_alias (_setjmp, __GI__setjmp)

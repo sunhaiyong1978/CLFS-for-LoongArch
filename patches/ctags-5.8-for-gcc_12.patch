@@ -1,0 +1,12 @@
+diff -Nurp ctags-5.8.orig/general.h ctags-5.8/general.h
+--- ctags-5.8.orig/general.h	2007-05-03 03:21:08.000000000 +0000
++++ ctags-5.8/general.h	2021-08-31 07:24:59.919960558 +0000
+@@ -57,7 +57,7 @@
+  *  to prevent warnings about unused variables.
+  */
+ #if (__GNUC__ > 2  ||  (__GNUC__ == 2  &&  __GNUC_MINOR__ >= 7)) && !defined (__GNUG__)
+-# define __unused__  __attribute__((unused))
++# define __unused__ __attribute_maybe_unused__
+ # define __printf__(s,f)  __attribute__((format (printf, s, f)))
+ #else
+ # define __unused__
