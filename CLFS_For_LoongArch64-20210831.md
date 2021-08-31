@@ -1048,7 +1048,7 @@ popd
 ```sh
 tar xvf ${DOWNLOADDIR}/m4-1.4.19.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/m4-1.4.19
-	patch -Np0 -i ${DOWNLOADDIR}/stack-direction-add-loongarch.patch
+	patch -Np1 -i ${DOWNLOADDIR}/stack-direction-add-loongarch.patch
 	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
 	make
 	make DESTDIR=${SYSDIR}/sysroot install
@@ -1220,7 +1220,7 @@ popd
 ```sh
 tar xvf ${DOWNLOADDIR}/grep-3.7.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/grep-3.7
-    patch -Np0 -i ${DOWNLOADDIR}/stack-direction-add-loongarch.patch
+    patch -Np1 -i ${DOWNLOADDIR}/stack-direction-add-loongarch.patch
 	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
 	make
 	make DESTDIR=${SYSDIR}/sysroot install
@@ -1413,7 +1413,7 @@ popd
 ```sh
 tar xvf ${DOWNLOADDIR}/diffutils-3.8.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/diffutils-3.8
-    patch -Np0 -i ${DOWNLOADDIR}/stack-direction-add-loongarch.patch
+    patch -Np1 -i ${DOWNLOADDIR}/stack-direction-add-loongarch.patch
 	rm $(dirname $(find -name "config.sub"))/config.{sub,guess}
 	automake -a
 	./configure --prefix=/usr  --build=${CROSS_HOST} --host=${CROSS_TARGET}
