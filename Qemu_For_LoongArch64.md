@@ -257,7 +257,7 @@ mount -t devpts devpts /dev/pts
 　　系统中有些程序对用户有一定的要求，比如不能使用root用户运行，然而chroot默认使用root用户登录，因此创建一个普通用户，步骤如下：
 
 ```sh
-useradd -m testuser
+/sbin/useradd -m testuser
 ```
 
 　　并且切换到该用户
