@@ -7,7 +7,12 @@
 ## 1 前言
 　　龙芯中科于2021年推出了全新指令集架构LoongArch，其中64位指令集称为LoongArch64。  
 　　基于LoongArch64指令集的操作系统需要运行在使用龙芯3A5000 CPU的机器上，在没有这样的机器的情况下如果想简单的体验就需要使用到QEMU这个模拟器。  
-　　本文的目标是通过一步一步的制作使用QEMU运行一个基于LoongArch64制作的Linux系统。
+　　本文的目标是通过一步一步的制作使用QEMU运行一个基于LoongArch64制作的Linux系统。  
+
+　　**文末有已编译好不同架构的QEMU文件可供下载，简化使用过程。**  
+
+　　本文涉及一些编译软件相关的操作，如果你想简单点来使用，可以参考简化版的文档：  
+　　https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/Qemu_For_LoongArch64-Simple.md
 
 ## 2 编译QEMU
 
