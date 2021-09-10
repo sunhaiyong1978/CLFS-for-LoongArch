@@ -378,7 +378,7 @@ pushd ${SYSDIR}/downloads
 
 其它文件下载地址：
 
-　　**ACPI-Update:** https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210812/acpi-update-20210822.tar.gz  
+　　**ACPI-Update:** https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210822/acpi-update-20210822.tar.gz  
 　　**SSL证书文件:** https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210818/ssl-certs.tar.gz  
 
 
