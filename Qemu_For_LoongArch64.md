@@ -78,6 +78,10 @@ cd ~/qemu
 sed -i '/compile_prog/s@"\$glib_cflags"@"\$glib_cflags -Werror"@g' configure
 ```
 
+```sh
+sed -i 's@"loongarch"@"loongarch64"@g' linux-user/loongarch64/target_syscall.h
+```
+
 　　QEMU的编译参数非常的多，可以通过以下命令查看：
 
 ```sh
@@ -233,7 +237,7 @@ uname -m
 ```  
 　　会返回： 
 
-　　loongarch
+　　loongarch64
 
 　　代表当前环境正模拟的LoongArch的架构。
 
