@@ -68,7 +68,7 @@ git clone https://github.com/gaosong-loongson/qemu.git -b tcg-dev
 　　进入QEMU的源代码目录：
 
 ```sh
-cd ~/qemu
+cd qemu
 ```
 　　注意：这里假定源代码是下载到当前用户的家目录中。
 
