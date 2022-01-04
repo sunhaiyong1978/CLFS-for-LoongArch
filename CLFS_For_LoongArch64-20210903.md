@@ -2820,7 +2820,7 @@ export JOBS="-j8"
 　　这里设置了2个环境变量：
 
 　　“COMMON_CONFIG":用来为配置软件包提供通用参数。  
-　　“JBOS”：用来给make命令提供并行编译的数量设置。
+　　“JOBS”：用来给make命令提供并行编译的数量设置。
 
 #### Util-Macros
 https://www.x.org/archive//individual/util/util-macros-1.19.3.tar.gz
