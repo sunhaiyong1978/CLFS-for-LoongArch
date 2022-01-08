@@ -1,0 +1,116 @@
+Submitted by: Pierre Labastie <pierre dot labastie at neuf dot fr>
+Date: 2020-05-10
+Initial Package Version: 1.20.7
+Origin: Upstream + PR's
+Upstream Status: some fixes committed, others pending
+Description: Fix several build failures
+             - some introduced by glibc-2.26
+             - some introduced by gcc-10
+             - also fix an ignored error when gpm.h is not already in
+               /usr/include
+diff -Naur gpm-1.20.7.old/src/daemon/open_console.c gpm-1.20.7.new/src/daemon/open_console.c
+--- gpm-1.20.7.old/src/daemon/open_console.c	2012-10-26 23:21:38.000000000 +0200
++++ gpm-1.20.7.new/src/daemon/open_console.c	2020-05-10 15:48:59.752067421 +0200
+@@ -23,6 +23,10 @@
+ #include <sys/stat.h>               /* stat()            */
+ #include <sys/ioctl.h>              /* ioctl             */
+ 
++#ifdef HAVE_SYS_SYSMACROS_H
++#include <sys/sysmacros.h>          /* major() w/newer glibc */
++#endif
++
+ /* Linux specific (to be outsourced in gpm2 */
+ #include <linux/serial.h>           /* for serial console check */
+ #include <asm/ioctls.h>            /* for serial console check */
+diff -Naur gpm-1.20.7.old/src/headers/daemon.h gpm-1.20.7.new/src/headers/daemon.h
+--- gpm-1.20.7.old/src/headers/daemon.h	2012-10-26 23:21:38.000000000 +0200
++++ gpm-1.20.7.new/src/headers/daemon.h	2020-05-10 15:48:52.719159555 +0200
+@@ -180,7 +180,7 @@
+ extern Gpm_Type         mice[];
+ extern Gpm_Type         *repeated_type;
+ 
+-time_t                  last_selection_time;
++extern time_t                  last_selection_time;
+ 
+ 
+ 
+diff -Naur gpm-1.20.7.old/src/prog/display-buttons.c gpm-1.20.7.new/src/prog/display-buttons.c
+--- gpm-1.20.7.old/src/prog/display-buttons.c	2012-10-26 23:21:38.000000000 +0200
++++ gpm-1.20.7.new/src/prog/display-buttons.c	2020-05-10 15:48:59.751067434 +0200
+@@ -36,7 +36,7 @@
+ #include <stdio.h>            /* printf()             */
+ #include <time.h>             /* time()               */
+ #include <errno.h>            /* errno                */
+-#include <gpm.h>              /* gpm information      */
++#include "headers/gpm.h"              /* gpm information      */
+ 
+ /* display resulting data */
+ int display_data(Gpm_Event *event, void *data)
+diff -Naur gpm-1.20.7.old/src/prog/display-coords.c gpm-1.20.7.new/src/prog/display-coords.c
+--- gpm-1.20.7.old/src/prog/display-coords.c	2012-10-26 23:21:38.000000000 +0200
++++ gpm-1.20.7.new/src/prog/display-coords.c	2020-05-10 15:48:59.751067434 +0200
+@@ -37,7 +37,7 @@
+ #include <stdio.h>            /* printf()             */
+ #include <time.h>             /* time()               */
+ #include <errno.h>            /* errno                */
+-#include <gpm.h>              /* gpm information      */
++#include "headers/gpm.h"              /* gpm information      */
+ 
+ /* display resulting data */
+ int display_data(Gpm_Event *event, void *data)
+diff -Naur gpm-1.20.7.old/src/prog/get-versions.c gpm-1.20.7.new/src/prog/get-versions.c
+--- gpm-1.20.7.old/src/prog/get-versions.c	2012-10-26 23:21:38.000000000 +0200
++++ gpm-1.20.7.new/src/prog/get-versions.c	2020-05-10 15:48:59.751067434 +0200
+@@ -22,7 +22,7 @@
+  ********/
+ 
+ #include <stdio.h>            /* printf()             */
+-#include <gpm.h>              /* gpm information      */
++#include "headers/gpm.h"              /* gpm information      */
+ 
+ int main()
+ {
+diff -Naur gpm-1.20.7.old/src/prog/gpm-root.y gpm-1.20.7.new/src/prog/gpm-root.y
+--- gpm-1.20.7.old/src/prog/gpm-root.y	2012-10-26 23:21:38.000000000 +0200
++++ gpm-1.20.7.new/src/prog/gpm-root.y	2020-05-10 15:48:59.752067421 +0200
+@@ -443,6 +443,7 @@
+ }
+ 
+ /*---------------------------------------------------------------------*/
++#if 0
+ static int f_debug_one(FILE *f, Draw *draw)
+ {
+    DrawItem *ip;
+@@ -465,6 +466,7 @@
+ #undef LINE
+    return 0;
+ }
++#endif
+ 
+ int f_debug(int mode, DrawItem *self, int uid)
+ {
+@@ -960,10 +962,8 @@
+ /*------------*/
+ static inline void scr_restore(int fd, FILE *f, unsigned char *buffer, int vc)
+ {
+-   int x,y, dumpfd;
++   int dumpfd;
+    char dumpname[20];
+-
+-   x=buffer[2]; y=buffer[3];
+    
+    /* WILL NOT WORK WITH DEVFS! FIXME! */
+    sprintf(dumpname,"/dev/vcsa%i",vc);
+@@ -1196,11 +1196,7 @@
+                                                         LOG_DAEMON : LOG_USER);
+    /* reap your zombies */
+    childaction.sa_handler=reap_children;
+-#if defined(__GLIBC__)
+-   __sigemptyset(&childaction.sa_mask);
+-#else /* __GLIBC__ */
+-   childaction.sa_mask=0;
+-#endif /* __GLIBC__ */
++   sigemptyset(&childaction.sa_mask);
+    childaction.sa_flags=SA_INTERRUPT; /* need to break the select() call */
+    sigaction(SIGCHLD,&childaction,NULL);
+ 

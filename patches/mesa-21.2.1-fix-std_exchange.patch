@@ -1,0 +1,10 @@
+--- mesa-21.2.1.orig/src/amd/compiler/aco_instruction_selection.cpp	2021-08-19 16:13:57.910800500 +0000
++++ mesa-21.2.1/src/amd/compiler/aco_instruction_selection.cpp	2021-09-07 04:07:42.938782328 +0000
+@@ -41,6 +41,7 @@
+ #include <numeric>
+ #include <stack>
+ #include <vector>
++#include<utility>
+ 
+ namespace aco {
+ namespace {

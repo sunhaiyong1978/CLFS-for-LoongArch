@@ -1,0 +1,13 @@
+diff -Nurp guile-3.0.7.orig/module/system/base/target.scm guile-3.0.7/module/system/base/target.scm
+--- guile-3.0.7.orig/module/system/base/target.scm	2019-08-02 12:41:06.000000000 +0000
++++ guile-3.0.7/module/system/base/target.scm	2021-12-16 09:22:52.652361492 +0000
+@@ -77,7 +77,7 @@
+       (cond ((string-match "^i[0-9]86$" cpu)
+              (endianness little))
+             ((member cpu '("x86_64" "ia64"
+-                           "powerpcle" "powerpc64le" "mipsel" "mips64el" "nios2" "sh3" "sh4" "alpha"))
++                           "powerpcle" "powerpc64le" "mipsel" "mips64el" "nios2" "sh3" "sh4" "alpha" "loongarch64"))
+              (endianness little))
+             ((member cpu '("sparc" "sparc64" "powerpc" "powerpc64" "spu"
+                            "mips" "mips64" "m68k" "s390x"))
+
