@@ -56,7 +56,7 @@ su loongson
 　　使用以下命令下载QEMU代码：
 
 ```sh
-git clone https://github.com/gaosong-loongson/qemu.git -b tcg-dev
+git clone https://github.com/loongson/qemu.git -b tcg-dev
 ```
 
 经过一段时间的下载过程后我们就拥有了支持LoongArch64指令集的QEMU源代码。
