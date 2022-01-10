@@ -63,7 +63,7 @@ echo ":qemu-loongarch64:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x
 
     The above command registers the "header information" of the LoongArch executable file, and specifies that the qualified files will be executed using the "/bin/qemu-loongarch64" command, so this "/bin/qemu-loongarch64" command must be true and effective.
 
-    If you want to know what Binfmt is, you can search on the Internet by yourself, or look at the brief description of the documents mentioned in the preface.
+    If you want to know what Binfmt is, you can search on the Internet by yourself, or look at the brief description of the documents mentioned in the introduction.
 
 #### Chroot to LoongArch system
     In order to conveniently chroot to the LoongArch system through the Linux user-mode of QEMU, the registration of the Binfmt function is essential. After the registration is completed, the following one-time steps are required:
