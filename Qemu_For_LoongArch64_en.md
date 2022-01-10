@@ -6,7 +6,7 @@
 <center>Translator: Andrii Kurdiumov</center>
 
 ## 1 Introduction
-    Loongson Zhongke launched a new instruction set architecture LoongArch in 2021. This 64-bit instruction set is called LoongArch64.  
+    Loongson Technology launched a new instruction set architecture LoongArch in 2021. This 64-bit instruction set is called LoongArch64.  
     The operating system based on the LoongArch64 instruction set needs to run on a machine using the Loongson 3A5000 CPU. If you need simply work without such a machine, you need to use the QEMU emulator.  
     The goal of this article is to use QEMU to run a Linux system based on LoongArch64 through a step-by-step instructions.
 

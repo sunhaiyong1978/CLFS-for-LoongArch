@@ -6,9 +6,9 @@
 <center>Translator: Andrii Kurdiumov</center>
 
 
-## 0 Preface
-    Loongson Zhongke launched a new instruction set architecture LoongArch in 2021, of which the 64-bit instruction set is called LoongArch64.  
-    The goal of this article is to make a basic Linux system for LoongArch64. As a new instruction set architecture to make a Linux system, we can assume that there is no runnable system on the architecture platform as the premise, and use cross-compilation to make a Linux system. A basic Linux system.
+## 0 Introduction
+    Loongson Technology launched a new instruction set architecture LoongArch in 2021, of which the 64-bit instruction set is called LoongArch64.  
+    The goal of this article is to make a basic Linux system for LoongArch64. As a new instruction set architecture to make a Linux system, we can assume that there is no runnable system on the architecture platform as the premise, and use cross-compilation to make a basic Linux system.
 
 
 ## 1 About the porting of software packages
@@ -99,9 +99,9 @@ install -dv ${SYSDIR}/sysroot
 
 * The "build" directory is used to compile various software packages;
 
-* The "cross-tools" directory is used to store cross compilation tool chains and related software;
+* The "cross-tools" directory is used to store cross compilation toolchains and related software;
 
-* "Sysroot" is used to store the target platform system.
+* "sysroot" is used to store the target platform system.
 
 #### Create build user
 
@@ -389,8 +389,8 @@ popd
 ```
 
 
-## 3 Make a cross tool chain and related tools
-    Then we will formally enter the production link of cross tool chain and related tools.
+## 3 Make a cross-compile toolchain and related tools
+    Then we will formally enter the production link of cross-compile toolchain and related tools.
 ### 3.1 Linux kernel header file
 
 * Code preparation  
@@ -462,7 +462,7 @@ popd
 ```
 
 ### 3.3 GMP
-    Build the GMP software package used in the cross tool chain.
+    Build the GMP software package used in the cross-compile toolchain.
 
 ```sh
 tar xvf ${DOWNLOADDIR}/gmp-6.2.1.tar.xz -C ${BUILDDIR}
@@ -474,7 +474,7 @@ popd
 ```
 
 ### 3.4 MPFR
-    Build the MPFR software package used in the cross tool chain.  
+    Build the MPFR software package used in the cross-compile toolchain.  
 
 ```sh
 tar xvf ${DOWNLOADDIR}/mpfr-4.1.0.tar.xz -C ${BUILDDIR}
@@ -486,7 +486,7 @@ popd
 ```
 
 ### 3.5 MPC
-    Build the MPC software package used in the cross tool chain.
+    Build the MPC software package used in the cross-compile toolchain.
 
 ```sh
 tar xvf ${DOWNLOADDIR}/mpc-1.2.1.tar.gz -C ${BUILDDIR}
@@ -564,7 +564,7 @@ tar -czf ${DOWNLOADDIR}/glibc-2.34.tar.gz glibc-2.34
 ```
 
 * Production steps  
-    After building and installing the Binutils of the cross tool chain, the simplified version of GCC and the header files of the Linux kernel, you can compile the Glibc for the target system. The build and installation steps are as follows:
+    After building and installing the Binutils of the cross-compile toolchain, the simplified version of GCC and the header files of the Linux kernel, you can compile the Glibc for the target system. The build and installation steps are as follows:
 
 ```sh
 tar xvf ${DOWNLOADDIR}/glibc-2.34.tar.gz -C ${BUILDDIR}
@@ -590,7 +590,7 @@ popd
     Glibc is part of the target system, so when specifying path parameters such as prefix, it is set according to the path of the conventional system. Therefore, DESTDIR must be specified during installation to specify the installation to the directory where the target system is stored.
 
 ### 3.8 GCC for Cross Compiler (Full Version)
-    After completing the Glibc for the target system, you can start building the full version of GCC in the cross tool chain. The building steps are as follows:
+    After completing the Glibc for the target system, you can start building the full version of GCC in the cross-compile toolchain. The building steps are as follows:
 
 ```sh
 tar xvf ${DOWNLOADDIR}/gcc-12.0.0.tar.gz -C ${BUILDDIR} 
@@ -647,7 +647,7 @@ popd
     Apply the patch and install it in the directory of the cross toolchain, so that when there are subsequent software packages that need to update the script file, it can be replaced by the script file in the Automake installed this time.
 
 ### 3.11 Pkg-Config
-    In order to be able to use the "pc" file installed in the target system during the cross-compiling of the target system, we install a pkg-config in the directory of the cross tool chain specifically to query the "pc" file from the target system directory Command, the build process is as follows:
+    In order to be able to use the "pc" file installed in the target system during the cross-compiling of the target system, we install a pkg-config in the directory of the cross-compile toolchain specifically to query the "pc" file from the target system directory Command, the build process is as follows:
 
 ```sh
 tar xvf ${DOWNLOADDIR}/pkg-config-0.29.2.tar.gz -C ${BUILDDIR}/
@@ -671,7 +671,7 @@ popd
 ```
 
 ### 3.13 Groff
-	The process of compiling the target system will have certain requirements for Groff version, so install a newer version of Groff in the directory of the cross tool chain.
+	The process of compiling the target system will have certain requirements for Groff version, so install a newer version of Groff in the directory of the cross-compile toolchain.
 
 ```sh
 tar xvf ${DOWNLOADDIR}/groff-1.22.4.tar.gz -C ${BUILDDIR}
@@ -713,7 +713,7 @@ popd
 ```
 
 ### 3.16 Grub2
-    In order to make and generate the EFI boot file used on LoongArch machine in the cross-compilation environment, we store a Grub software package that can generate the EFI of the target machine in the cross tool chain directory.
+    In order to make and generate the EFI boot file used on LoongArch machine in the cross-compilation environment, we store a Grub software package that can generate the EFI of the target machine in the cross-compile toolchain directory.
 
 * Code preparation  
     Grub2 needs to be expanded and transplanted to the software package. If there is no official software support, a special method of obtaining code is required. The following is the method of obtaining:
@@ -762,7 +762,7 @@ popd
 
 
 ## 4 Make the target system
-    After the cross tool chain and related tools are built and installed, you can continue to produce the target system.
+    After the cross-compile toolchain and related tools are built and installed, you can continue to produce the target system.
     
 ### 4.1 Distribution building instructions
 
@@ -775,7 +775,7 @@ rm config.guess config.sub
 automake --add-missing
 ```
 
-    It is assumed here that the two script files config.guess and config.sub are in the first-level directory of the software package, or in directories such as build-aux, find the files and delete them, and then use the "--add-" of the automake command "missing" parameter to run, this parameter will automatically confirm whether the script for detecting the architecture is missing, if it is missing, it will be copied from the directory where the Automake package is installed, because automake runs in the cross tool chain directory, so it has been added The judgment of the LoongArch architecture, so that the software package can run normally.
+    It is assumed here that the two script files config.guess and config.sub are in the first-level directory of the software package, or in directories such as build-aux, find the files and delete them, and then use the "--add-" of the automake command "missing" parameter to run, this parameter will automatically confirm whether the script for detecting the architecture is missing, if it is missing, it will be copied from the directory where the Automake package is installed, because automake runs in the cross-compile toolchain directory, so it has been added The judgment of the LoongArch architecture, so that the software package can run normally.
 
     2. Directly replace the file, the specific operation method is:
 
@@ -1720,7 +1720,7 @@ endian ='little'
 EOF
 popd
 ```
-    After the above steps are completed, a meson-cross.txt file will be generated in the ${BUILDDIR} directory. This file contains the name of the target architecture when compiling Systemd, the system, the tool chain commands used, and the compilation parameters, etc., so that in the next It is enough to quote this file in the configuration phase of.
+    After the above steps are completed, a meson-cross.txt file will be generated in the ${BUILDDIR} directory. This file contains the name of the target architecture when compiling Systemd, the system, the toolchain commands used, and the compilation parameters, etc., so that in the next It is enough to quote this file in the configuration phase of.
 
     The following are the steps to configure and compile:
 
@@ -3784,7 +3784,7 @@ cp -av ${SYSDIR}/sysroot/usr/lib64/grub/loongarch64-efi ${SYSDIR}/sysroot/boot/g
 ### Clean up symbol information
     Currently, most of the binary files installed in the target system carry various symbol information, which does not affect execution, but takes up a large amount of storage space. If there is no debugging-related requirement, this information can be cleaned up to reduce storage space.
 
-    You can use the strip command to clean up symbol information, but strip must be able to handle the target platform binary, so we can use the strip command in the cross-compilation tool chain to operate. The steps are as follows:
+    You can use the strip command to clean up symbol information, but strip must be able to handle the target platform binary, so we can use the strip command in the cross-compilation toolchain to operate. The steps are as follows:
 
 ```sh
 pushd ${SYSDIR}/sysroot
