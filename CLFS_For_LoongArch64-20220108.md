@@ -924,7 +924,6 @@ popd
 ```sh
 tar xvf ${DOWNLOADDIR}/llvm-project-11.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/llvm-project-11/clang
-    patch -Np1 -i ${DOWNLOADDIR}/clang-11-build-fix.patch
     mkdir native-build
     pushd native-build
         LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" \
@@ -1832,9 +1831,9 @@ pushd ${BUILDDIR}/iproute2-5.12.0
 	sed -i /ARPD/d Makefile
 	rm -fv man/man8/arpd.8
 	sed -i 's/.m_ipt.o//' tc/Makefile
-	PKG_CONFIG=${CROSS_TARGET}-pkgconfig \
+	PKG_CONFIG=${CROSS_TARGET}-pkg-config \
 	make CC="${CROSS_TARGET}-gcc" HOSTCC="gcc" KERNEL_INCLUDE=${SYSDIR}/sysroot/usr/include ${JOBS}
-	PKG_CONFIG=${CROSS_TARGET}-pkgconfig \
+	PKG_CONFIG=${CROSS_TARGET}-pkg-config \
 	make CC="${CROSS_TARGET}-gcc" HOSTCC="gcc" KERNEL_INCLUDE=${SYSDIR}/sysroot/usr/include \
 			DESTDIR=${SYSDIR}/sysroot install
 popd
@@ -2186,7 +2185,7 @@ popd
 #### 安装证书
 ```sh
 tar xvf ${DOWNLOADDIR}/ssl-certs.tar.gz -C ${BUILDDIR}
-pushd certs
+pushd ${BUILDDIR}/certs
     cp -a * ${SYSDIR}/sysroot/etc/ssl/certs/
 popd
 ```
@@ -3519,7 +3518,6 @@ popd
 ```
 
 #### LLVM
-https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/llvm-12.0.1.src.tar.xz
 
 ```sh
 tar xvf ${DOWNLOADDIR}/llvm-project-11.tar.gz -C ${BUILDDIR}
@@ -3547,7 +3545,6 @@ popd
 ```
 
 #### Clang
-https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/llvm-12.0.1.src.tar.xz
 
 ```sh
 tar xvf ${DOWNLOADDIR}/llvm-project-11.tar.gz -C ${BUILDDIR}
