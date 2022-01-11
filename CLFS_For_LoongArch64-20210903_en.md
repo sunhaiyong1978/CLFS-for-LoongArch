@@ -40,7 +40,7 @@
     In order to minimize the problems caused by additional factors during the production system explanation process, we produced in a "rebuilt" Fedora system, and used the following commands to build in a system that supports the dnf command tool:
 
 ```sh
-export DISTRO_URL=https://mirrors.bfsu.edu.cn/fedora/releases/34/Everything/x86_64/os/
+export DISTRO_URL=https://download-cc-rdu01.fedoraproject.org/pub/fedora/linux/releases/34/Everything/x86_64/os/
 sudo dnf install @core @c-development rpm-build git python3-devel texinfo \
                  zlib-devel xz-lzma-compat gettext-devel perl-FindBin \
                  gdbm-devel expat-devel gobject-introspection-devel \
