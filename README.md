@@ -4,34 +4,18 @@
 [更新说明](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/ChangeLog.md)
 
 
-[CLFS_For_LoongArch64-20210831](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/CLFS_For_LoongArch64-20210831.md)：
+[CLFS_For_LoongArch64 5.0](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/CLFS_For_LoongArch64.md)：
 
-　　对应的CLFS系统：[loongarch64-clfs-system-20210831](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210831/loongarch64-clfs-system-20210831.tar.bz2)
+　　对应的CLFS系统：[loongarch64-clfs-system-5.0](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-system-5.0.tar.bz2)
 
-　　交叉工具链：[loongarch64-clfs-20210831-cross-tools](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210831/loongarch64-clfs-20210831-cross-tools.tar.xz)
-  
-[CLFS_For_LoongArch64-20210822](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/CLFS_For_LoongArch64-20210822.md)：
+附加包：
+　　LightDM桌面登录管理器：[loongarch64-clfs-system-5.0-lightdm](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-system-5.0-lightdm.tar.bz2)
+　　LXDE桌面环境：[loongarch64-clfs-system-5.0-WM-LXDE](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-system-5.0-WM-LXDE.tar.bz2)
 
-　　对应的CLFS系统：[loongarch64-clfs-system-20210822](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210822/loongarch64-clfs-system-20210822.tar.bz2)
 
-　　交叉工具链：[loongarch64-clfs-20210812-cross-tools](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210812/loongarch64-clfs-20210812-cross-tools.tar.xz)
-  
-[CLFS_For_LoongArch64-20210818](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/CLFS_For_LoongArch64-20210818.md)：
 
-　　对应的CLFS系统：[loongarch64-clfs-system-20210818](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210818/loongarch64-clfs-system-20210818.tar.bz2)
-
-　　交叉工具链：[loongarch64-clfs-20210812-cross-tools](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210812/loongarch64-clfs-20210812-cross-tools.tar.xz)
-  
-
-[CLFS_For_LoongArch64-20210812](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/CLFS_For_LoongArch64-20210812.md)：
-
-　　对应的CLFS系统：[loongarch64-clfs-system-20210812](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210812/loongarch64-clfs-system-20210812.tar.bz2)
-
-　　交叉工具链：[loongarch64-clfs-20210812-cross-tools](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210812/loongarch64-clfs-20210812-cross-tools.tar.xz)
-  
-
-[CLFS_For_LoongArch64-20210801](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/CLFS_For_LoongArch64-20210801.md)：
-
-　　对应的CLFS系统：[loongarch64-clfs-system-20210801](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210801/loongarch64-clfs-system-20210801.tar.bz2)
-
-　　交叉工具链：[loongarch64-clfs-20210801-cross-tools](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210801/loongarch64-clfs-20210801-cross-tools.tar.xz)
+以下交叉工具连均默认带gcc编译器。
+　　交叉工具链（精简版，不带任何库文件）：[loongarch64-clfs-5.0-cross-tools-c-only](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-5.0-cross-tools-c-only.tar.xz)
+　　交叉工具链（仅带glibc库支持）：[loongarch64-clfs-5.0-cross-tools-gcc-glibc](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-5.0-cross-tools-gcc-glibc.tar.xz)
+　　交叉工具链（带有对应CLFS系统全部库文件）：[loongarch64-clfs-5.0-cross-tools-gcc-full](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-5.0-cross-tools-gcc-full.tar.xz)
+　　交叉工具链（带有clang编译器且带有对应CLFS系统全部库文件）：[loongarch64-clfs-5.0-cross-tools-gcc_clang-full](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-5.0-cross-tools-gcc_and_clang-full.tar.xz)
