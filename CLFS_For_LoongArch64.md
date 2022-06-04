@@ -311,6 +311,7 @@ pushd ${SYSDIR}/downloads
 　　**Libxml2:** http://xmlsoft.org/sources/libxml2-2.9.12.tar.gz  
 　　**Libxslt:** http://xmlsoft.org/sources/libxslt-1.1.34.tar.gz  
 　　**Links:** http://links.twibright.com/download/links-2.23.tar.bz2  
+　　**Linux-headers:** ```https://github.com/torvalds/linux.git 分支名“master”```  
 　　**Linux:** ```https://github.com/loongson/linux.git 分支名“loongarch-next”```  
 　　**Linux-Firmware:** https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/linux-firmware-20211027.tar.xz  
 　　**LVM2:** https://sourceware.org/ftp/lvm2/LVM2.2.03.13.tgz  
@@ -406,18 +407,18 @@ popd
 ### 3.1 Linux内核头文件
 
 * 代码准备  
-　　Linux内核需要进行扩充式移植的软件包，在没有软件官方支持的情况下需要专门的获取代码的方式进行，以下是获取方式：
+　　目前Linux内核官方已经加入了LoongArch的相关支持，已经具备生成Linux内核头文件的条件，我们通过以下是获取代码：
 
 ```sh
-git clone https://github.com/loongson/linux.git -b loongarch-next --depth 1
+git clone https://github.com/torvalds/linux.git --depth 1
 pushd linux
-    git archive --format=tar --output ../linux-5.git.tar "loongarch-next"
+    git archive --format=tar --output ../linux-headers-5.git.tar "master"
 popd
-mkdir linux-5.git
-pushd linux-5.git
-    tar xvf ../linux-5.git.tar
+mkdir linux-headers-5.git
+pushd linux-headers-5.git
+    tar xvf ../linux-headers-5.git.tar
 popd
-tar -czf ${DOWNLOADDIR}/linux-5.git.tar.gz linux-5.git
+tar -czf ${DOWNLOADDIR}/linux-headers-5.git.tar.gz linux-headers-5.git
 
 ```
 
@@ -425,8 +426,8 @@ tar -czf ${DOWNLOADDIR}/linux-5.git.tar.gz linux-5.git
 　　按以下步骤制作Linux内核头文件并安装到目标系统目录中。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/linux-5.git.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-5.git
+tar xvf ${DOWNLOADDIR}/linux-headers-5.git.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-headers-5.git
 	make mrproper
 	make ARCH=loongarch INSTALL_HDR_PATH=dest headers_install
 	find dest/include -name '.*' -delete
@@ -6218,6 +6219,24 @@ popd
 ## 5 启动相关软件包
 
 #### Linux
+* 代码准备  
+　　目前Linux内核官方的代码还不能启动LoongArch的及其，目前需要获取专门的内核代码，以下是获取方式：
+
+```sh
+git clone https://github.com/loongson/linux.git -b loongarch-next --depth 1
+pushd linux
+    git archive --format=tar --output ../linux-5.git.tar "loongarch-next"
+popd
+mkdir linux-5.git
+pushd linux-5.git
+    tar xvf ../linux-5.git.tar
+popd
+tar -czf ${DOWNLOADDIR}/linux-5.git.tar.gz linux-5.git
+
+```
+
+* 开始编译
+
 ```sh
 tar xvf ${DOWNLOADDIR}/linux-5.git.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/linux-5.git
