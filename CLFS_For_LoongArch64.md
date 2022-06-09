@@ -6875,6 +6875,7 @@ popd
 ```sh
 pushd /tmp/liveusb
 cat > boot/grub/grub.cfg << "EOF"
+set timeout=5
 menuentry 'My GNU/Linux System for LoongArch64' {
 echo 'Loading Linux Kernel ...'
 linux /vmlinux root=<PARTUUID> rootdelay=5 rw quiet
