@@ -6233,7 +6233,7 @@ pushd ${BUILDDIR}/linux-5.git
 	     make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}- INSTALL_MOD_PATH=dest modules_install
 	mkdir -pv ${SYSDIR}/sysroot/lib/modules/
 	cp -av dest/lib/modules/* ${SYSDIR}/sysroot/lib/modules/
-	cp -av vmlinux ${SYSDIR}/sysroot/boot/vmlinux
+	cp -av arch/loongarch/boot/vmlinux.efi ${SYSDIR}/sysroot/boot/vmlinux.efi
 popd
 
 ```
@@ -6261,7 +6261,7 @@ Device Drivers  --->
     <*>   Event interface                  
 ```
 
-　　当Linux内核编译完成后，我们可以将内核文件“vmlinux”和对应的模块复制到目标系统存放的目录中。
+　　当Linux内核编译完成后，我们可以将内核文件“vmlinux.efi”和对应的模块复制到目标系统存放的目录中。
 
 
 #### ACPI-Update
@@ -6877,8 +6877,7 @@ pushd /tmp/liveusb
 cat > boot/grub/grub.cfg << "EOF"
 menuentry 'My GNU/Linux System for LoongArch64' {
 echo 'Loading Linux Kernel ...'
-linux /vmlinux root=<PARTUUID> rootdelay=5 rw quiet
-initrd /acpi-initrd
+linux /vmlinux.efi root=<PARTUUID> rootdelay=5 rw quiet
 boot
 }
 EOF
@@ -6888,7 +6887,7 @@ popd
 下面简单介绍一下菜单文件的设置内容：  
 　　* ```menuentry```，该设置项设置启动菜单显示的条目，一个条目对应一个`menuentry`。  
 　　* `echo`，输入内容，就是在屏幕上打印该行的内容。  
-　　* `linux`，加载Linux内核，因当前加载的grub.cfg与Linux内核vmlinux文件在同一个分区，则可以直接使用路径，若不在同一个分区中则需要设置磁盘和分区来指定内核文件路径。后面的`root=<PARTUUID> rootdelay=5 rw`都是提供给Linux内核启动时的参数：`root`指定启动根分区名，这里设置了待转换的```<PARTUUID>```，接下来会用到，也可以时用确定的设备名，假定U盘的设备名是sdb，根分区是sdb3，则在可以写成root=/dev/sdb3，当然这里需要根据U盘插入到目标机器上时的设备名进行修改；`rootdelay`设置等待时间，这通常在用U盘作为启动盘时使用，因为U盘会需要一小段的初始化，如果没有等待会导致找不到设备而启动失败；`rw`设置根分区按照可读写的方式挂载。  
+　　* `linux`，加载Linux内核，因当前加载的grub.cfg与Linux内核vmlinux.efi文件在同一个分区，则可以直接使用路径，若不在同一个分区中则需要设置磁盘和分区来指定内核文件路径。后面的`root=<PARTUUID> rootdelay=5 rw`都是提供给Linux内核启动时的参数：`root`指定启动根分区名，这里设置了待转换的```<PARTUUID>```，接下来会用到，也可以时用确定的设备名，假定U盘的设备名是sdb，根分区是sdb3，则在可以写成root=/dev/sdb3，当然这里需要根据U盘插入到目标机器上时的设备名进行修改；`rootdelay`设置等待时间，这通常在用U盘作为启动盘时使用，因为U盘会需要一小段的初始化，如果没有等待会导致找不到设备而启动失败；`rw`设置根分区按照可读写的方式挂载。  
 　　* `initrd`，用于加在initrd或者initramfs文件提供给内核使用。
 
 当设置根分区为待转换的```<PARTUUID>```时，就需要根据根分区的实际PARTUUID进行替换，替换步骤如下：
