@@ -6,7 +6,7 @@
 
 [CLFS_For_LoongArch64 5.0](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/CLFS_For_LoongArch64.md)：
 
-　　对应的CLFS系统：[loongarch64-clfs-system-5.1](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-system-5.1.tar.bz2)
+　　对应的CLFS系统：[loongarch64-clfs-system-5.5](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-system-5.5.tar.bz2)
 
 附加包：
 
@@ -14,7 +14,7 @@
 
 　　LXDE桌面环境：[loongarch64-clfs-system-5.0-WM-LXDE](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-system-5.0-WM-LXDE.tar.bz2)
 
-　　KDE桌面环境：[loongarch64-clfs-system-5.0-WM-KDE](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-system-5.1-WM-KDE.tar.bz2)
+　　KDE桌面环境：[loongarch64-clfs-system-5.5-WM-KDE](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-system-5.5-WM-KDE.tar.bz2)
 
 
 
