@@ -20,10 +20,10 @@
 
 以下交叉工具连均默认带gcc编译器。
 
-　　交叉工具链（精简版，不带任何库文件）：[loongarch64-clfs-5.0-cross-tools-c-only](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-5.0-cross-tools-c-only.tar.xz)
+　　交叉工具链（精简版，不带任何库文件）：[loongarch64-clfs-5.1-cross-tools-c-only](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-5.1-cross-tools-c-only.tar.xz)
   
-　　交叉工具链（仅带glibc库支持）：[loongarch64-clfs-5.0-cross-tools-gcc-glibc](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-5.0-cross-tools-gcc-glibc.tar.xz)
+　　交叉工具链（仅带glibc库支持）：[loongarch64-clfs-5.1-cross-tools-gcc-glibc](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-5.1-cross-tools-gcc-glibc.tar.xz)
   
-　　交叉工具链（带有对应CLFS系统全部库文件）：[loongarch64-clfs-5.0-cross-tools-gcc-full](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-5.0-cross-tools-gcc-full.tar.xz)
+　　交叉工具链（带有对应CLFS系统全部库文件）：[loongarch64-clfs-5.1-cross-tools-gcc-full](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-5.1-cross-tools-gcc-full.tar.xz)
   
-　　交叉工具链（带有clang编译器且带有对应CLFS系统全部库文件）：[loongarch64-clfs-5.0-cross-tools-gcc_clang-full](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-5.0-cross-tools-gcc_and_clang-full.tar.xz)
+　　交叉工具链（带有clang编译器且带有对应CLFS系统全部库文件）：[loongarch64-clfs-5.1-cross-tools-gcc_clang-full](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-5.1-cross-tools-gcc_and_clang-full.tar.xz)
