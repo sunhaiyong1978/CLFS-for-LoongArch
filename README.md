@@ -1,12 +1,12 @@
-# CLFS-for-LoongArch
+# CLFS for LoongArch
 如何交叉编译一个基于LoongArch架构的LFS（Linux From Scratch）系统。
 
 [更新说明](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/ChangeLog.md)
 
 
-[CLFS_For_LoongArch64 5.0](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/CLFS_For_LoongArch64.md)：
+[CLFS_For_LoongArch64 6.0](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/blob/main/CLFS_For_LoongArch64.md)：
 
-　　对应的CLFS系统：[loongarch64-clfs-system-5.5](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/5.0/loongarch64-clfs-system-5.5.tar.bz2)
+　　对应的CLFS系统：[loongarch64-clfs-system-6.1](https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/6.0/loongarch64-clfs-system-6.1.tar.bz2)
 
 附加包：
 
