@@ -268,7 +268,7 @@ pushd ${SYSDIR}/downloads
 　　**Gettext:** https://ftp.gnu.org/gnu/gettext/gettext-0.21.tar.xz  
 　　**Git:** https://www.kernel.org/pub/software/scm/git/git-2.37.1.tar.xz  
 　　**Glib:** https://download.gnome.org/sources/glib/2.72/glib-2.72.1.tar.xz  
-　　**Glibc:** ```https://github.com/loongson/glibc.git  分支名“loongarch_2_34_dev_v2.0”```  
+　　**Glibc:** https://ftp.gnu.org/gnu/libc/glibc-2.36.tar.xz  
 　　**Glibmm:** https://download.gnome.org/sources/glibmm/2.72/glibmm-2.72.0.tar.xz  
 　　**GMP:** https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz  
 　　**GnuTLS:** https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.4.tar.xz  
@@ -571,26 +571,10 @@ popd
 　　打上补丁并安装到交叉工具链的目录中，这样当后续有软件包需要更新脚本文件时就可以通过本次安装的Automake中的脚本文件来进行替换。
 
 ### 3.8 目标系统的Glibc
-* 代码准备  
-　　Glibc目前需要专门获取代码的方式，以下是获取步骤：
-
-```sh
-git clone git://sourceware.org/git/glibc.git --depth 1
-pushd glibc
-    git archive --format=tar --output ../glibc-2.36.tar "master"
-popd
-mkdir glibc-2.36
-pushd glibc-2.36
-    tar xvf ../glibc-2.36.tar
-popd
-tar -czf ${DOWNLOADDIR}/glibc-2.36.tar.gz glibc-2.36
-```
-
-* 制作步骤  
 　　在制作并安装好交叉工具链的Binutils、精简版的GCC以及Linux内核的头文件后就可以编译目标系统的Glibc了，制作和安装步骤如下：
 
 ```sh
-tar xvf ${DOWNLOADDIR}/glibc-2.36.tar.gz -C ${BUILDDIR}
+tar xvf ${DOWNLOADDIR}/glibc-2.36.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/glibc-2.36
     sed -i "s@5.15.0@4.15.0@g" sysdeps/unix/sysv/linux/loongarch/configure{,.ac}
     mkdir -v build-64
@@ -3514,6 +3498,23 @@ pushd ${BUILDDIR}/p11-kit-0.24.1
 popd
 ```
 
+#### Brotli
+https://github.com/google/brotli/archive/v1.0.9/brotli-1.0.9.tar.gz
+
+```sh
+tar xvf ${DOWNLOADDIR}/brotli-1.0.9.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/brotli-1.0.9
+    ./bootstrap
+    ./configure --prefix=/usr --libdir=/usr/lib64 \
+                --build=${CROSS_HOST} --host=${CROSS_TARGET}
+    make ${JOBS}
+    make DESTDIR=${SYSDIR}/sysroot install
+    rm -v ${SYSDIR}/sysroot//usr/lib64/libbrotli*.la
+popd
+```
+
+
+
 #### GnuTLS
 ```sh
 tar xvf ${DOWNLOADDIR}/gnutls-3.7.4.tar.xz -C ${BUILDDIR}
@@ -3522,6 +3523,7 @@ pushd ${BUILDDIR}/gnutls-3.7.4
                 --build=${CROSS_HOST} --host=${CROSS_TARGET} \
                 --enable-openssl-compatibility --enable-ssl3-support \
                 --with-default-trust-store-pkcs11="pkcs11:" \
+                --with-libz-prefix=${SYSDIR}/sysroot/usr \
                 --disable-guile --disable-doc
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
@@ -3829,19 +3831,21 @@ popd
 
 
 #### Wayland-Protocols
-https://wayland.freedesktop.org/releases/wayland-protocols-1.25.tar.xz
+https://wayland.freedesktop.org/releases/wayland-protocols-1.26.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/wayland-protocols-1.25.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/wayland-protocols-1.25
+tar xvf ${DOWNLOADDIR}/wayland-protocols-1.26.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/wayland-protocols-1.26
     sed -i -e "/dep_scanner =/s@, native: true@@g" \
            -e "/prog_scanner =/s@find_program\(.*\)\$@find_program('wayland-scanner')@g" \
            tests/meson.build
+    sed -i "/xdg-decoration/d" meson.build
     mkdir cross-build
     pushd cross-build
         PKG_CONFIG_SYSROOT_DIR="" \
         meson --prefix=/usr --libdir=/usr/lib64 --buildtype=release \
               --cross-file=${BUILDDIR}/meson-cross.txt ..
+        ninja
         DESTDIR=${SYSDIR}/sysroot ninja install
     popd
 popd
@@ -3853,6 +3857,7 @@ popd
 ```sh
 tar xvf ${DOWNLOADDIR}/llvm-project-11.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/llvm-project-11/llvm
+    patch -Np1 -i ${DOWNLOADDIR}/llvm-11-fix-for-gcc13.patch
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -3913,7 +3918,7 @@ pushd ${BUILDDIR}/rustc-1.57.0-src
     tar xvf ${DOWNLOADDIR}/llvm-project-11.tar.gz -C src/
     mv src/llvm-project-11 src/llvm-project
     pushd src/llvm-project
-        patch -Np1 -i ${DOWNLOADDIR}/llvm-11-fix-nopic.patch
+        patch -Np1 -i ${DOWNLOADDIR}/llvm-11-fix-for-gcc13.patch
     popd
     patch -Np1 -i ${DOWNLOADDIR}/rust-1.57-add-loongarch-support.patch
     patch -Np1 -i ${DOWNLOADDIR}/rust-1.57-add-libc-loongarch-support.patch
@@ -5978,6 +5983,7 @@ tar xvf ${DOWNLOADDIR}/qt-everywhere-opensource-src-5.15.5.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/qt-everywhere-src-5.15.5
     patch -Np1 -i ${DOWNLOADDIR}/qt-everywhere-opensource-src-5.15.5-kf5-1.patch
     patch -Np1 -i ${DOWNLOADDIR}/qt-everywhere-src-5.15.2-add-loongarch.patch
+    patch -Np1 -i ${DOWNLOADDIR}/qt-everywhere-src-5.15.5-fix-for-gcc13.patch
     mkdir pre-build
     pushd pre-build
         PKG_CONFIG_LIBDIR=${SYSDIR}/sysroot/usr/lib64/pkgconfig:${SYSDIR}/sysroot/usr/share/pkgconfig \
@@ -6731,21 +6737,18 @@ https://github.com/pygobject/pycairo/releases/download/v1.20.1/pycairo-1.20.1.ta
 
 ```sh
 tar xvf ${DOWNLOADDIR}/pycairo-1.20.1.tar.gz -C ${BUILDDIR}
+cp -a ${BUILDDIR}/pycairo-1.20.1{,-native}
+pushd ${BUILDDIR}/pycairo-1.20.1-native
+    PKG_CONFIG_PATH="" \
+    LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" ${SYSDIR}/cross-tools/bin/python3 setup.py build
+    PKG_CONFIG_PATH="" \
+    LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" ${SYSDIR}/cross-tools/bin/python3 setup.py install --optimize=1
+popd
 pushd ${BUILDDIR}/pycairo-1.20.1
-    mkdir native-build
-    pushd native-build
-        PKG_CONFIG="" PKG_CONFIG_PATH=""\
-        LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" ${SYSDIR}/cross-tools/bin/python3 setup.py build
-        PKG_CONFIG="" PKG_CONFIG_PATH="" \
-        LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" ${SYSDIR}/cross-tools/bin/python3 setup.py install --optimize=1
-    popd
-    mkdir cross-build
-    pushd cross-build
         _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
         ${SYSDIR}/cross-tools/bin/python3 setup.py build
         _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
         ${SYSDIR}/cross-tools/bin/python3 setup.py install --optimize=1 --root=${SYSDIR}/sysroot --prefix=/usr
-    popd
 popd
 ```
 
@@ -7191,6 +7194,7 @@ https://github.com/libarchive/libarchive/releases/download/v3.6.1/libarchive-3.6
 ```sh
 tar xvf ${DOWNLOADDIR}/libarchive-3.6.1.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/libarchive-3.6.1
+    sed -i "/linux\/fs.h/d" libarchive/archive_read_disk_posix.c
     ./configure $COMMON_CONFIG
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
@@ -8169,6 +8173,7 @@ https://webkitgtk.org/releases/webkitgtk-2.36.3.tar.xz
 tar xvf ${DOWNLOADDIR}/webkitgtk-2.36.3.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/webkitgtk-2.36.3
     patch -Np1 -i ${DOWNLOADDIR}/webkitgtk-add-loongarch64.patch
+    patch -Np1 -i ${DOWNLOADDIR}/webkitgtk-fix-for-gcc13.patch
     mkdir cross-prebuild
     pushd cross-prebuild
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -8343,6 +8348,7 @@ https://www.freedesktop.org/software/plymouth/releases/plymouth-22.02.122.tar.xz
 tar xvf ${DOWNLOADDIR}/plymouth-22.02.122.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/plymouth-22.02.122
     cp ${SYSDIR}/cross-tools/share/automake-1.16/config.* build-tools/
+    sed -i "/linux\/fs.h/d" src/libply/ply-utils.c
     ./configure $COMMON_CONFIG
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
@@ -8390,11 +8396,12 @@ popd
 ```
 
 #### Nodejs
-https://github.com/nodejs/node/archive/v18.5.0/node-v18.5.0.tar.gz
+https://github.com/nodejs/node/archive/v18.7.0/node-v18.7.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/node-v18.5.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/node-18.5.0
+tar xvf ${DOWNLOADDIR}/node-v18.7.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/node-18.7.0
+    patch -Np1 -i ${DOWNLOADDIR}/node-fix-for-gcc13.patch
     sed -i "s@registry.npmjs.org@registry.loongnix.cn:5873@g" deps/npm/lib/utils/config/definitions.js
     mkdir -pv out/Release
     for i in bytecode_builtins_list_generator gen-regexp-special-case torque mksnapshot
@@ -8444,6 +8451,7 @@ pushd ${BUILDDIR}/firefox-100.0
     patch -Np1 -i ${DOWNLOADDIR}/firefox-100-xpcom-add-loongarch.patch
     patch -Np1 -i ${DOWNLOADDIR}/firefox-100-for-clfs.patch
     patch -Np1 -i ${DOWNLOADDIR}/firefox-100-workround-fix.patch
+    patch -Np1 -i ${DOWNLOADDIR}/firefox-100-fix-for-gcc13.patch
     cat > mozconfig << "EOF"
 ac_add_options --disable-necko-wifi
 ac_add_options --with-system-icu
@@ -8480,21 +8488,20 @@ mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-build-dir
 EOF
     CC=${CROSS_TARGET}-gcc CXX=${CROSS_TARGET}-g++ \
     CXXFLAGS="-fpermissive" \
-    MACH_USE_SYSTEM_PYTHON=1 MOZBUILD_STATE_PATH=${PWD}/mozbuild \
+    MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system MOZBUILD_STATE_PATH=${PWD}/mozbuild \
     ./mach configure
     CC=${CROSS_TARGET}-gcc CXX=${CROSS_TARGET}-g++ \
     CXXFLAGS="-fpermissive" \
-    MACH_USE_SYSTEM_PYTHON=1 MOZBUILD_STATE_PATH=${PWD}/mozbuild \
+    MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system MOZBUILD_STATE_PATH=${PWD}/mozbuild \
     ./mach build ${JOBS}
     CC=${CROSS_TARGET}-gcc CXX=${CROSS_TARGET}-g++ \
     CXXFLAGS="-fpermissive" \
-    MACH_USE_SYSTEM_PYTHON=1 MOZBUILD_STATE_PATH=${PWD}/mozbuild \
+    MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system MOZBUILD_STATE_PATH=${PWD}/mozbuild \
     ./mach package
     CC=${CROSS_TARGET}-gcc CXX=${CROSS_TARGET}-g++ \
     CXXFLAGS="-fpermissive" \
-    MACH_USE_SYSTEM_PYTHON=1 MOZBUILD_STATE_PATH=${PWD}/mozbuild \
+    MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system MOZBUILD_STATE_PATH=${PWD}/mozbuild \
     ./mach build installers-zh-CN
-    MACH_USE_SYSTEM_PYTHON=1 DESTDIR=${SYSDIR}/sysroot ./mach install
     tar xvf firefox-build-dir/dist/firefox-100.0.zh-CN.linux-loongarch64.tar.bz2 \
         -C ${SYSDIR}/sysroot/usr/lib64/
     ln -sfv /usr/lib64/firefox/firefox ${SYSDIR}/sysroot/usr/bin/firefox
@@ -8554,6 +8561,7 @@ tar xvf ${DOWNLOADDIR}/jdk-18.0.1.1_linux-x64_bin.tar.gz -C ${SYSDIR}/cross-tool
 ```sh
 tar xvf ${DOWNLOADDIR}/jdk18-git.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/jdk18-git
+    sed -i "s@(defined LOONGARCH)@(defined LOONGARCH64)@g" src/hotspot/os/linux/os_linux.cpp
     LDFLAGS="" CC="${CROSS_TARGET}-gcc" \
     sh ./configure --prefix=/usr --host=${CROSS_TARGET} \
                 --with-zlib=system --with-libpng=system --enable-unlimited-crypto \
@@ -8578,18 +8586,19 @@ popd
 　　Golang支持LoongArch的版本使用以下方式获取：
 
 ```sh
-git clone https://github.com/golang/go.git -b master --depth 1
+git clone https://github.com/golang/go.git --depth 1
 pushd go
     git archive --format=tar --output ../golang-1.19-git.tar "master"
-popd
-mkdir golang-1.19-git
-pushd golang-1.19-git
-    tar xvf ../golang-1.19-git.tar
     echo -n 1.$(cat src/internal/goversion/goversion.go | \
                 grep 'const Version' | \
                 awk -F'=' '{print $2}' | \
                 sed 's/ //g')-$(git log -n 1 --format=format:"%h %cd" HEAD | \
-                awk -F' ' '{print $1}') > VERSION
+                awk -F' ' '{print $1}') > ../VERSION
+popd
+mkdir golang-1.19-git
+pushd golang-1.19-git
+    tar xvf ../golang-1.19-git.tar
+    mv ../VERSION ./
 popd
 tar -czf ${DOWNLOADDIR}/golang-1.19-git.tar.gz golang-1.19-git
 ```
