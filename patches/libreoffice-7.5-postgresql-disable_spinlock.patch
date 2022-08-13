@@ -1,0 +1,11 @@
+diff -Nurp core.orig/external/postgresql/ExternalProject_postgresql.mk core/external/postgresql/ExternalProject_postgresql.mk
+--- core.orig/external/postgresql/ExternalProject_postgresql.mk	2022-08-12 01:32:28.831617721 +0000
++++ core/external/postgresql/ExternalProject_postgresql.mk	2022-08-12 06:52:50.675810076 +0000
+@@ -69,6 +69,7 @@ $(call gb_ExternalProject_get_state_targ
+ 			--without-readline \
+ 			--without-zlib \
+ 			--with-ldap \
++			--disable-spinlocks \
+ 			$(gb_CONFIGURE_PLATFORMS) \
+ 			$(if $(ENABLE_OPENSSL),--with-openssl \
+ 				$(if $(WITH_GSSAPI),--with-gssapi)) \
