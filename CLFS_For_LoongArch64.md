@@ -316,13 +316,13 @@ pushd ${SYSDIR}/downloads
 　　**Libxcrypt:** https://github.com/besser82/libxcrypt/releases/download/v4.4.33/libxcrypt-4.4.33.tar.xz  
 　　**Libxml2:** http://xmlsoft.org/sources/libxml2-2.9.12.tar.gz  
 　　**Libxslt:** http://xmlsoft.org/sources/libxslt-1.1.34.tar.gz  
-　　**Links:** http://links.twibright.com/download/links-2.28.tar.bz2  
-　　**Linux-headers:** https://www.kernel.org/pub/linux/kernel/v6.x/linux-6.2.7.tar.xz  
+　　**Links:** http://links.twibright.com/download/links-2.29.tar.bz2  
+　　**Linux-headers:** https://www.kernel.org/pub/linux/kernel/v6.x/linux-6.2.8.tar.xz  
 　　**Linux:** ```https://github.com/loongson/linux.git 分支名“loongarch-next”```  
 　　**Linux-Firmware:** https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/linux-firmware-20230310.tar.xz  
 　　**LLVM:** https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/llvm-project-16.0.0.src.tar.xz  
 　　**Lua:** https://www.lua.org/ftp/lua-5.4.4.tar.gz  
-　　**LVM2:** https://sourceware.org/ftp/lvm2/LVM2.2.03.19.tgz  
+　　**LVM2:** https://sourceware.org/ftp/lvm2/LVM2.2.03.20.tgz  
 　　**M4:** https://ftp.gnu.org/gnu/m4/m4-1.4.19.tar.xz  
 　　**Make:** https://ftp.gnu.org/gnu/make/make-4.4.1.tar.gz  
 　　**Man-DB:** https://download.savannah.gnu.org/releases/man-db/man-db-2.11.2.tar.xz  
@@ -359,7 +359,7 @@ pushd ${SYSDIR}/downloads
 　　**Rust:** https://static.rust-lang.org/dist/rustc-1.68.0-src.tar.gz  
 　　**Sed:** https://ftp.gnu.org/gnu/sed/sed-4.9.tar.xz  
 　　**Shadow:** https://github.com/shadow-maint/shadow/releases/download/v4.11.1/shadow-4.11.1.tar.xz  
-　　**Sqlite3:** https://github.com/sqlite/sqlite/archive/version-3.41.1/sqlite-3.41.1.tar.gz  
+　　**Sqlite3:** https://github.com/sqlite/sqlite/archive/version-3.41.2/sqlite-3.41.2.tar.gz  
 　　**Systemd:** https://github.com/systemd/systemd/archive/v253/systemd-253.tar.gz  
 　　**Sudo:** https://www.sudo.ws/dist/sudo-1.9.13p3.tar.gz  
 　　**Tar:** https://ftp.gnu.org/gnu/tar/tar-1.34.tar.xz  
@@ -373,7 +373,7 @@ pushd ${SYSDIR}/downloads
 　　**Userspace-RCU:** https://lttng.org/files/urcu/userspace-rcu-0.14.tar.bz2  
 　　**Util-Linux:** https://www.kernel.org/pub/linux/utils/util-linux/v2.38/util-linux-2.38.1.tar.xz  
 　　**Vala:** https://download.gnome.org/sources/vala/0.56/vala-0.56.4.tar.xz  
-　　**VIM:** https://github.com/vim/vim/archive/v9.0.1418/vim-9.0.1418.tar.gz  
+　　**VIM:** https://github.com/vim/vim/archive/v9.0.1424/vim-9.0.1424.tar.gz  
 　　**WGet:** https://ftp.gnu.org/gnu/wget/wget-1.21.3.tar.gz  
 　　**Wireless-Tools:** https://hewlettpackard.github.io/wireless-tools/wireless_tools.29.tar.gz  
 　　**Wpa_Supplicant:** https://w1.fi/releases/wpa_supplicant-2.10.tar.gz  
@@ -403,7 +403,7 @@ pushd ${SYSDIR}/downloads
 其它文件下载地址：
 
 　　**SSL证书文件:** https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210818/ssl-certs.tar.gz  
-　　**时区文件:** https://data.iana.org/time-zones/releases/tzdata2022g.tar.gz
+　　**时区文件:** https://data.iana.org/time-zones/releases/tzdata2023a.tar.gz
 
 
 　　都下载完成后，离开"downloads"目录:
@@ -421,8 +421,8 @@ popd
 　　按以下步骤制作Linux内核头文件并安装到目标系统目录中。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/linux-6.2.7.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-6.2.7
+tar xvf ${DOWNLOADDIR}/linux-6.2.8.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-6.2.8
 	make mrproper
 	make ARCH=loongarch INSTALL_HDR_PATH=dest headers_install
 	find dest/include -name '.*' -delete
@@ -1191,9 +1191,9 @@ popd
 
 #### TZ-Data
 ```sh
-mkdir ${BUILDDIR}/tzdata-2022
-tar xvf ${DOWNLOADDIR}/tzdata2022g.tar.gz -C ${BUILDDIR}/tzdata-2022
-pushd ${BUILDDIR}/tzdata-2022
+mkdir ${BUILDDIR}/tzdata-2023
+tar xvf ${DOWNLOADDIR}/tzdata2023a.tar.gz -C ${BUILDDIR}/tzdata-2023
+pushd ${BUILDDIR}/tzdata-2023
     ZONEINFO=${SYSDIR}/sysroot/usr/share/zoneinfo
     mkdir -pv $ZONEINFO/{posix,right}
     for tz in etcetera southamerica northamerica europe africa antarctica  \
@@ -2088,8 +2088,8 @@ popd
 
 #### VIM
 ```sh
-tar xvf ${DOWNLOADDIR}/vim-9.0.1418.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/vim-9.0.1418
+tar xvf ${DOWNLOADDIR}/vim-9.0.1424.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/vim-9.0.1424
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 cat > src/auto/config.cache << EOF
 	vim_cv_getcwd_broken=no
@@ -2423,8 +2423,8 @@ sed -i "/wheel ALL=(ALL:ALL) ALL/s@# @@g" ${SYSDIR}/sysroot/etc/sudoers.dist
 
 #### SQLite3
 ```sh
-unzip ${DOWNLOADDIR}/sqlite-3.41.1.tar.gz -d ${BUILDDIR}
-pushd ${BUILDDIR}/sqlite-3.41.1
+unzip ${DOWNLOADDIR}/sqlite-3.41.2.tar.gz -d ${BUILDDIR}
+pushd ${BUILDDIR}/sqlite-3.41.2
     cp ${SYSDIR}/cross-tools/share/automake-*/config.* ./
     ./configure --prefix=/usr --libdir=/usr/lib64 \
                 --build=${CROSS_HOST} --host=${CROSS_TARGET} \
@@ -2776,8 +2776,8 @@ popd
 　　Links是一个文本环境下简易的互联网浏览器。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/links-2.28.tar.bz2 -C ${BUILDDIR}
-pushd ${BUILDDIR}/links-2.28
+tar xvf ${DOWNLOADDIR}/links-2.29.tar.bz2 -C ${BUILDDIR}
+pushd ${BUILDDIR}/links-2.29
     CC="${CROSS_TARGET}-gcc" \
     ./configure --prefix=/usr --libdir=/usr/lib64 --mandir=/usr/share/man \
 	            --build=${CROSS_HOST} --host=${CROSS_TARGET}
@@ -2942,8 +2942,8 @@ popd
 
 #### LVM2
 ```sh
-tar xvf ${DOWNLOADDIR}/LVM2.2.03.19.tgz -C ${BUILDDIR}
-pushd ${BUILDDIR}/LVM2.2.03.19
+tar xvf ${DOWNLOADDIR}/LVM2.2.03.20.tgz -C ${BUILDDIR}
+pushd ${BUILDDIR}/LVM2.2.03.20
     ./configure --prefix=/usr --libdir=/usr/lib64 --with-usrlibdir=/usr/lib64 \
                 --build=${CROSS_HOST} --host=${CROSS_TARGET} \
                 --enable-cmdlib --enable-pkgconfig --enable-udev_sync \
@@ -4025,14 +4025,22 @@ popd
 ```
 
 #### Mesa-Demos
-ftp://ftp.freedesktop.org/pub/mesa/demos/mesa-demos-8.4.0.tar.bz2
+ftp://ftp.freedesktop.org/pub/mesa/demos/mesa-demos-9.0.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/mesa-demos-8.4.0.tar.bz2 -C ${BUILDDIR}
-pushd ${BUILDDIR}/mesa-demos-8.4.0
-    ./configure $COMMON_CONFIG
-    make ${JOBS}
-    make DESTDIR=${SYSDIR}/sysroot install
+tar xvf ${DOWNLOADDIR}/mesa-demos-9.0.0.tar.bz2 -C ${BUILDDIR}
+pushd ${BUILDDIR}/mesa-demos-9.0.0
+    sed -i -e "/dep_wl_scanner =/s@, native: true@@g" \
+           -e "/prog_wl_scanner =/s@find_program\(.*\)\$@find_program('wayland-scanner')@g" \
+           meson.build
+    mkdir cross-build
+    pushd cross-build
+        PKG_CONFIG_SYSROOT_DIR="" \
+        meson --prefix=/usr --libdir=/usr/lib64 --buildtype=release \
+              --cross-file=${BUILDDIR}/meson-cross.txt ..
+        ninja
+        DESTDIR=${SYSDIR}/sysroot ninja install
+    popd
 popd
 ```
 
@@ -4240,11 +4248,11 @@ popd
 
 
 #### Xwayland
-https://www.x.org/archive/individual/xserver/xwayland-23.0.99.902.tar.xz
+https://www.x.org/archive/individual/xserver/xwayland-23.1.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/xwayland-23.0.99.902.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/xwayland-23.0.99.902
+tar xvf ${DOWNLOADDIR}/xwayland-23.1.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/xwayland-23.1.0
     sed -i -e "/scanner_dep/s@, native: true@@g" \
            -e "/scanner =/s@find_program\(.*\)\$@find_program('wayland-scanner')@g" \
            hw/xwayland/meson.build 
@@ -5925,11 +5933,11 @@ popd
 ```
 
 #### Scons
-https://downloads.sourceforge.net/scons/SCons-4.5.1.tar.gz
+https://downloads.sourceforge.net/scons/SCons-4.5.2.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/SCons-4.5.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/SCons-4.5.1
+tar xvf ${DOWNLOADDIR}/SCons-4.5.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/SCons-4.5.2
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     python3 setup.py install --optimize=1
     ${SYSDIR}/cross-tools/bin/python3 setup.py install \
@@ -6402,11 +6410,11 @@ popd
 ```
 
 #### NetworkManager
-https://download.gnome.org/sources/NetworkManager/1.43/NetworkManager-1.43.3.tar.xz
+https://download.gnome.org/sources/NetworkManager/1.43/NetworkManager-1.43.4.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/NetworkManager-1.43.3.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/NetworkManager-1.43.3
+tar xvf ${DOWNLOADDIR}/NetworkManager-1.43.4.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/NetworkManager-1.43.4
     sed -i "s@jansson_libdir,@'${SYSDIR}/sysroot' + &@g" meson.build
     mkdir cross-prebuild
     pushd cross-prebuild
@@ -8212,11 +8220,11 @@ popd
 ```
 
 #### Wpebackend-Fdo
-https://wpewebkit.org/releases/wpebackend-fdo-1.14.1.tar.xz
+https://wpewebkit.org/releases/wpebackend-fdo-1.14.2.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/wpebackend-fdo-1.14.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/wpebackend-fdo-1.14.1
+tar xvf ${DOWNLOADDIR}/wpebackend-fdo-1.14.2.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/wpebackend-fdo-1.14.2
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -8241,22 +8249,22 @@ popd
 ```
 
 #### Markdown
-https://files.pythonhosted.org/packages/85/7e/133e943e97a943d2f1d8bae0c5060f8ac50e6691754eb9dbe036b047a9bb/Markdown-3.4.1.tar.gz
+https://files.pythonhosted.org/packages/66/bf/a7c9e8cc23c105633b74e3280c2b06d13273da0df389e59395188d440017/Markdown-3.4.2.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/Markdown-3.4.1.tar.gz -C ${BUILDDIR}
-cp -a ${BUILDDIR}/Markdown-3.4.1{,.native}
-pushd ${BUILDDIR}/Markdown-3.4.1.native
+tar xvf ${DOWNLOADDIR}/Markdown-3.4.2.tar.gz -C ${BUILDDIR}
+cp -a ${BUILDDIR}/Markdown-3.4.2{,.native}
+pushd ${BUILDDIR}/Markdown-3.4.2.native
     PKG_CONFIG="" PKG_CONFIG_PATH="" \
-    LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" ${SYSDIR}/cross-tools/bin/python3 setup.py build
+    LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" ${SYSDIR}/cross-tools/bin/pip3 wheel -w dist --no-build-isolation --no-deps $PWD
     PKG_CONFIG="" PKG_CONFIG_PATH="" \
-    LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" ${SYSDIR}/cross-tools/bin/python3 setup.py install --optimize=1
+    LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" ${SYSDIR}/cross-tools/bin/pip3 install --no-index --find-links dist --no-cache-dir --force-reinstall --no-user Markdown
 popd
-pushd ${BUILDDIR}/Markdown-3.4.1
+pushd ${BUILDDIR}/Markdown-3.4.2
     _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
-    ${SYSDIR}/cross-tools/bin/python3 setup.py build
+    ${SYSDIR}/cross-tools/bin/pip3 wheel -w dist --no-build-isolation --no-deps $PWD
     _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
-    ${SYSDIR}/cross-tools/bin/python3 setup.py install --optimize=1 --root=${SYSDIR}/sysroot --prefix=/usr
+    ${SYSDIR}/cross-tools/bin/pip3 install --no-index --find-links dist --no-cache-dir --force-reinstall --no-user Markdown --root=${SYSDIR}/sysroot --prefix=/usr
 popd
 ```
 
