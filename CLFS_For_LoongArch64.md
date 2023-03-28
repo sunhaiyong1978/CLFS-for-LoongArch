@@ -241,7 +241,7 @@ pushd ${SYSDIR}/downloads
 　　**Bzip2:** https://www.sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz  
 　　**Coreutils:** https://ftp.gnu.org/gnu/coreutils/coreutils-9.2.tar.xz  
 　　**Check:** https://github.com/libcheck/check/releases/download/0.15.2/check-0.15.2.tar.gz  
-　　**CMake:** https://cmake.org/files/v3.26/cmake-3.26.0.tar.gz  
+　　**CMake:** https://cmake.org/files/v3.26/cmake-3.26.1.tar.gz  
 　　**CPIO:** https://ftp.gnu.org/gnu/cpio/cpio-2.13.tar.bz2  
 　　**Ctags:** http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz  
 　　**CURL:** https://curl.se/download/curl-8.0.1.tar.gz  
@@ -268,22 +268,22 @@ pushd ${SYSDIR}/downloads
 　　**GDBM:** https://ftp.gnu.org/gnu/gdbm/gdbm-1.23.tar.gz  
 　　**Gettext:** https://ftp.gnu.org/gnu/gettext/gettext-0.21.1.tar.xz  
 　　**Git:** https://www.kernel.org/pub/software/scm/git/git-2.40.0.tar.xz  
-　　**Glib:** https://download.gnome.org/sources/glib/2.76/glib-2.76.0.tar.xz  
+　　**Glib:** https://download.gnome.org/sources/glib/2.76/glib-2.76.1.tar.xz  
 　　**Glibc:** https://ftp.gnu.org/gnu/libc/glibc-2.37.tar.xz  
 　　**Glibmm:** https://download.gnome.org/sources/glibmm/2.76/glibmm-2.76.0.tar.xz  
 　　**GMP:** https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz  
 　　**GnuTLS:** https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.0.tar.xz  
-　　**Gobject-Introspection:** https://download.gnome.org/sources/gobject-introspection/1.76/gobject-introspection-1.76.0.tar.xz  
+　　**Gobject-Introspection:** https://download.gnome.org/sources/gobject-introspection/1.76/gobject-introspection-1.76.1.tar.xz  
 　　**GPerf:** https://ftp.gnu.org/gnu/gperf/gperf-3.1.tar.gz  
 　　**GPM:** https://www.nico.schottelius.org/software/gpm/archives/gpm-1.20.7.tar.bz2  
 　　**Graphite:** https://github.com/silnrsi/graphite/releases/download/1.3.14/graphite-1.3.14.tar.gz  
-　　**Grep:** https://ftp.gnu.org/gnu/grep/grep-3.9.tar.xz  
+　　**Grep:** https://ftp.gnu.org/gnu/grep/grep-3.10.tar.xz  
 　　**Groff:** https://ftp.gnu.org/gnu/groff/groff-1.22.4.tar.gz  
 　　**Grub2:** ```https://github.com/loongarch64/grub  分支名“dev/patchwork/efi”```  
 　　**Guile:** https://ftp.gnu.org/gnu/guile/guile-3.0.9.tar.xz  
 　　**Gzip:** https://ftp.gnu.org/gnu/gzip/gzip-1.12.tar.xz  
 　　**Harfbuzz:** https://github.com/harfbuzz/harfbuzz/releases/download/7.1.0/harfbuzz-7.1.0.tar.xz  
-　　**Iana-Etc:** https://github.com/Mic92/iana-etc/releases/download/20230316/iana-etc-20230316.tar.gz  
+　　**Iana-Etc:** https://github.com/Mic92/iana-etc/releases/download/20230320/iana-etc-20230320.tar.gz  
 　　**ICU4C:** https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz  
 　　**Inetutils:** https://ftp.gnu.org/gnu/inetutils/inetutils-2.4.tar.xz  
 　　**Inih:** https://github.com/benhoyt/inih/archive/r56/inih-r56.tar.gz  
@@ -295,7 +295,7 @@ pushd ${SYSDIR}/downloads
 　　**Less:** https://www.greenwoodsoftware.com/less/less-608.tar.gz  
 　　**Lcms:** https://downloads.sourceforge.net/lcms/lcms2-2.15.tar.gz  
 　　**Libaio:** https://ftp.debian.org/debian/pool/main/liba/libaio/libaio_0.3.113.orig.tar.gz  
-　　**Libcap:** https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-2.67.tar.xz  
+　　**Libcap:** https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-2.68.tar.xz  
 　　**Libelf:** https://sourceware.org/ftp/elfutils/0.189/elfutils-0.189.tar.bz2  
 　　**Libevent:** https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz  
 　　**Libffi:** https://github.com/libffi/libffi/archive/v3.4.4/libffi-3.4.4.tar.gz  
@@ -356,7 +356,7 @@ pushd ${SYSDIR}/downloads
 　　**QEMU:** https://download.qemu.org/qemu-7.2.0.tar.xz  
 　　**Readline:** https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz  
 　　**Ruby:** https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.1.tar.xz  
-　　**Rust:** https://static.rust-lang.org/dist/rustc-1.68.0-src.tar.gz  
+　　**Rust:** https://static.rust-lang.org/dist/rustc-1.68.1-src.tar.gz  
 　　**Sed:** https://ftp.gnu.org/gnu/sed/sed-4.9.tar.xz  
 　　**Shadow:** https://github.com/shadow-maint/shadow/releases/download/v4.11.1/shadow-4.11.1.tar.xz  
 　　**Sqlite3:** https://github.com/sqlite/sqlite/archive/version-3.41.2/sqlite-3.41.2.tar.gz  
@@ -364,7 +364,7 @@ pushd ${SYSDIR}/downloads
 　　**Sudo:** https://www.sudo.ws/dist/sudo-1.9.13p3.tar.gz  
 　　**Tar:** https://ftp.gnu.org/gnu/tar/tar-1.34.tar.xz  
 　　**Tcl:** https://downloads.sourceforge.net/tcl/tcl8.6.13-src.tar.gz  
-　　**Texinfo:** https://ftp.gnu.org/gnu/texinfo/texinfo-7.0.2.tar.xz  
+　　**Texinfo:** https://ftp.gnu.org/gnu/texinfo/texinfo-7.0.3.tar.xz  
 　　**Tiff:** https://download.osgeo.org/libtiff/tiff-4.5.0.tar.xz  
 　　**UnRAR:** https://www.rarlab.com/rar/unrarsrc-6.2.6.tar.gz  
 　　**UnZip:** ftp://ftp.info-zip.org/pub/infozip/src/unzip60.tgz  
@@ -372,12 +372,12 @@ pushd ${SYSDIR}/downloads
 　　**Usbutils:** https://www.kernel.org/pub/linux/utils/usb/usbutils/usbutils-015.tar.xz  
 　　**Userspace-RCU:** https://lttng.org/files/urcu/userspace-rcu-0.14.tar.bz2  
 　　**Util-Linux:** https://www.kernel.org/pub/linux/utils/util-linux/v2.38/util-linux-2.38.1.tar.xz  
-　　**Vala:** https://download.gnome.org/sources/vala/0.56/vala-0.56.4.tar.xz  
-　　**VIM:** https://github.com/vim/vim/archive/v9.0.1424/vim-9.0.1424.tar.gz  
+　　**Vala:** https://download.gnome.org/sources/vala/0.56/vala-0.56.5.tar.xz  
+　　**VIM:** https://github.com/vim/vim/archive/v9.0.1429/vim-9.0.1429.tar.gz  
 　　**WGet:** https://ftp.gnu.org/gnu/wget/wget-1.21.3.tar.gz  
 　　**Wireless-Tools:** https://hewlettpackard.github.io/wireless-tools/wireless_tools.29.tar.gz  
 　　**Wpa_Supplicant:** https://w1.fi/releases/wpa_supplicant-2.10.tar.gz  
-　　**Xfsprogs:** https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-6.1.1.tar.xz  
+　　**Xfsprogs:** https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-6.2.0.tar.xz  
 　　**XML-Parser:** https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-2.46.tar.gz  
 　　**XZ:** https://tukaani.org/xz/xz-5.4.2.tar.xz  
 　　**Zip:** ftp://ftp.info-zip.org/pub/infozip/src/zip30.tgz  
@@ -403,7 +403,7 @@ pushd ${SYSDIR}/downloads
 其它文件下载地址：
 
 　　**SSL证书文件:** https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210818/ssl-certs.tar.gz  
-　　**时区文件:** https://data.iana.org/time-zones/releases/tzdata2023a.tar.gz
+　　**时区文件:** https://data.iana.org/time-zones/releases/tzdata2023b.tar.gz
 
 
 　　都下载完成后，离开"downloads"目录:
@@ -828,8 +828,8 @@ popd
 
 ### 3.24 Gobject-Introspection
 ```sh
-tar xvf ${DOWNLOADDIR}/gobject-introspection-1.76.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/gobject-introspection-1.76.0
+tar xvf ${DOWNLOADDIR}/gobject-introspection-1.76.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gobject-introspection-1.76.1
     mkdir native-build
     pushd native-build
         meson --prefix=${SYSDIR}/cross-tools \
@@ -862,8 +862,8 @@ chmod +x ${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-g-ir-compiler
 
 ### 3.25 Vala
 ```sh
-tar xvf ${DOWNLOADDIR}/vala-0.56.4.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/vala-0.56.4
+tar xvf ${DOWNLOADDIR}/vala-0.56.5.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/vala-0.56.5
     ./configure --prefix=${SYSDIR}/cross-tools --disable-valadoc
     make ${JOBS}
     make install
@@ -944,9 +944,9 @@ popd
 　　以x86_64的环境为例，按照以下步骤进行下载和安装Rust。
 
 ```sh
-wget https://static.rust-lang.org/dist/rust-1.68.0-x86_64-unknown-linux-gnu.tar.gz
-tar xvf rust-1.68.0-x86_64-unknown-linux-gnu.tar.gz
-pushd rust-1.68.0-x86_64-unknown-linux-gnu
+wget https://static.rust-lang.org/dist/rust-1.68.1-x86_64-unknown-linux-gnu.tar.gz
+tar xvf rust-1.68.1-x86_64-unknown-linux-gnu.tar.gz
+pushd rust-1.68.1-x86_64-unknown-linux-gnu
     ./install.sh --destdir=${SYSDIR}/cross-tools/rust
 popd
 ```
@@ -954,8 +954,8 @@ popd
 　　完成主系统的Rust安装后，就可以给编译交叉工具链制作Rust软件包了，这样才能在后续进行目标系统Rust的制作。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/rustc-1.68.0-src.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/rustc-1.68.0-src
+tar xvf ${DOWNLOADDIR}/rustc-1.68.1-src.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/rustc-1.68.1-src
     rm -rf src/llvm-project
     tar xvf ${DOWNLOADDIR}/llvm-project-16.0.0.src.tar.xz -C src/
     mv src/llvm-project-16.0.0.src src/llvm-project
@@ -1017,8 +1017,8 @@ popd
 ### 3.32 CMake
 
 ```
-tar xvf ${DOWNLOADDIR}/cmake-3.26.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/cmake-3.26.0
+tar xvf ${DOWNLOADDIR}/cmake-3.26.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/cmake-3.26.1
     patch -Np1 -i ${DOWNLOADDIR}/cmake-3.22.3-add-loongarch64-to-checktypesize.patch
     mkdir build
     pushd build
@@ -1182,8 +1182,8 @@ popd
 
 #### Iana-Etc
 ```sh
-tar xvf ${DOWNLOADDIR}/iana-etc-20230316.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/iana-etc-20230316
+tar xvf ${DOWNLOADDIR}/iana-etc-20230320.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/iana-etc-20230320
 	cp -v services protocols ${SYSDIR}/sysroot/etc
 popd
 ```
@@ -1192,7 +1192,7 @@ popd
 #### TZ-Data
 ```sh
 mkdir ${BUILDDIR}/tzdata-2023
-tar xvf ${DOWNLOADDIR}/tzdata2023a.tar.gz -C ${BUILDDIR}/tzdata-2023
+tar xvf ${DOWNLOADDIR}/tzdata2023b.tar.gz -C ${BUILDDIR}/tzdata-2023
 pushd ${BUILDDIR}/tzdata-2023
     ZONEINFO=${SYSDIR}/sysroot/usr/share/zoneinfo
     mkdir -pv $ZONEINFO/{posix,right}
@@ -1467,8 +1467,8 @@ popd
 
 #### Libcap
 ```sh
-tar xvf ${DOWNLOADDIR}/libcap-2.67.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libcap-2.67
+tar xvf ${DOWNLOADDIR}/libcap-2.68.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libcap-2.68
 	make CROSS_COMPILE="${CROSS_TARGET}-" BUILD_CC="gcc" GOLANG=no prefix=/usr lib=lib64 ${JOBS}
 	make CROSS_COMPILE="${CROSS_TARGET}-" BUILD_CC="gcc" GOLANG=no prefix=/usr lib=lib64 \
 		 DESTDIR=${SYSDIR}/sysroot install
@@ -1635,8 +1635,8 @@ popd
 
 #### Grep
 ```sh
-tar xvf ${DOWNLOADDIR}/grep-3.9.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/grep-3.9
+tar xvf ${DOWNLOADDIR}/grep-3.10.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/grep-3.10
 	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
 	make ${JOBS}
 	make DESTDIR=${SYSDIR}/sysroot install
@@ -2005,8 +2005,8 @@ popd
 
 #### CMake
 ```sh
-tar xvf ${DOWNLOADDIR}/cmake-3.25.2.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/cmake-3.25.2
+tar xvf ${DOWNLOADDIR}/cmake-3.26.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/cmake-3.26.1
     patch -Np1 -i ${DOWNLOADDIR}/cmake-3.22.3-add-loongarch64-to-checktypesize.patch
     mkdir build
     pushd build
@@ -2068,8 +2068,8 @@ popd
 
 #### Texinfo
 ```sh
-tar xvf ${DOWNLOADDIR}/texinfo-7.0.2.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/texinfo-7.0.2
+tar xvf ${DOWNLOADDIR}/texinfo-7.0.3.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/texinfo-7.0.3
 sed -e 's/__attribute_nonnull__/__nonnull/' \
     -i gnulib/lib/malloc/dynarray-skeleton.c
 	for i in $(dirname $(find -name "config.sub"))
@@ -2088,8 +2088,8 @@ popd
 
 #### VIM
 ```sh
-tar xvf ${DOWNLOADDIR}/vim-9.0.1424.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/vim-9.0.1424
+tar xvf ${DOWNLOADDIR}/vim-9.0.1429.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/vim-9.0.1429
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 cat > src/auto/config.cache << EOF
 	vim_cv_getcwd_broken=no
@@ -2913,8 +2913,8 @@ popd
 
 #### Xfsprogs
 ```sh
-tar xvf ${DOWNLOADDIR}/xfsprogs-6.1.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/xfsprogs-6.1.1
+tar xvf ${DOWNLOADDIR}/xfsprogs-6.2.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/xfsprogs-6.2.0
     CC=${CROSS_TARGET}-gcc ./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET} \
                 --mandir=/usr/share/man
     make ${JOBS}
@@ -2984,8 +2984,8 @@ popd
 
 #### Glib
 ```sh
-tar xvf ${DOWNLOADDIR}/glib-2.76.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/glib-2.76.0
+tar xvf ${DOWNLOADDIR}/glib-2.76.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/glib-2.76.1
     mkdir build
     pushd build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -3249,8 +3249,8 @@ sed -i -e "s@/opt/mylaos/cross-tools/bin@/usr/bin@g" \
 
 #### Gobject-Introspection
 ```sh
-tar xvf ${DOWNLOADDIR}/gobject-introspection-1.76.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/gobject-introspection-1.76.0
+tar xvf ${DOWNLOADDIR}/gobject-introspection-1.76.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gobject-introspection-1.76.1
     sed -i -e "/gircompiler_command/s@gircompiler,@'${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-g-ir-compiler',@g" \
            -e "/g-ir-scanner/s@'g-ir-scanner'@'${CROSS_TARGET}-g-ir-scanner'@g" \
            gir/meson.build
@@ -3497,8 +3497,8 @@ rm -v ${SYSDIR}/sysroot/usr/lib64/libgnutls*.la
 
 #### Vala
 ```sh
-tar xvf ${DOWNLOADDIR}/vala-0.56.4.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/vala-0.56.4
+tar xvf ${DOWNLOADDIR}/vala-0.56.5.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/vala-0.56.5
     ./configure --prefix=/usr --libdir=/usr/lib64 \
                 --build=${CROSS_HOST} --host=${CROSS_TARGET} \
                 --disable-valadoc
@@ -3874,11 +3874,11 @@ popd
 
 
 #### Rust
-https://static.rust-lang.org/dist/rustc-1.68.0-src.tar.gz
+https://static.rust-lang.org/dist/rustc-1.68.1-src.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/rustc-1.68.0-src.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/rustc-1.68.0-src
+tar xvf ${DOWNLOADDIR}/rustc-1.68.1-src.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/rustc-1.68.1-src
     rm -rf src/llvm-project
     tar xvf ${DOWNLOADDIR}/llvm-project-16.0.0.src.tar.xz -C src/
     mv src/llvm-project-16.0.0.src src/llvm-project
@@ -3972,11 +3972,11 @@ popd
 ```
 
 #### Mesa
-https://archive.mesa3d.org/mesa-23.0.0.tar.xz
+https://archive.mesa3d.org/mesa-23.0.1.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/mesa-23.0.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/mesa-23.0.0
+tar xvf ${DOWNLOADDIR}/mesa-23.0.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/mesa-23.0.1
     sed -i -e "/dep_wl_scanner/s@, native: true@@g" \
            -e "/prog_wl_scanner/s@find_program\(.*\)\$@'wayland-scanner'@g" meson.build
     mkdir cross-build
@@ -4348,11 +4348,11 @@ popd
 ```
 
 #### Libinput
-https://gitlab.freedesktop.org/libinput/libinput/-/archive/1.22.1/libinput-1.22.1.tar.gz
+https://gitlab.freedesktop.org/libinput/libinput/-/archive/1.23.0/libinput-1.23.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libinput-1.22.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libinput-1.22.1
+tar xvf ${DOWNLOADDIR}/libinput-1.23.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libinput-1.23.0
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -6446,11 +6446,11 @@ popd
 ```
 
 #### Fish
-https://github.com/fish-shell/fish-shell/releases/download/3.6.0/fish-3.6.0.tar.xz
+https://github.com/fish-shell/fish-shell/releases/download/3.6.1/fish-3.6.1.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/fish-3.6.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/fish-3.6.0
+tar xvf ${DOWNLOADDIR}/fish-3.6.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/fish-3.6.1
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -6778,11 +6778,11 @@ popd
 ```
 
 #### PyGobject
-https://download.gnome.org/sources/pygobject/3.44/pygobject-3.44.0.tar.xz
+https://download.gnome.org/sources/pygobject/3.44/pygobject-3.44.1.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/pygobject-3.44.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/pygobject-3.44.0
+tar xvf ${DOWNLOADDIR}/pygobject-3.44.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/pygobject-3.44.1
     mkdir cross-build
     pushd cross-build
         PYTHON=${SYSDIR}/cross-tools/bin/python3 \
@@ -8249,18 +8249,18 @@ popd
 ```
 
 #### Markdown
-https://files.pythonhosted.org/packages/66/bf/a7c9e8cc23c105633b74e3280c2b06d13273da0df389e59395188d440017/Markdown-3.4.2.tar.gz
+https://files.pythonhosted.org/packages/9d/80/cc67bfb7deb973d5ae662ee6454d2dafaa8f7c106feafd0d1572666ebde5/Markdown-3.4.3.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/Markdown-3.4.2.tar.gz -C ${BUILDDIR}
-cp -a ${BUILDDIR}/Markdown-3.4.2{,.native}
-pushd ${BUILDDIR}/Markdown-3.4.2.native
+tar xvf ${DOWNLOADDIR}/Markdown-3.4.3.tar.gz -C ${BUILDDIR}
+cp -a ${BUILDDIR}/Markdown-3.4.3{,.native}
+pushd ${BUILDDIR}/Markdown-3.4.3.native
     PKG_CONFIG="" PKG_CONFIG_PATH="" \
     LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" ${SYSDIR}/cross-tools/bin/pip3 wheel -w dist --no-build-isolation --no-deps $PWD
     PKG_CONFIG="" PKG_CONFIG_PATH="" \
     LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" ${SYSDIR}/cross-tools/bin/pip3 install --no-index --find-links dist --no-cache-dir --force-reinstall --no-user Markdown
 popd
-pushd ${BUILDDIR}/Markdown-3.4.2
+pushd ${BUILDDIR}/Markdown-3.4.3
     _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
     ${SYSDIR}/cross-tools/bin/pip3 wheel -w dist --no-build-isolation --no-deps $PWD
     _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
@@ -8542,11 +8542,11 @@ chmod -v 777 ${SYSDIR}/sysroot/mnt/usb
 ```
 
 Squashfs-Tools
-https://sourceforge.net/projects/squashfs/files/squashfs/squashfs4.6/squashfs-tools-4.6.tar.gz
+https://sourceforge.net/projects/squashfs/files/squashfs/squashfs4.6.1/squashfs-tools-4.6.1.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/squashfs-tools-4.6.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/squashfs-tools-4.6/squashfs-tools
+tar xvf ${DOWNLOADDIR}/squashfs-tools-4.6.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/squashfs-tools-4.6.1/squashfs-tools
     for i in mksquashfs unsquashfs sqfstar sqfscat
     do
         sed -i.orig "s@^\$1@qemu-loongarch64 \$1@g" ../generate-manpages/$i-manpage.sh
