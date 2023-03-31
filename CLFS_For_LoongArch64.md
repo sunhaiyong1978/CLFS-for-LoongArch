@@ -241,7 +241,7 @@ pushd ${SYSDIR}/downloads
 　　**Bzip2:** https://www.sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz  
 　　**Coreutils:** https://ftp.gnu.org/gnu/coreutils/coreutils-9.2.tar.xz  
 　　**Check:** https://github.com/libcheck/check/releases/download/0.15.2/check-0.15.2.tar.gz  
-　　**CMake:** https://cmake.org/files/v3.26/cmake-3.26.1.tar.gz  
+　　**CMake:** https://cmake.org/files/v3.26/cmake-3.26.2.tar.gz  
 　　**CPIO:** https://ftp.gnu.org/gnu/cpio/cpio-2.13.tar.bz2  
 　　**Ctags:** http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz  
 　　**CURL:** https://curl.se/download/curl-8.0.1.tar.gz  
@@ -352,11 +352,11 @@ pushd ${SYSDIR}/downloads
 　　**PSmisc:** https://sourceforge.net/projects/psmisc/files/psmisc/psmisc-23.6.tar.xz  
 　　**Python:** https://www.python.org/ftp/python/3.11.2/Python-3.11.2.tar.xz  
 　　**Python-Pip:** https://files.pythonhosted.org/packages/6b/8b/0b16094553ecc680e43ded8f920c3873b01b1da79a54274c98f08cb29fca/pip-23.0.1.tar.gz  
-　　**Python-Setuptools:** https://files.pythonhosted.org/packages/25/f3/d68c20919bc774c6cb127f1762f2f2f999d700a58198556e883dd3700e58/setuptools-67.6.0.tar.gz  
+　　**Python-Setuptools:** https://files.pythonhosted.org/packages/cb/46/22ec35f286a77e6b94adf81b4f0d59f402ed981d4251df0ba7b992299146/setuptools-67.6.1.tar.gz  
 　　**QEMU:** https://download.qemu.org/qemu-7.2.0.tar.xz  
 　　**Readline:** https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz  
 　　**Ruby:** https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.1.tar.xz  
-　　**Rust:** https://static.rust-lang.org/dist/rustc-1.68.1-src.tar.gz  
+　　**Rust:** https://static.rust-lang.org/dist/rustc-1.68.2-src.tar.gz  
 　　**Sed:** https://ftp.gnu.org/gnu/sed/sed-4.9.tar.xz  
 　　**Shadow:** https://github.com/shadow-maint/shadow/releases/download/v4.11.1/shadow-4.11.1.tar.xz  
 　　**Sqlite3:** https://github.com/sqlite/sqlite/archive/version-3.41.2/sqlite-3.41.2.tar.gz  
@@ -373,7 +373,8 @@ pushd ${SYSDIR}/downloads
 　　**Userspace-RCU:** https://lttng.org/files/urcu/userspace-rcu-0.14.tar.bz2  
 　　**Util-Linux:** https://www.kernel.org/pub/linux/utils/util-linux/v2.38/util-linux-2.38.1.tar.xz  
 　　**Vala:** https://download.gnome.org/sources/vala/0.56/vala-0.56.5.tar.xz  
-　　**VIM:** https://github.com/vim/vim/archive/v9.0.1429/vim-9.0.1429.tar.gz  
+　　**VIM:** https://github.com/vim/vim/archive/v9.0.1430/vim-9.0.1430.tar.gz  
+　　**Wayland:** https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.21.93/downloads/wayland-1.21.93.tar.xz  
 　　**WGet:** https://ftp.gnu.org/gnu/wget/wget-1.21.3.tar.gz  
 　　**Wireless-Tools:** https://hewlettpackard.github.io/wireless-tools/wireless_tools.29.tar.gz  
 　　**Wpa_Supplicant:** https://w1.fi/releases/wpa_supplicant-2.10.tar.gz  
@@ -403,7 +404,7 @@ pushd ${SYSDIR}/downloads
 其它文件下载地址：
 
 　　**SSL证书文件:** https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/download/20210818/ssl-certs.tar.gz  
-　　**时区文件:** https://data.iana.org/time-zones/releases/tzdata2023b.tar.gz
+　　**时区文件:** https://data.iana.org/time-zones/releases/tzdata2023c.tar.gz
 
 
 　　都下载完成后，离开"downloads"目录:
@@ -902,7 +903,6 @@ pushd ${BUILDDIR}/llvm-project-16.0.0.src/llvm
                  -DCMAKE_INSTALL_RPATH="${SYSDIR}/cross-tools/lib64;\\\${ORIGIN}/../lib64" \
                  -DLLVM_BUILD_EXTERNAL_COMPILER_RT:BOOL=ON   \
                  -DLLVM_INSTALL_TOOLCHAIN_ONLY:BOOL=OFF \
-                 -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD="LoongArch" \
                  -DLLVM_DEFAULT_TARGET_TRIPLE=${CROSS_TARGET}
         ninja
         ninja install
@@ -954,8 +954,8 @@ popd
 　　完成主系统的Rust安装后，就可以给编译交叉工具链制作Rust软件包了，这样才能在后续进行目标系统Rust的制作。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/rustc-1.68.1-src.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/rustc-1.68.1-src
+tar xvf ${DOWNLOADDIR}/rustc-1.68.2-src.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/rustc-1.68.2-src
     rm -rf src/llvm-project
     tar xvf ${DOWNLOADDIR}/llvm-project-16.0.0.src.tar.xz -C src/
     mv src/llvm-project-16.0.0.src src/llvm-project
@@ -999,11 +999,10 @@ popd
 ```
 
 ### 3.31 Wayland
-https://wayland.freedesktop.org/releases/wayland-1.21.92.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/wayland-1.21.92.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/wayland-1.21.92
+tar xvf ${DOWNLOADDIR}/wayland-1.21.93.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/wayland-1.21.93
     mkdir build
     pushd build
         meson --prefix=${SYSDIR}/cross-tools --buildtype=release \
@@ -1017,8 +1016,8 @@ popd
 ### 3.32 CMake
 
 ```
-tar xvf ${DOWNLOADDIR}/cmake-3.26.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/cmake-3.26.1
+tar xvf ${DOWNLOADDIR}/cmake-3.26.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/cmake-3.26.2
     patch -Np1 -i ${DOWNLOADDIR}/cmake-3.22.3-add-loongarch64-to-checktypesize.patch
     mkdir build
     pushd build
@@ -1192,7 +1191,7 @@ popd
 #### TZ-Data
 ```sh
 mkdir ${BUILDDIR}/tzdata-2023
-tar xvf ${DOWNLOADDIR}/tzdata2023b.tar.gz -C ${BUILDDIR}/tzdata-2023
+tar xvf ${DOWNLOADDIR}/tzdata2023c.tar.gz -C ${BUILDDIR}/tzdata-2023
 pushd ${BUILDDIR}/tzdata-2023
     ZONEINFO=${SYSDIR}/sysroot/usr/share/zoneinfo
     mkdir -pv $ZONEINFO/{posix,right}
@@ -2005,13 +2004,13 @@ popd
 
 #### CMake
 ```sh
-tar xvf ${DOWNLOADDIR}/cmake-3.26.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/cmake-3.26.1
+tar xvf ${DOWNLOADDIR}/cmake-3.26.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/cmake-3.26.2
     patch -Np1 -i ${DOWNLOADDIR}/cmake-3.22.3-add-loongarch64-to-checktypesize.patch
     mkdir build
     pushd build
         cmake -DCMAKE_CXX_COMPILER="${CROSS_TARGET}-g++" -DCMAKE_C_COMPILER="${CROSS_TARGET}-gcc" \
-              -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_DOC_DIR=/share/doc/cmake-3.25 \
+              -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_DOC_DIR=/share/doc/cmake-3.26 \
               -DOPENSSL_ROOT_DIR=${SYSDIR}/sysroot/usr -DCMAKE_BUILD_TYPE=RELEASE ../
         sed -i "/P cmake_install.cmake/s@\tbin/cmake@\t/bin/cmake@g" Makefile
         make ${JOBS}
@@ -2088,8 +2087,8 @@ popd
 
 #### VIM
 ```sh
-tar xvf ${DOWNLOADDIR}/vim-9.0.1429.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/vim-9.0.1429
+tar xvf ${DOWNLOADDIR}/vim-9.0.1430.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/vim-9.0.1430
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 cat > src/auto/config.cache << EOF
 	vim_cv_getcwd_broken=no
@@ -2560,8 +2559,8 @@ popd
 
 #### Python-Setuptools
 ```sh
-tar xvf ${DOWNLOADDIR}/setuptools-67.6.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/setuptools-67.6.0
+tar xvf ${DOWNLOADDIR}/setuptools-67.6.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/setuptools-67.6.1
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     ${SYSDIR}/cross-tools/bin/python3 setup.py install --root=${SYSDIR}/sysroot --prefix=/usr
 popd
@@ -3778,11 +3777,10 @@ popd
 ```
 
 #### Wayland
-https://wayland.freedesktop.org/releases/wayland-1.21.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/wayland-1.21.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/wayland-1.21.0
+tar xvf ${DOWNLOADDIR}/wayland-1.21.93.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/wayland-1.21.93
     sed -i "/wayland_scanner_for_build =/s@find\(.*\)\$@wayland_scanner@g" src/meson.build
     sed -i -e "/scanner_dep =/s@, native: true@@g" src/meson.build
     mkdir cross-build
@@ -3836,7 +3834,6 @@ pushd ${BUILDDIR}/llvm-project-16.0.0.src/llvm
               -DLLVM_BUILD_LLVM_DYLIB:BOOL=ON \
               -DLLVM_LINK_LLVM_DYLIB:BOOL=ON -DLLVM_BUILD_EXTERNAL_COMPILER_RT:BOOL=ON \
               -DLLVM_INSTALL_TOOLCHAIN_ONLY:BOOL=OFF \
-              -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD="LoongArch" \
               -DLLVM_TARGET_ARCH=LoongArch -DLLVM_DEFAULT_TARGET_TRIPLE=${CROSS_TARGET} 
         ninja
         DESTDIR=${SYSDIR}/sysroot ninja install
@@ -3872,13 +3869,41 @@ pushd ${BUILDDIR}/llvm-project-16.0.0.src/clang
 popd
 ```
 
-
-#### Rust
-https://static.rust-lang.org/dist/rustc-1.68.1-src.tar.gz
+#### Compiler-RT
 
 ```sh
-tar xvf ${DOWNLOADDIR}/rustc-1.68.1-src.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/rustc-1.68.1-src
+tar xvf ${DOWNLOADDIR}/llvm-project-16.0.0.src.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/llvm-project-16.0.0.src/compiler-rt
+    mkdir cross-build
+    pushd cross-build
+            CC="clang" CXX="clang++" \
+            cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release \
+                  -DLLVM_CONFIG=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-llvm-config \
+                  -DLLVM_LIBDIR_SUFFIX=64 \
+                  -DCMAKE_AR="${SYSDIR}/cross-tools/bin/llvm-ar" \
+                  -DCMAKE_RANLIB="${SYSDIR}/cross-tools/bin/llvm-ranlib" \
+                  -DCMAKE_C_FLAGS="-DNDEBUG" -DCMAKE_CXX_FLAGS="-DNDEBUG" \
+                  -DLLVM_ENABLE_RTTI:BOOL=ON \
+                  -DLLVM_ENABLE_ZLIB:BOOL=ON \
+                  -DCMAKE_MAKE_PROGRAM:PATH=${SYSDIR}/cross-tools/bin/ninja \
+                  -DLLVM_ENABLE_TERMINFO:BOOL=OFF \
+                  -DLLVM_USE_SANITIZER:BOOL=ON \
+                  -DCMAKE_SYSROOT=${SYSROOT_DIR} \
+                  -DCMAKE_FIND_ROOT_PATH=${SYSDIR}/sysroot/usr \
+                  -DLLVM_LINK_LLVM_DYLIB:BOOL=ON \
+                  -DLLVM_HOST_TRIPLE=${CROSS_TARGET}
+        ninja
+        DESTDIR=${SYSDIR}/sysroot ninja install
+    popd
+popd
+```
+
+#### Rust
+https://static.rust-lang.org/dist/rustc-1.68.2-src.tar.gz
+
+```sh
+tar xvf ${DOWNLOADDIR}/rustc-1.68.2-src.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/rustc-1.68.2-src
     rm -rf src/llvm-project
     tar xvf ${DOWNLOADDIR}/llvm-project-16.0.0.src.tar.xz -C src/
     mv src/llvm-project-16.0.0.src src/llvm-project
@@ -3930,11 +3955,11 @@ popd
 ```
 
 #### Libva
-https://github.com/intel/libva/releases/download/2.17.0/libva-2.17.0.tar.bz2
+https://github.com/intel/libva/releases/download/2.18.0/libva-2.18.0.tar.bz2
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libva-2.17.0.tar.bz2 -C ${BUILDDIR}
-pushd ${BUILDDIR}/libva-2.17.0
+tar xvf ${DOWNLOADDIR}/libva-2.18.0.tar.bz2 -C ${BUILDDIR}
+pushd ${BUILDDIR}/libva-2.18.0
     ./configure $COMMON_CONFIG
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
@@ -4248,11 +4273,11 @@ popd
 
 
 #### Xwayland
-https://www.x.org/archive/individual/xserver/xwayland-23.1.0.tar.xz
+https://www.x.org/archive/individual/xserver/xwayland-23.1.1.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/xwayland-23.1.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/xwayland-23.1.0
+tar xvf ${DOWNLOADDIR}/xwayland-23.1.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/xwayland-23.1.1
     sed -i -e "/scanner_dep/s@, native: true@@g" \
            -e "/scanner =/s@find_program\(.*\)\$@find_program('wayland-scanner')@g" \
            hw/xwayland/meson.build 
@@ -4270,11 +4295,11 @@ mkdir -pv ${SYSDIR}/sysroot/etc/X11/xorg.conf.d
 ```
 
 #### Xorg-Server
-https://www.x.org/archive/individual/xserver/xorg-server-21.1.7.tar.xz
+https://www.x.org/archive/individual/xserver/xorg-server-21.1.8.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/xorg-server-21.1.7.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/xorg-server-21.1.7
+tar xvf ${DOWNLOADDIR}/xorg-server-21.1.8.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/xorg-server-21.1.8
     patch -Np1 -i ${DOWNLOADDIR}/xorg-server-21.1.3-fix-x11perf-segment-fault.patch
     ./configure $COMMON_CONFIG --enable-glamor \
             --enable-suid-wrapper --disable-selective-werror \
@@ -8075,10 +8100,10 @@ popd
 ```
 
 #### LibMediainfo
-http://mediaarea.net/download/source/libmediainfo/22.12/libmediainfo_22.12.tar.bz2
+http://mediaarea.net/download/source/libmediainfo/23.03/libmediainfo_23.03.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libmediainfo_22.12.tar.bz2 -C ${BUILDDIR}
+tar xvf ${DOWNLOADDIR}/libmediainfo_23.03.tar.bz2 -C ${BUILDDIR}
 pushd ${BUILDDIR}/MediaInfoLib/Project/GNU/Library
     autoreconf -ifv
     ./configure $COMMON_CONFIG --enable-shared \
@@ -8378,11 +8403,11 @@ popd
 ```
 
 #### WebKitGTK
-https://webkitgtk.org/releases/webkitgtk-2.40.0.tar.xz
+https://webkitgtk.org/releases/webkitgtk-2.41.1.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/webkitgtk-2.40.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/webkitgtk-2.40.0
+tar xvf ${DOWNLOADDIR}/webkitgtk-2.41.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/webkitgtk-2.41.1
     mkdir cross-prebuild
     pushd cross-prebuild
         WK_USE_CCACHE=NO CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -8494,11 +8519,11 @@ popd
 ```
 
 #### AccountsService
-https://www.freedesktop.org/software/accountsservice/accountsservice-23.11.69.tar.xz
+https://www.freedesktop.org/software/accountsservice/accountsservice-23.13.9.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/accountsservice-23.11.69.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/accountsservice-23.11.69
+tar xvf ${DOWNLOADDIR}/accountsservice-23.13.9.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/accountsservice-23.13.9
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
