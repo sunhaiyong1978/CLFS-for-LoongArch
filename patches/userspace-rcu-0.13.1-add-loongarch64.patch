@@ -1,0 +1,107 @@
+diff -Nurp userspace-rcu-0.13.1.orig/include/urcu/arch/loongarch64.h userspace-rcu-0.13.1/include/urcu/arch/loongarch64.h
+--- userspace-rcu-0.13.1.orig/include/urcu/arch/loongarch64.h	1970-01-01 00:00:00.000000000 +0000
++++ userspace-rcu-0.13.1/include/urcu/arch/loongarch64.h	2022-04-21 10:34:32.212507373 +0000
+@@ -0,0 +1,34 @@
++#ifndef _URCU_ARCH_LOONGARCH64_H
++#define _URCU_ARCH_LOONGARCH64_H
++
++/*
++ * arch/loongarch64.h: definitions for the LoongArch64 architecture
++ *
++ */
++
++#include <urcu/compiler.h>
++#include <urcu/config.h>
++#include <urcu/syscall-compat.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++#include <stdlib.h>
++#include <sys/time.h>
++
++/*
++ * On Linux, define the membarrier system call number if not yet available in
++ * the system headers.
++ */
++#if (defined(__linux__) && !defined(__NR_membarrier))
++#define __NR_membarrier		283
++#endif
++
++#ifdef __cplusplus
++}
++#endif
++
++#include <urcu/arch/generic.h>
++
++#endif /* _URCU_ARCH_LOONGARCH64_H */
+diff -Nurp userspace-rcu-0.13.1.orig/include/urcu/arch.h userspace-rcu-0.13.1/include/urcu/arch.h
+--- userspace-rcu-0.13.1.orig/include/urcu/arch.h	2022-01-05 20:38:11.000000000 +0000
++++ userspace-rcu-0.13.1/include/urcu/arch.h	2022-04-21 10:32:24.745512729 +0000
+@@ -167,6 +167,11 @@
+ #define URCU_ARCH_RISCV 1
+ #include <urcu/arch/riscv.h>
+ 
++#elif defined(__loongarch_lp64)
++
++#define URCU_ARCH_LOONGARCH64 1
++#include <urcu/arch/loongarch64.h>
++
+ #else
+ #error "Cannot build: unrecognized architecture, see <urcu/arch.h>."
+ #endif
+diff -Nurp userspace-rcu-0.13.1.orig/include/urcu/uatomic/loongarch64.h userspace-rcu-0.13.1/include/urcu/uatomic/loongarch64.h
+--- userspace-rcu-0.13.1.orig/include/urcu/uatomic/loongarch64.h	1970-01-01 00:00:00.000000000 +0000
++++ userspace-rcu-0.13.1/include/urcu/uatomic/loongarch64.h	2022-04-21 10:36:45.207501785 +0000
+@@ -0,0 +1,20 @@
++#ifndef _URCU_ARCH_UATOMIC_LOONGARCH64_H
++#define _URCU_ARCH_UATOMIC_LOONGARCH64_H
++
++#include <urcu/compiler.h>
++#include <urcu/system.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++#define UATOMIC_HAS_ATOMIC_BYTE
++#define UATOMIC_HAS_ATOMIC_SHORT
++
++#ifdef __cplusplus
++}
++#endif
++
++#include <urcu/uatomic/generic.h>
++
++#endif /* _URCU_ARCH_UATOMIC_LOONGARCH64_H */
+diff -Nurp userspace-rcu-0.13.1.orig/include/urcu/uatomic.h userspace-rcu-0.13.1/include/urcu/uatomic.h
+--- userspace-rcu-0.13.1.orig/include/urcu/uatomic.h	2022-01-05 20:38:11.000000000 +0000
++++ userspace-rcu-0.13.1/include/urcu/uatomic.h	2022-04-21 10:35:01.391506147 +0000
+@@ -51,6 +51,8 @@
+ #include <urcu/uatomic/m68k.h>
+ #elif defined(URCU_ARCH_RISCV)
+ #include <urcu/uatomic/riscv.h>
++#elif defined(URCU_ARCH_LOONGARCH64)
++#include <urcu/uatomic/loongarch64.h>
+ #else
+ #error "Cannot build: unrecognized architecture, see <urcu/arch.h>."
+ #endif
+--- userspace-rcu-0.13.1.ok/include/Makefile.am	2022-01-05 20:38:11.000000000 +0000
++++ userspace-rcu-0.13.1/include/Makefile.am	2022-04-21 11:09:50.474418370 +0000
+@@ -7,6 +7,7 @@ nobase_include_HEADERS = \
+ 	urcu/arch.h \
+ 	urcu/arch/hppa.h \
+ 	urcu/arch/ia64.h \
++	urcu/arch/loongarch64.h \
+ 	urcu/arch/m68k.h \
+ 	urcu/arch/mips.h \
+ 	urcu/arch/nios2.h \
+@@ -67,6 +68,7 @@ nobase_include_HEADERS = \
+ 	urcu/uatomic.h \
+ 	urcu/uatomic/hppa.h \
+ 	urcu/uatomic/ia64.h \
++	urcu/uatomic/loongarch64.h \
+ 	urcu/uatomic/m68k.h \
+ 	urcu/uatomic/mips.h \
+ 	urcu/uatomic/nios2.h \

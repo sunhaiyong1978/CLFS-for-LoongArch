@@ -5,25 +5,14 @@ diff -Nurp gc-8.0.6.orig/include/private/gcconfig.h gc-8.0.6/include/private/gcc
  #    define VAX
  #    define mach_type_known
  # endif
-+# if defined(__loongarch64) 
++# if defined(__loongarch_lp64) 
 +#    define LOONGARCH64
 +#    define mach_type_known
 +# endif
  # if defined(mips) || defined(__mips) || defined(_mips)
  #    define MIPS
  #    if defined(nec_ews) || defined(_nec_ews)
-@@ -514,6 +518,10 @@ EXTERN_C_BEGIN
- #   define AARCH64
- #   define mach_type_known
- # endif
-+# if defined(FREEBSD) && (defined(__loongarch64) )
-+#   define LOONGARCH64
-+#   define mach_type_known
-+# endif
- # if defined(FREEBSD) && (defined(mips) || defined(__mips) || defined(_mips))
- #   define MIPS
- #   define mach_type_known
-@@ -1732,6 +1740,26 @@ EXTERN_C_BEGIN
+@@ -1732,6 +1736,26 @@ EXTERN_C_BEGIN
  #   define STACKBOTTOM ((ptr_t)0xfffff000) /* for Encore */
  # endif
  

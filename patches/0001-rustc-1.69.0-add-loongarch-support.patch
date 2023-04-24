@@ -1,0 +1,412 @@
+From aa99e5592f6f5bce4a09ccb2a2502f75b9e82b84 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Fri, 21 Apr 2023 14:00:01 +0000
+Subject: [PATCH] rustc 1.69.0 add loongarch support
+
+---
+ .../rustc_codegen_ssa/src/back/metadata.rs    |   5 +
+ compiler/rustc_llvm/build.rs                  |   1 +
+ .../rustc_llvm/llvm-wrapper/PassWrapper.cpp   |   7 +
+ compiler/rustc_llvm/src/lib.rs                |   8 ++
+ .../src/spec/loongarch64_unknown_linux_gnu.rs |  19 +++
+ compiler/rustc_target/src/spec/mod.rs         |   1 +
+ library/std/src/env.rs                        |   1 +
+ library/std/src/os/linux/raw.rs               |   3 +-
+ library/std/src/personality/gcc.rs            |   3 +
+ library/std/src/sys/common/alloc.rs           |   1 +
+ library/unwind/src/libunwind.rs               |   3 +
+ src/bootstrap/bootstrap.py                    |   1 +
+ src/bootstrap/lib.rs                          |   2 +-
+ src/bootstrap/native.rs                       |   2 +-
+ src/librustdoc/clean/cfg.rs                   |   1 +
+ vendor/cc/src/lib.rs                          |   1 +
+ vendor/object-0.29.0/src/elf.rs               | 121 ++++++++++++++++--
+ 17 files changed, 165 insertions(+), 15 deletions(-)
+ create mode 100644 compiler/rustc_target/src/spec/loongarch64_unknown_linux_gnu.rs
+
+diff --git a/compiler/rustc_codegen_ssa/src/back/metadata.rs b/compiler/rustc_codegen_ssa/src/back/metadata.rs
+index 019ec0758..118c68a92 100644
+--- a/compiler/rustc_codegen_ssa/src/back/metadata.rs
++++ b/compiler/rustc_codegen_ssa/src/back/metadata.rs
+@@ -123,6 +123,7 @@ pub(crate) fn create_object_file(sess: &Session) -> Option<write::Object<'static
+         "powerpc64" => Architecture::PowerPc64,
+         "riscv32" => Architecture::Riscv32,
+         "riscv64" => Architecture::Riscv64,
++        "loongarch64" => Architecture::LoongArch64,
+         "sparc64" => Architecture::Sparc64,
+         "avr" => Architecture::Avr,
+         "msp430" => Architecture::Msp430,
+@@ -172,6 +173,10 @@ pub(crate) fn create_object_file(sess: &Session) -> Option<write::Object<'static
+                 };
+             e_flags
+         }
++	Architecture::LoongArch64 => {
++	    let e_flags = elf::EF_LARCH_ABI_DOUBLE_FLOAT;
++	    e_flags
++	}
+         Architecture::Riscv32 | Architecture::Riscv64 => {
+             // Source: https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/079772828bd10933d34121117a222b4cc0ee2200/riscv-elf.adoc
+             let mut e_flags: u32 = 0x0;
+diff --git a/compiler/rustc_llvm/build.rs b/compiler/rustc_llvm/build.rs
+index 9fe59a1d8..f30277014 100644
+--- a/compiler/rustc_llvm/build.rs
++++ b/compiler/rustc_llvm/build.rs
+@@ -10,6 +10,7 @@ const OPTIONAL_COMPONENTS: &[&str] = &[
+     "aarch64",
+     "amdgpu",
+     "avr",
++    "loongarch",
+     "m68k",
+     "mips",
+     "powerpc",
+diff --git a/compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp b/compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp
+index 4761ce83f..f426b3231 100644
+--- a/compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp
++++ b/compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp
+@@ -136,6 +136,12 @@ extern "C" void LLVMTimeTraceProfilerFinish(const char* FileName) {
+ #define SUBTARGET_RISCV
+ #endif
+ 
++#ifdef LLVM_COMPONENT_LOONGARCH
++#define SUBTARGET_LOONGARCH SUBTARGET(LoongArch)
++#else
++#define SUBTARGET_LOONGARCH
++#endif
++
+ #ifdef LLVM_COMPONENT_SPARC
+ #define SUBTARGET_SPARC SUBTARGET(Sparc)
+ #else
+@@ -161,6 +167,7 @@ extern "C" void LLVMTimeTraceProfilerFinish(const char* FileName) {
+   SUBTARGET_SPARC                                                              \
+   SUBTARGET_HEXAGON                                                            \
+   SUBTARGET_RISCV                                                              \
++  SUBTARGET_LOONGARCH                                                          \
+ 
+ #define SUBTARGET(x)                                                           \
+   namespace llvm {                                                             \
+diff --git a/compiler/rustc_llvm/src/lib.rs b/compiler/rustc_llvm/src/lib.rs
+index 8542dcf5b..06351731b 100644
+--- a/compiler/rustc_llvm/src/lib.rs
++++ b/compiler/rustc_llvm/src/lib.rs
+@@ -102,6 +102,14 @@ pub fn initialize_available_targets() {
+         LLVMInitializeM68kAsmPrinter,
+         LLVMInitializeM68kAsmParser
+     );
++    init_target!(
++        llvm_component = "loongarch",
++        LLVMInitializeLoongArchTargetInfo,
++        LLVMInitializeLoongArchTarget,
++        LLVMInitializeLoongArchTargetMC,
++        LLVMInitializeLoongArchAsmPrinter,
++        LLVMInitializeLoongArchAsmParser
++    );
+     init_target!(
+         llvm_component = "mips",
+         LLVMInitializeMipsTargetInfo,
+diff --git a/compiler/rustc_target/src/spec/loongarch64_unknown_linux_gnu.rs b/compiler/rustc_target/src/spec/loongarch64_unknown_linux_gnu.rs
+new file mode 100644
+index 000000000..2f9dd6ed9
+--- /dev/null
++++ b/compiler/rustc_target/src/spec/loongarch64_unknown_linux_gnu.rs
+@@ -0,0 +1,19 @@
++use crate::spec::{CodeModel, Target, TargetOptions};
++
++pub fn target() -> Target {
++    Target {
++        llvm_target: "loongarch64-unknown-linux-gnu".into(),
++        pointer_width: 64,
++        data_layout: "e-m:e-p:64:64-i64:64-i128:128-n64-S128".into(),
++        arch: "loongarch64".into(),
++        options: TargetOptions {
++            code_model: Some(CodeModel::Medium),
++            cpu: "la464".into(),
++            features: "+f,+d".into(),
++            llvm_abiname: "lp64d".into(),
++            max_atomic_width: Some(64),
++            ..super::linux_gnu_base::opts()
++        }
++    }
++}
++
+diff --git a/compiler/rustc_target/src/spec/mod.rs b/compiler/rustc_target/src/spec/mod.rs
+index 0d86a3032..8eb380439 100644
+--- a/compiler/rustc_target/src/spec/mod.rs
++++ b/compiler/rustc_target/src/spec/mod.rs
+@@ -1029,6 +1029,7 @@ supported_targets! {
+     ("mipsisa64r6-unknown-linux-gnuabi64", mipsisa64r6_unknown_linux_gnuabi64),
+     ("mipsisa64r6el-unknown-linux-gnuabi64", mipsisa64r6el_unknown_linux_gnuabi64),
+     ("mipsel-unknown-linux-gnu", mipsel_unknown_linux_gnu),
++    ("loongarch64-unknown-linux-gnu", loongarch64_unknown_linux_gnu),
+     ("powerpc-unknown-linux-gnu", powerpc_unknown_linux_gnu),
+     ("powerpc-unknown-linux-gnuspe", powerpc_unknown_linux_gnuspe),
+     ("powerpc-unknown-linux-musl", powerpc_unknown_linux_musl),
+diff --git a/library/std/src/env.rs b/library/std/src/env.rs
+index 183f9ab3b..3014fe6e2 100644
+--- a/library/std/src/env.rs
++++ b/library/std/src/env.rs
+@@ -895,6 +895,7 @@ pub mod consts {
+     /// - x86_64
+     /// - arm
+     /// - aarch64
++    /// - loongarch64
+     /// - m68k
+     /// - mips
+     /// - mips64
+diff --git a/library/std/src/os/linux/raw.rs b/library/std/src/os/linux/raw.rs
+index f46028c3a..c76fb4a47 100644
+--- a/library/std/src/os/linux/raw.rs
++++ b/library/std/src/os/linux/raw.rs
+@@ -235,7 +235,8 @@ mod arch {
+     target_arch = "s390x",
+     target_arch = "sparc64",
+     target_arch = "riscv64",
+-    target_arch = "riscv32"
++    target_arch = "riscv32",
++    target_arch = "loongarch64"
+ ))]
+ mod arch {
+     #[stable(feature = "raw_ext", since = "1.1.0")]
+diff --git a/library/std/src/personality/gcc.rs b/library/std/src/personality/gcc.rs
+index 41c0fe725..6533c9c3d 100644
+--- a/library/std/src/personality/gcc.rs
++++ b/library/std/src/personality/gcc.rs
+@@ -77,6 +77,9 @@ const UNWIND_DATA_REG: (i32, i32) = (0, 1); // R0, R1
+ #[cfg(any(target_arch = "riscv64", target_arch = "riscv32"))]
+ const UNWIND_DATA_REG: (i32, i32) = (10, 11); // x10, x11
+ 
++#[cfg(target_arch = "loongarch64")]
++const UNWIND_DATA_REG: (i32, i32) = (4, 5); // A0, A1
++
+ // The following code is based on GCC's C and C++ personality routines.  For reference, see:
+ // https://github.com/gcc-mirror/gcc/blob/master/libstdc++-v3/libsupc++/eh_personality.cc
+ // https://github.com/gcc-mirror/gcc/blob/trunk/libgcc/unwind-c.c
+diff --git a/library/std/src/sys/common/alloc.rs b/library/std/src/sys/common/alloc.rs
+index 403a5e627..a5fcbdf39 100644
+--- a/library/std/src/sys/common/alloc.rs
++++ b/library/std/src/sys/common/alloc.rs
+@@ -22,6 +22,7 @@ pub const MIN_ALIGN: usize = 8;
+ #[cfg(any(
+     target_arch = "x86_64",
+     target_arch = "aarch64",
++    target_arch = "loongarch64",
+     target_arch = "mips64",
+     target_arch = "s390x",
+     target_arch = "sparc64",
+diff --git a/library/unwind/src/libunwind.rs b/library/unwind/src/libunwind.rs
+index eeeed3afc..2ef405f54 100644
+--- a/library/unwind/src/libunwind.rs
++++ b/library/unwind/src/libunwind.rs
+@@ -51,6 +51,9 @@ pub const unwinder_private_data_size: usize = 5;
+ #[cfg(target_arch = "m68k")]
+ pub const unwinder_private_data_size: usize = 2;
+ 
++#[cfg(target_arch = "loongarch64")]
++pub const unwinder_private_data_size: usize = 2;
++
+ #[cfg(target_arch = "mips")]
+ pub const unwinder_private_data_size: usize = 2;
+ 
+diff --git a/src/bootstrap/bootstrap.py b/src/bootstrap/bootstrap.py
+index 013d1ab52..cd5948439 100644
+--- a/src/bootstrap/bootstrap.py
++++ b/src/bootstrap/bootstrap.py
+@@ -304,6 +304,7 @@ def default_build_triple(verbose):
+         'i486': 'i686',
+         'i686': 'i686',
+         'i786': 'i686',
++        'loongarch64': 'loongarch64',
+         'm68k': 'm68k',
+         'powerpc': 'powerpc',
+         'powerpc64': 'powerpc64',
+diff --git a/src/bootstrap/lib.rs b/src/bootstrap/lib.rs
+index 950f3b151..72252c7c6 100644
+--- a/src/bootstrap/lib.rs
++++ b/src/bootstrap/lib.rs
+@@ -127,7 +127,7 @@ const EXTRA_CHECK_CFGS: &[(Option<Mode>, &'static str, Option<&[&'static str]>)]
+     /* Extra values not defined in the built-in targets yet, but used in std */
+     (Some(Mode::Std), "target_env", Some(&["libnx"])),
+     // (Some(Mode::Std), "target_os", Some(&[])),
+-    (Some(Mode::Std), "target_arch", Some(&["asmjs", "spirv", "nvptx", "xtensa"])),
++    (Some(Mode::Std), "target_arch", Some(&["asmjs", "spirv", "nvptx", "xtensa", "loongarch64"])),
+     /* Extra names used by dependencies */
+     // FIXME: Used by serde_json, but we should not be triggering on external dependencies.
+     (Some(Mode::Rustc), "no_btreemap_remove_entry", None),
+diff --git a/src/bootstrap/native.rs b/src/bootstrap/native.rs
+index 5987b641b..98b6f3150 100644
+--- a/src/bootstrap/native.rs
++++ b/src/bootstrap/native.rs
+@@ -301,7 +301,7 @@ impl Step for Llvm {
+         let llvm_targets = match &builder.config.llvm_targets {
+             Some(s) => s,
+             None => {
+-                "AArch64;ARM;BPF;Hexagon;MSP430;Mips;NVPTX;PowerPC;RISCV;\
++                "AArch64;ARM;BPF;Hexagon;LoongArch;MSP430;Mips;NVPTX;PowerPC;RISCV;\
+                      Sparc;SystemZ;WebAssembly;X86"
+             }
+         };
+diff --git a/src/librustdoc/clean/cfg.rs b/src/librustdoc/clean/cfg.rs
+index dd58a5b51..68ff0df8e 100644
+--- a/src/librustdoc/clean/cfg.rs
++++ b/src/librustdoc/clean/cfg.rs
+@@ -517,6 +517,7 @@ impl<'a> fmt::Display for Display<'a> {
+                         "aarch64" => "AArch64",
+                         "arm" => "ARM",
+                         "asmjs" => "JavaScript",
++                        "loongarch64" => "LoongArch64",
+                         "m68k" => "M68k",
+                         "mips" => "MIPS",
+                         "mips64" => "MIPS-64",
+diff --git a/vendor/cc/src/lib.rs b/vendor/cc/src/lib.rs
+index 1ebd2cc7a..85df9dbf1 100644
+--- a/vendor/cc/src/lib.rs
++++ b/vendor/cc/src/lib.rs
+@@ -2774,6 +2774,7 @@ impl Build {
+             ]), // explicit None if not found, so caller knows to fall back
+             "i686-unknown-linux-musl" => Some("musl"),
+             "i686-unknown-netbsd" => Some("i486--netbsdelf"),
++            "loongarch64-unknown-linux-gnu" => Some("loongarch64-linux-gnu"),
+             "mips-unknown-linux-gnu" => Some("mips-linux-gnu"),
+             "mips-unknown-linux-musl" => Some("mips-linux-musl"),
+             "mipsel-unknown-linux-gnu" => Some("mipsel-linux-gnu"),
+diff --git a/vendor/object-0.29.0/src/elf.rs b/vendor/object-0.29.0/src/elf.rs
+index 9f6577269..38b058916 100644
+--- a/vendor/object-0.29.0/src/elf.rs
++++ b/vendor/object-0.29.0/src/elf.rs
+@@ -6251,18 +6251,17 @@ pub const R_NDS32_TLS_TPOFF: u32 = 102;
+ pub const R_NDS32_TLS_DESC: u32 = 119;
+ 
+ // LoongArch values `FileHeader*::e_flags`.
+-/// Uses 64-bit GPRs and the stack for parameter passing
+-pub const EF_LARCH_ABI_LP64S: u32 = 0x1;
+-/// Uses 64-bit GPRs, 32-bit FPRs and the stack for parameter passing
+-pub const EF_LARCH_ABI_LP64F: u32 = 0x2;
+-/// Uses 64-bit GPRs, 64-bit FPRs and the stack for parameter passing
+-pub const EF_LARCH_ABI_LP64D: u32 = 0x3;
+-/// Uses 32-bit GPRs and the stack for parameter passing
+-pub const EF_LARCH_ABI_ILP32S: u32 = 0x5;
+-/// Uses 32-bit GPRs, 32-bit FPRs and the stack for parameter passing
+-pub const EF_LARCH_ABI_ILP32F: u32 = 0x6;
+-/// Uses 32-bit GPRs, 64-bit FPRs and the stack for parameter passing
+-pub const EF_LARCH_ABI_ILP32D: u32 = 0x7;
++/// Additional properties of the base ABI type, including the FP calling
++/// convention.
++pub const EF_LARCH_ABI_MODIFIER_MASK: u32 = 0x7;
++/// Uses GPRs and the stack for parameter passing
++pub const EF_LARCH_ABI_SOFT_FLOAT: u32 = 0x1;
++/// Uses GPRs, 32-bit FPRs and the stack for parameter passing
++pub const EF_LARCH_ABI_SINGLE_FLOAT: u32 = 0x2;
++/// Uses GPRs, 64-bit FPRs and the stack for parameter passing
++pub const EF_LARCH_ABI_DOUBLE_FLOAT: u32 = 0x3;
++/// Uses relocation types directly writing to immediate slots
++pub const EF_LARCH_OBJABI_V1: u32 = 0x40;
+ 
+ // LoongArch values `Rel*::r_type`.
+ /// No reloc
+@@ -6372,6 +6371,104 @@ pub const R_LARCH_SUB64: u32 = 56;
+ pub const R_LARCH_GNU_VTINHERIT: u32 = 57;
+ /// GNU C++ vtable member usage
+ pub const R_LARCH_GNU_VTENTRY: u32 = 58;
++/// 18-bit PC-relative jump offset with two trailing zeros
++pub const R_LARCH_B16: u32 = 64;
++/// 23-bit PC-relative jump offset with two trailing zeros
++pub const R_LARCH_B21: u32 = 65;
++/// 28-bit PC-relative jump offset with two trailing zeros
++pub const R_LARCH_B26: u32 = 66;
++/// 12..=31 bits of 32/64-bit absolute address
++pub const R_LARCH_ABS_HI20: u32 = 67;
++/// 0..=11 bits of 32/64-bit absolute address
++pub const R_LARCH_ABS_LO12: u32 = 68;
++/// 32..=51 bits of 64-bit absolute address
++pub const R_LARCH_ABS64_LO20: u32 = 69;
++/// 52..=63 bits of 64-bit absolute address
++pub const R_LARCH_ABS64_HI12: u32 = 70;
++/// The signed 32-bit offset `offs` from `PC & 0xfffff000` to
++/// `(S + A + 0x800) & 0xfffff000`, with 12 trailing zeros removed.
++///
++/// We define the *PC relative anchor* for `S + A` as `PC + offs` (`offs`
++/// is sign-extended to VA bits).
++pub const R_LARCH_PCALA_HI20: u32 = 71;
++/// Same as R_LARCH_ABS_LO12.  0..=11 bits of the 32/64-bit offset from the
++/// [PC relative anchor][R_LARCH_PCALA_HI20].
++pub const R_LARCH_PCALA_LO12: u32 = 72;
++/// 32..=51 bits of the 64-bit offset from the
++/// [PC relative anchor][R_LARCH_PCALA_HI20].
++pub const R_LARCH_PCALA64_LO20: u32 = 73;
++/// 52..=63 bits of the 64-bit offset from the
++/// [PC relative anchor][R_LARCH_PCALA_HI20].
++pub const R_LARCH_PCALA64_HI12: u32 = 74;
++/// The signed 32-bit offset `offs` from `PC & 0xfffff000` to
++/// `(GP + G + 0x800) & 0xfffff000`, with 12 trailing zeros removed.
++///
++/// We define the *PC relative anchor* for the GOT entry at `GP + G` as
++/// `PC + offs` (`offs` is sign-extended to VA bits).
++pub const R_LARCH_GOT_PC_HI20: u32 = 75;
++/// 0..=11 bits of the 32/64-bit offset from the
++/// [PC relative anchor][R_LARCH_GOT_PC_HI20] to the GOT entry.
++pub const R_LARCH_GOT_PC_LO12: u32 = 76;
++/// 32..=51 bits of the 64-bit offset from the
++/// [PC relative anchor][R_LARCH_GOT_PC_HI20] to the GOT entry.
++pub const R_LARCH_GOT64_PC_LO20: u32 = 77;
++/// 52..=63 bits of the 64-bit offset from the
++/// [PC relative anchor][R_LARCH_GOT_PC_HI20] to the GOT entry.
++pub const R_LARCH_GOT64_PC_HI12: u32 = 78;
++/// 12..=31 bits of 32/64-bit GOT entry absolute address
++pub const R_LARCH_GOT_HI20: u32 = 79;
++/// 0..=11 bits of 32/64-bit GOT entry absolute address
++pub const R_LARCH_GOT_LO12: u32 = 80;
++/// 32..=51 bits of 64-bit GOT entry absolute address
++pub const R_LARCH_GOT64_LO20: u32 = 81;
++/// 52..=63 bits of 64-bit GOT entry absolute address
++pub const R_LARCH_GOT64_HI12: u32 = 82;
++/// 12..=31 bits of TLS LE 32/64-bit offset from thread pointer
++pub const R_LARCH_TLS_LE_HI20: u32 = 83;
++/// 0..=11 bits of TLS LE 32/64-bit offset from thread pointer
++pub const R_LARCH_TLS_LE_LO12: u32 = 84;
++/// 32..=51 bits of TLS LE 64-bit offset from thread pointer
++pub const R_LARCH_TLS_LE64_LO20: u32 = 85;
++/// 52..=63 bits of TLS LE 64-bit offset from thread pointer
++pub const R_LARCH_TLS_LE64_HI12: u32 = 86;
++/// The signed 32-bit offset `offs` from `PC & 0xfffff000` to
++/// `(GP + IE + 0x800) & 0xfffff000`, with 12 trailing zeros removed.
++///
++/// We define the *PC relative anchor* for the TLS IE GOT entry at
++/// `GP + IE` as `PC + offs` (`offs` is sign-extended to VA bits).
++pub const R_LARCH_TLS_IE_PC_HI20: u32 = 87;
++/// 0..=12 bits of the 32/64-bit offset from the
++/// [PC-relative anchor][R_LARCH_TLS_IE_PC_HI20] to the TLS IE GOT entry.
++pub const R_LARCH_TLS_IE_PC_LO12: u32 = 88;
++/// 32..=51 bits of the 64-bit offset from the
++/// [PC-relative anchor][R_LARCH_TLS_IE_PC_HI20] to the TLS IE GOT entry.
++pub const R_LARCH_TLS_IE64_PC_LO20: u32 = 89;
++/// 52..=63 bits of the 64-bit offset from the
++/// [PC-relative anchor][R_LARCH_TLS_IE_PC_HI20] to the TLS IE GOT entry.
++pub const R_LARCH_TLS_IE64_PC_HI12: u32 = 90;
++/// 12..=31 bits of TLS IE GOT entry 32/64-bit absolute address
++pub const R_LARCH_TLS_IE_HI20: u32 = 91;
++/// 0..=11 bits of TLS IE GOT entry 32/64-bit absolute address
++pub const R_LARCH_TLS_IE_LO12: u32 = 92;
++/// 32..=51 bits of TLS IE GOT entry 64-bit absolute address
++pub const R_LARCH_TLS_IE64_LO20: u32 = 93;
++/// 51..=63 bits of TLS IE GOT entry 64-bit absolute address
++pub const R_LARCH_TLS_IE64_HI12: u32 = 94;
++/// 12..=31 bits of the offset from `PC` to `GP + GD + 0x800`, where
++/// `GP + GD` is a TLS LD GOT entry
++pub const R_LARCH_TLS_LD_PC_HI20: u32 = 95;
++/// 12..=31 bits of TLS LD GOT entry 32/64-bit absolute address
++pub const R_LARCH_TLS_LD_HI20: u32 = 96;
++/// 12..=31 bits of the 32/64-bit PC-relative offset to the PC-relative
++/// anchor for the TLE GD GOT entry.
++pub const R_LARCH_TLS_GD_PC_HI20: u32 = 97;
++/// 12..=31 bits of TLS GD GOT entry 32/64-bit absolute address
++pub const R_LARCH_TLS_GD_HI20: u32 = 98;
++/// 32-bit PC relative
++pub const R_LARCH_32_PCREL: u32 = 99;
++/// Paired with a normal relocation at the same address to indicate the
++/// insturction can be relaxed
++pub const R_LARCH_RELAX: u32 = 100;
+ 
+ unsafe_impl_endian_pod!(
+     FileHeader32,
+-- 
+2.31.1
+

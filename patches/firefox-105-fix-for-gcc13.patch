@@ -1,0 +1,22 @@
+diff -Nurp firefox-105.0.orig/toolkit/components/telemetry/pingsender/pingsender.cpp firefox-105.0/toolkit/components/telemetry/pingsender/pingsender.cpp
+--- firefox-105.0.orig/toolkit/components/telemetry/pingsender/pingsender.cpp	2022-09-15 18:50:28.000000000 +0000
++++ firefox-105.0/toolkit/components/telemetry/pingsender/pingsender.cpp	2022-09-20 04:46:11.421696481 +0000
+@@ -9,6 +9,7 @@
+ #include <fstream>
+ #include <iomanip>
+ #include <string>
++#include <cstdint>
+ #include <vector>
+ 
+ #include <zlib.h>
+diff -Nurp firefox-105.0.orig/gfx/2d/Rect.h firefox-105.0/gfx/2d/Rect.h
+--- firefox-105.0.orig/gfx/2d/Rect.h	2022-09-15 18:49:09.000000000 +0000
++++ firefox-105.0/gfx/2d/Rect.h	2022-09-20 04:35:44.173722836 +0000
+@@ -15,6 +15,7 @@
+ #include "mozilla/Maybe.h"
+ 
+ #include <cmath>
++#include <cstdint>
+ 
+ namespace mozilla {
+ 

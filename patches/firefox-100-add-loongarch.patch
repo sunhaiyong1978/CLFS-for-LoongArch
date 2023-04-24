@@ -1,0 +1,39 @@
+diff -Nurp firefox-100.0.orig/ipc/chromium/src/build/build_config.h firefox-100.0/ipc/chromium/src/build/build_config.h
+--- firefox-100.0.orig/ipc/chromium/src/build/build_config.h	2022-04-28 22:02:47.000000000 +0000
++++ firefox-100.0/ipc/chromium/src/build/build_config.h	2022-06-08 07:15:25.232514650 +0000
+@@ -125,6 +125,9 @@
+ #elif defined(__riscv) && __riscv_xlen == 64
+ #  define ARCH_CPU_RISCV64 1
+ #  define ARCH_CPU_64_BITS 1
++#elif defined(__loongarch_lp64)
++#  define ARCH_CPU_LOONGARCH64 1
++#  define ARCH_CPU_64_BITS 1
+ #else
+ #  error Please add support for your architecture in build/build_config.h
+ #endif
+diff -Nurp firefox-100.0.orig/third_party/libwebrtc/build/build_config.h firefox-100.0/third_party/libwebrtc/build/build_config.h
+--- firefox-100.0.orig/third_party/libwebrtc/build/build_config.h	2022-04-28 22:03:52.000000000 +0000
++++ firefox-100.0/third_party/libwebrtc/build/build_config.h	2022-06-08 07:15:25.233514649 +0000
+@@ -206,6 +206,10 @@
+ #define ARCH_CPU_SPARC 1
+ #define ARCH_CPU_32_BITS 1
+ #define ARCH_CPU_BIG_ENDIAN 1
++#elif defined(__loongarch_lp64)
++#define ARCH_CPU_LOONGARCH64 1
++#define ARCH_CPU_64_BITS 1
++#define ARCH_CPU_LITTLE_ENDIAN 1
+ #else
+ #error Please add support for your architecture in build/build_config.h
+ #endif
+diff -Nurp firefox-100.0.orig/toolkit/moz.configure firefox-100.0/toolkit/moz.configure
+--- firefox-100.0.orig/toolkit/moz.configure	2022-04-28 23:01:47.000000000 +0000
++++ firefox-100.0/toolkit/moz.configure	2022-06-08 07:15:25.234514649 +0000
+@@ -2156,7 +2156,7 @@ with only_when(compile_environment | art
+                 flac_only = True
+         elif target.cpu == "x86_64":
+             flags = ["-D__x86_64__", "-DPIC", "-DELF", "-Pconfig_unix64.asm"]
+-        elif target.cpu in ("x86", "arm", "aarch64"):
++        elif target.cpu in ("x86", "arm", "aarch64", "loongarch64"):
+             flac_only = True
+         else:
+             enable = False

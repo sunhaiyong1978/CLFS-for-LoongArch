@@ -13,7 +13,7 @@ diff -Nurp elogind-246.10.orig/src/basic/architecture.h elogind-246.10/src/basic
  #elif defined(__hppa__)
  #  define native_architecture() ARCHITECTURE_PARISC
  #  define LIB_ARCH_TUPLE "hppa‑linux‑gnu"
-+#elif defined(__loongarch64)
++#elif defined(__loongarch_lp64)
 +#  define native_architecture() ARCHITECTURE_LOONGARCH64
 +#  define LIB_ARCH_TUPLE "loongarch64-linux-gnu"
  #elif defined(__s390x__)

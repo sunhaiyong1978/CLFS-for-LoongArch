@@ -1,0 +1,72 @@
+From 860c6d8475e98f59e7e8c9023fc421f4986c2378 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Fri, 3 Mar 2023 03:51:55 +0000
+Subject: [PATCH] QT 5.15.8 add loongarch64 support.
+
+---
+ qtbase/src/corelib/global/archdetect.cpp        |  2 ++
+ qtbase/src/corelib/global/qglobal.cpp           | 10 ++++++++++
+ qtbase/src/corelib/global/qprocessordetection.h | 13 +++++++++++++
+ 3 files changed, 25 insertions(+)
+
+diff --git a/qtbase/src/corelib/global/archdetect.cpp b/qtbase/src/corelib/global/archdetect.cpp
+index 1d00b7f5a5..74f3c8fc86 100644
+--- a/qtbase/src/corelib/global/archdetect.cpp
++++ b/qtbase/src/corelib/global/archdetect.cpp
+@@ -59,6 +59,8 @@
+ #  define ARCH_PROCESSOR "x86_64"
+ #elif defined(Q_PROCESSOR_IA64)
+ #  define ARCH_PROCESSOR "ia64"
++#elif defined(Q_PROCESSOR_LOONGARCH_64)
++#  define ARCH_PROCESSOR "loongarch64"
+ #elif defined(Q_PROCESSOR_MIPS_64)
+ #  define ARCH_PROCESSOR "mips64"
+ #elif defined(Q_PROCESSOR_MIPS)
+diff --git a/qtbase/src/corelib/global/qglobal.cpp b/qtbase/src/corelib/global/qglobal.cpp
+index ac2e85c51e..0c3524804f 100644
+--- a/qtbase/src/corelib/global/qglobal.cpp
++++ b/qtbase/src/corelib/global/qglobal.cpp
+@@ -1815,6 +1815,16 @@ bool qSharedBuild() noexcept
+     \sa QSysInfo::buildCpuArchitecture()
+ */
+ 
++/*!
++    \macro Q_PROCESSOR_LOONGARCH
++    \relates <QtGlobal>
++
++    Defined if the application is compiled for LOONGARCH processors. Qt currently
++    supports seven LOONGARCH revisions: Q_PROCESSOR_LOONGARCH_64.
++
++    \sa QSysInfo::buildCpuArchitecture()
++*/
++
+ /*!
+     \macro Q_PROCESSOR_MIPS
+     \relates <QtGlobal>
+diff --git a/qtbase/src/corelib/global/qprocessordetection.h b/qtbase/src/corelib/global/qprocessordetection.h
+index 8d65720850..680265f1aa 100644
+--- a/qtbase/src/corelib/global/qprocessordetection.h
++++ b/qtbase/src/corelib/global/qprocessordetection.h
+@@ -213,6 +213,19 @@
+ #  define Q_BYTE_ORDER Q_LITTLE_ENDIAN
+ #  define Q_PROCESSOR_WORDSIZE   8
+ 
++/*
++    LoongArch family, known variants: 64-bit
++
++    LoongArch is little-endian.
++*/
++#elif defined(__loongarch__)
++#  define Q_PROCESSOR_LOONGARCH
++#  if __loongarch_grlen == 64
++#    define Q_PROCESSOR_LOONGARCH_64
++#  endif
++#  define Q_BYTE_ORDER Q_LITTLE_ENDIAN
++#  define Q_PROCESSOR_WORDSIZE   8
++
+ /*
+     Itanium (IA-64) family, no revisions or variants
+ 
+-- 
+2.31.1
+

@@ -1,0 +1,12 @@
+diff -Nurp firefox-100.0.orig/build/moz.configure/pkg.configure firefox-100.0/build/moz.configure/pkg.configure
+--- firefox-100.0.orig/build/moz.configure/pkg.configure	2022-04-28 22:02:34.000000000 +0000
++++ firefox-100.0/build/moz.configure/pkg.configure	2022-06-08 07:27:46.771483492 +0000
+@@ -63,7 +63,7 @@ def pkg_config_vars(target, sysroot_path
+             PKG_CONFIG_LIBDIR=pathsep.join(
+                 os.path.join(sysroot_path, d)
+                 for d in (
+-                    "usr/lib/pkgconfig",
++                    "usr/lib64/pkgconfig",
+                     "usr/lib/{}/pkgconfig".format(multiarch_dir),
+                     "usr/share/pkgconfig",
+                 )

@@ -1,0 +1,65 @@
+From 8e8586590c93db2c794918bc7b50740d38d54b8f Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Wed, 1 Mar 2023 09:48:26 +0000
+Subject: [PATCH] ibus 1.5.28 change for cross compiler.
+
+---
+ configure.ac    | 28 +---------------------------
+ src/Makefile.am |  2 +-
+ 2 files changed, 2 insertions(+), 28 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index f446ae9..5a1427e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -152,33 +152,7 @@ AC_CHECK_LIB(c, dlclose, LIBDL="", [AC_CHECK_LIB(dl, dlclose, LIBDL="-ldl")])
+ AC_SUBST(LIBDL)
+ 
+ # Check endianness.
+-AC_MSG_CHECKING([build system endianness])
+-ENDIAN=unknown
+-AC_RUN_IFELSE(
+-    [AC_LANG_PROGRAM(
+-        [[
+-            #include <endian.h>
+-            #if __BYTE_ORDER != __LITTLE_ENDIAN
+-            #error
+-            #endif
+-        ]]
+-    )],
+-    [ENDIAN=little]
+-)
+-AC_RUN_IFELSE(
+-    [AC_LANG_PROGRAM(
+-        [[
+-            #include <endian.h>
+-            #if __BYTE_ORDER != __BIG_ENDIAN
+-            #error
+-            #endif
+-        ]]
+-    )],
+-    [ENDIAN=big]
+-)
+-if test x"$ENDIAN" != xlittle  -a x"$ENDIAN" != xbig; then
+-    AC_MSG_ERROR([Cannot deermine endianness without endian.h])
+-fi
++ENDIAN=little
+ AC_MSG_RESULT($ENDIAN)
+ AC_SUBST(ENDIAN)
+ 
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 426376d..d25953d 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -270,7 +270,7 @@ ibus.gresources.xml: ibus.gresources.xml.in
+ 
+ compose/sequences-$(ENDIAN)-endian: gen-internal-compose-table
+ 	$(AM_V_GEN) $(MKDIR_P) $(builddir)/compose && \
+-	$(builddir)/gen-internal-compose-table && \
++	qemu-loongarch64 $(builddir)/gen-internal-compose-table && \
+ 	mv $(builddir)/sequences-big-endian $(builddir)/compose && \
+ 	mv $(builddir)/sequences-little-endian $(builddir)/compose
+ 
+-- 
+2.31.1
+

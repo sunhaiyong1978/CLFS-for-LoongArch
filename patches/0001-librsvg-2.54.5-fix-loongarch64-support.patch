@@ -1,0 +1,83 @@
+From c9513f5c0de0098fe713fdedbe4730ac0b264374 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@loongson.cn>
+Date: Tue, 20 Sep 2022 08:22:26 +0000
+Subject: [PATCH] librsvg 2.54.5 fix loongarch64 support.
+
+---
+ vendor/cfg-expr/src/targets/builtins.rs             | 13 +++++++++++++
+ .../linux_like/linux/gnu/b64/loongarch64/mod.rs     |  7 +------
+ 2 files changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/vendor/cfg-expr/src/targets/builtins.rs b/vendor/cfg-expr/src/targets/builtins.rs
+index 74ee0a4..fecd5c8 100644
+--- a/vendor/cfg-expr/src/targets/builtins.rs
++++ b/vendor/cfg-expr/src/targets/builtins.rs
+@@ -973,6 +973,18 @@ pub const ALL_BUILTINS: &[TargetInfo] = &[
+         has_atomics: HasAtomics::atomic_8_16_32_64_ptr,
+         panic: Panic::unwind,
+     },
++    TargetInfo {
++        triple: Triple::new_const("loongarch64-unknown-linux-gnu"),
++        os: Some(Os::linux),
++        arch: Arch::loongarch64,
++        env: Some(Env::gnu),
++        vendor: Some(Vendor::unknown),
++        families: Families::unix,
++        pointer_width: 64,
++        endian: Endian::little,
++        has_atomics: HasAtomics::atomic_8_16_32_64_ptr,
++        panic: Panic::unwind,
++    },
+     TargetInfo {
+         triple: Triple::new_const("m68k-unknown-linux-gnu"),
+         os: Some(Os::linux),
+@@ -2181,6 +2193,7 @@ impl super::Arch {
+     pub const avr: Arch = Arch::new_const("avr");
+     pub const bpf: Arch = Arch::new_const("bpf");
+     pub const hexagon: Arch = Arch::new_const("hexagon");
++    pub const loongarch64: Arch = Arch::new_const("loongarch64");
+     pub const m68k: Arch = Arch::new_const("m68k");
+     pub const mips: Arch = Arch::new_const("mips");
+     pub const mips64: Arch = Arch::new_const("mips64");
+diff --git a/vendor/libc/src/unix/linux_like/linux/gnu/b64/loongarch64/mod.rs b/vendor/libc/src/unix/linux_like/linux/gnu/b64/loongarch64/mod.rs
+index 2ed6a91..8ca3dca 100644
+--- a/vendor/libc/src/unix/linux_like/linux/gnu/b64/loongarch64/mod.rs
++++ b/vendor/libc/src/unix/linux_like/linux/gnu/b64/loongarch64/mod.rs
+@@ -325,8 +325,6 @@ pub const SYS_vmsplice: ::c_long = 75;
+ pub const SYS_splice: ::c_long = 76;
+ pub const SYS_tee: ::c_long = 77;
+ pub const SYS_readlinkat: ::c_long = 78;
+-pub const SYS_newfstatat: ::c_long = 79;
+-pub const SYS_fstat: ::c_long = 80;
+ pub const SYS_sync: ::c_long = 81;
+ pub const SYS_fsync: ::c_long = 82;
+ pub const SYS_fdatasync: ::c_long = 83;
+@@ -409,8 +407,6 @@ pub const SYS_setgroups: ::c_long = 159;
+ pub const SYS_uname: ::c_long = 160;
+ pub const SYS_sethostname: ::c_long = 161;
+ pub const SYS_setdomainname: ::c_long = 162;
+-pub const SYS_getrlimit: ::c_long = 163;
+-pub const SYS_setrlimit: ::c_long = 164;
+ pub const SYS_getrusage: ::c_long = 165;
+ pub const SYS_umask: ::c_long = 166;
+ pub const SYS_prctl: ::c_long = 167;
+@@ -490,7 +486,6 @@ pub const SYS_rt_tgsigqueueinfo: ::c_long = 240;
+ pub const SYS_perf_event_open: ::c_long = 241;
+ pub const SYS_accept4: ::c_long = 242;
+ pub const SYS_recvmmsg: ::c_long = 243;
+-//pub const SYS_arch_specific_syscall: ::c_long = 244;
+ pub const SYS_wait4: ::c_long = 260;
+ pub const SYS_prlimit64: ::c_long = 261;
+ pub const SYS_fanotify_init: ::c_long = 262;
+@@ -551,7 +546,7 @@ pub const SYS_landlock_add_rule: ::c_long = 445;
+ pub const SYS_landlock_restrict_self: ::c_long = 446;
+ pub const SYS_process_mrelease: ::c_long = 448;
+ pub const SYS_futex_waitv: ::c_long = 449;
+-//pub const SYS_set_mempolicy_home_node: ::c_long = 450;
++pub const SYS_set_mempolicy_home_node: ::c_long = 450;
+ 
+ pub const POSIX_FADV_DONTNEED: ::c_int = 4;
+ pub const POSIX_FADV_NOREUSE: ::c_int = 5;
+-- 
+2.31.1
+

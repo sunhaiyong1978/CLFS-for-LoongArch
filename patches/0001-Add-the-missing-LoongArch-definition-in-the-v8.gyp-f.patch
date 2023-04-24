@@ -1,0 +1,29 @@
+From dce3df4fe6f3561c2a97030552834bc4afe0dea4 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Thu, 20 Apr 2023 11:58:42 +0000
+Subject: [PATCH] Add the missing LoongArch definition in the v8.gyp file of
+ V8.
+
+---
+ tools/v8_gypfiles/v8.gyp | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/v8_gypfiles/v8.gyp b/tools/v8_gypfiles/v8.gyp
+index 4ed21761..6f04ec21 100644
+--- a/tools/v8_gypfiles/v8.gyp
++++ b/tools/v8_gypfiles/v8.gyp
+@@ -725,6 +725,11 @@
+               '<!@pymod_do_main(GN-scraper "<(V8_ROOT)/BUILD.gn"  "v8_compiler_sources =.*?v8_current_cpu == \\"riscv64\\".*?v8_compiler_sources \\+= ")',
+             ],
+           }],
++          ['v8_target_arch=="loong64"', {
++            'sources': [
++              '<!@pymod_do_main(GN-scraper "<(V8_ROOT)/BUILD.gn"  "v8_compiler_sources =.*?v8_current_cpu == \\"loong64\\".*?v8_compiler_sources \\+= ")',
++            ],
++          }],
+           ['v8_enable_webassembly==1', {
+             'sources': [
+               '<!@pymod_do_main(GN-scraper "<(V8_ROOT)/BUILD.gn"  "v8_compiler_sources =.*?v8_enable_webassembly.*?v8_compiler_sources \\+= ")',
+-- 
+2.31.1
+

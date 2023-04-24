@@ -1,0 +1,24 @@
+From 6c3d3a3319a0156b5f5ba8843cf92df8274ca103 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Fri, 21 Apr 2023 17:38:52 +0000
+Subject: [PATCH] rustc 1.69.0 vendor nix add loongarch64 support.
+
+---
+ vendor/nix/src/sys/ioctl/linux.rs | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/vendor/nix/src/sys/ioctl/linux.rs b/vendor/nix/src/sys/ioctl/linux.rs
+index 0c0a20905..214d9e8c6 100644
+--- a/vendor/nix/src/sys/ioctl/linux.rs
++++ b/vendor/nix/src/sys/ioctl/linux.rs
+@@ -41,6 +41,7 @@ mod consts {
+     target_arch = "s390x",
+     target_arch = "x86_64",
+     target_arch = "aarch64",
++    target_arch = "loongarch64",
+     target_arch = "riscv32",
+     target_arch = "riscv64"
+ ))]
+-- 
+2.31.1
+

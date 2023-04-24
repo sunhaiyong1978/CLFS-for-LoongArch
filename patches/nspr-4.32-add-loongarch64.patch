@@ -5,7 +5,7 @@ diff -Nurp nspr-4.32.orig/nspr/pr/include/md/_linux.cfg nspr-4.32/nspr/pr/includ
  #define PR_BYTES_PER_WORD_LOG2  3
  #define PR_BYTES_PER_DWORD_LOG2 3
  
-+#elif defined(__loongarch64)
++#elif defined(__loongarch_lp64)
 +
 +#undef  IS_BIG_ENDIAN
 +#define IS_LITTLE_ENDIAN 1
@@ -61,7 +61,7 @@ diff -Nurp nspr-4.32.orig/nspr/pr/include/md/_linux.h nspr-4.32/nspr/pr/include/
  #define _PR_SI_ARCHITECTURE "arm"
  #elif defined(__aarch64__)
  #define _PR_SI_ARCHITECTURE "aarch64"
-+#elif defined(__loongarch64)
++#elif defined(__loongarch_lp64)
 +#define _PR_SI_ARCHITECTURE "loongarch64"
  #elif defined(__hppa__)
  #define _PR_SI_ARCHITECTURE "hppa"

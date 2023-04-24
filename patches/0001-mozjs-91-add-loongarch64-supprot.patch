@@ -1,0 +1,107 @@
+From f7e509ffd86d097637b2eaf21330b95cf56bf608 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@loongson.cn>
+Date: Wed, 19 Oct 2022 07:12:21 +0000
+Subject: [PATCH] mozjs 91 add loongarch64 supprot.
+
+---
+ build/gyp_base.mozbuild                          | 1 +
+ build/moz.configure/init.configure               | 3 +++
+ js/src/configure.in                              | 0
+ js/src/jit/AtomicOperations.h                    | 2 +-
+ mfbt/double-conversion/double-conversion/utils.h | 1 +
+ mfbt/tests/TestPoisonArea.cpp                    | 3 +++
+ python/mozbuild/mozbuild/configure/constants.py  | 2 ++
+ 7 files changed, 11 insertions(+), 1 deletion(-)
+ mode change 100644 => 100755 js/src/configure.in
+
+diff --git a/build/gyp_base.mozbuild b/build/gyp_base.mozbuild
+index 83cd272e10..d47d702298 100644
+--- a/build/gyp_base.mozbuild
++++ b/build/gyp_base.mozbuild
+@@ -32,6 +32,7 @@ arches = {
+     'x86_64': 'x64',
+     'x86': 'ia32',
+     'aarch64': 'arm64',
++    'loongarch64': 'loongarch64',
+     'ppc64': 'ppc64le' if CONFIG['TARGET_ENDIANNESS'] == 'little' else 'ppc64',
+ }
+ 
+diff --git a/build/moz.configure/init.configure b/build/moz.configure/init.configure
+index 3a164c6558..b3e9890749 100644
+--- a/build/moz.configure/init.configure
++++ b/build/moz.configure/init.configure
+@@ -768,6 +768,9 @@ def split_triplet(triplet, allow_msvc=False, allow_wasi=False):
+     elif cpu in ("riscv64", "riscv64gc"):
+         canonical_cpu = "riscv64"
+         endianness = "little"
++    elif cpu.startswith('loongarch64'):
++        canonical_cpu = 'loongarch64'
++        endianness = 'little'
+     elif cpu == "sh4":
+         canonical_cpu = "sh4"
+         endianness = "little"
+diff --git a/js/src/configure.in b/js/src/configure.in
+old mode 100644
+new mode 100755
+diff --git a/js/src/jit/AtomicOperations.h b/js/src/jit/AtomicOperations.h
+index f4a5727d05..d620d0a6b6 100644
+--- a/js/src/jit/AtomicOperations.h
++++ b/js/src/jit/AtomicOperations.h
+@@ -381,7 +381,7 @@ constexpr inline bool AtomicOperations::isLockfreeJS(int32_t size) {
+ #elif defined(__ppc__) || defined(__PPC__) || defined(__sparc__) ||     \
+     defined(__ppc64__) || defined(__PPC64__) || defined(__ppc64le__) || \
+     defined(__PPC64LE__) || defined(__alpha__) || defined(__hppa__) ||  \
+-    defined(__sh__) || defined(__s390__) || defined(__s390x__) ||       \
++    defined(__loongarch_lp64) || defined(__sh__) || defined(__s390__) || defined(__s390x__) ||       \
+     defined(__m68k__) || defined(__riscv) || defined(__wasi__)
+ #  include "jit/shared/AtomicOperations-feeling-lucky.h"
+ #else
+diff --git a/mfbt/double-conversion/double-conversion/utils.h b/mfbt/double-conversion/double-conversion/utils.h
+index 6022132e2b..dd4a392161 100644
+--- a/mfbt/double-conversion/double-conversion/utils.h
++++ b/mfbt/double-conversion/double-conversion/utils.h
+@@ -107,6 +107,7 @@ int main(int argc, char** argv) {
+ #if defined(_M_X64) || defined(__x86_64__) || \
+     defined(__ARMEL__) || defined(__avr32__) || defined(_M_ARM) || defined(_M_ARM64) || \
+     defined(__hppa__) || defined(__ia64__) || \
++    defined(__loongarch__) || \
+     defined(__mips__) || \
+     defined(__nios2__) || defined(__ghs) || \
+     defined(__powerpc__) || defined(__ppc__) || defined(__ppc64__) || \
+diff --git a/mfbt/tests/TestPoisonArea.cpp b/mfbt/tests/TestPoisonArea.cpp
+index 96af108037..89a02356ee 100644
+--- a/mfbt/tests/TestPoisonArea.cpp
++++ b/mfbt/tests/TestPoisonArea.cpp
+@@ -147,6 +147,9 @@
+ #elif defined __hppa
+ #  define RETURN_INSTR 0xe840c002 /* bv,n r0(rp) */
+ 
++#elif defined __loongarch64
++#  define RETURN_INSTR 0x4c000020 /* jirl */
++
+ #elif defined __mips
+ #  define RETURN_INSTR 0x03e00008 /* jr ra */
+ 
+diff --git a/python/mozbuild/mozbuild/configure/constants.py b/python/mozbuild/mozbuild/configure/constants.py
+index 9f7a977f61..1b531e2e77 100644
+--- a/python/mozbuild/mozbuild/configure/constants.py
++++ b/python/mozbuild/mozbuild/configure/constants.py
+@@ -47,6 +47,7 @@ CPU_bitness = {
+     "arm": 32,
+     "hppa": 32,
+     "ia64": 64,
++    "loongarch64": 64,
+     "m68k": 32,
+     "mips32": 32,
+     "mips64": 64,
+@@ -83,6 +84,7 @@ CPU_preprocessor_checks = OrderedDict(
+         ("arm", "__arm__ || _M_ARM"),
+         ("aarch64", "__aarch64__ || _M_ARM64"),
+         ("ia64", "__ia64__"),
++	('loongarch64', '__loongarch_lp64'),
+         ("s390x", "__s390x__"),
+         ("s390", "__s390__"),
+         ("ppc64", "__powerpc64__"),
+-- 
+2.31.1
+
