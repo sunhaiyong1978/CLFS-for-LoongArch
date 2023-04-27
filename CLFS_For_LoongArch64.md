@@ -40,12 +40,12 @@
 
 ```sh
 export DISTRO_URL=https://mirrors.bfsu.edu.cn/fedora/releases/34/Everything/x86_64/os/
-sudo dnf install @core @c-development rpm-build git python3-devel texinfo \
+sudo dnf install @core @c-development rpm-build git wget python3-devel texinfo \
                  zlib-devel xz-lzma-compat gettext-devel perl-FindBin \
                  gdbm-devel expat-devel gobject-introspection-devel \
                  libgusb-devel libusb-devel libudev-devel libgudev-devel \
                  perl-Pod-Html rpm-devel tcl ncurses-devel openssl-devel libxslt bc \
-                 wget docbook-style-xsl meson ninja-build python3-jinja2 gperf rsync \
+                 docbook-style-xsl meson ninja-build python3-jinja2 gperf rsync \
                  xcursorgen mkfontscale itstool xmlto doxygen lynx \
                  gdk-pixbuf2-devel gmp-devel libxml2-devel libss-devel \
                  bzip2-devel ghc asciidoc pcre-static \
@@ -54,7 +54,7 @@ sudo dnf install @core @c-development rpm-build git python3-devel texinfo \
                  autoconf213 sqlite-devel nodejs cmake  \
                  cldr-emoji-annotation unicode-emoji iso-codes-devel \
                  --installroot ${HOME}/la-clfs --disablerepo="*" \
-                 --repofrompath base,${DISTRO_URL} \
+                 --repofrompath core,${DISTRO_URL} \
                  --releasever 34 --nogpgcheck
 ```
 　　以上步骤将在当前用户的目录中创建"la-clfs"的目录，在这个目录中将安装一个基本的制作环境，这里安装的是Fedora 34的系统，读者也可以安装其它的系统作为制作环境。
@@ -262,12 +262,12 @@ pushd ${SYSDIR}/downloads
 　　**Freetype:** https://downloads.sourceforge.net/freetype/freetype-2.13.0.tar.xz  
 　　**Fribidi:** https://github.com/fribidi/fribidi/releases/download/v1.0.12/fribidi-1.0.12.tar.xz  
 　　**Gawk:** https://ftp.gnu.org/gnu/gawk/gawk-5.2.1.tar.xz  
-　　**GCC:** ```git://sourceware.org/git/gcc.git  默认分支名“master”```  
+　　**GCC:** https://ftp.gnu.org/gnu/gcc/gcc-13.1.0/gcc-13.1.0.tar.xz  
 　　**GC:** https://www.hboehm.info/gc/gc_source/gc-8.2.2.tar.gz  
 　　**GDB:** https://ftp.gnu.org/gnu/gdb/gdb-13.1.tar.xz  
 　　**GDBM:** https://ftp.gnu.org/gnu/gdbm/gdbm-1.23.tar.gz  
 　　**Gettext:** https://ftp.gnu.org/gnu/gettext/gettext-0.21.1.tar.xz  
-　　**Git:** https://www.kernel.org/pub/software/scm/git/git-2.40.0.tar.xz  
+　　**Git:** https://www.kernel.org/pub/software/scm/git/git-2.40.1.tar.xz  
 　　**Glib:** https://download.gnome.org/sources/glib/2.76/glib-2.76.2.tar.xz  
 　　**Glibc:** https://ftp.gnu.org/gnu/libc/glibc-2.37.tar.xz  
 　　**Glibmm:** https://download.gnome.org/sources/glibmm/2.76/glibmm-2.76.0.tar.xz  
@@ -282,7 +282,7 @@ pushd ${SYSDIR}/downloads
 　　**Grub2:** ```https://github.com/loongarch64/grub  分支名“dev/patchwork/efi”```  
 　　**Guile:** https://ftp.gnu.org/gnu/guile/guile-3.0.9.tar.xz  
 　　**Gzip:** https://ftp.gnu.org/gnu/gzip/gzip-1.12.tar.xz  
-　　**Harfbuzz:** https://github.com/harfbuzz/harfbuzz/releases/download/7.1.0/harfbuzz-7.1.0.tar.xz  
+　　**Harfbuzz:** https://github.com/harfbuzz/harfbuzz/releases/download/7.2.0/harfbuzz-7.2.0.tar.xz  
 　　**Iana-Etc:** https://github.com/Mic92/iana-etc/releases/download/20230418/iana-etc-20230418.tar.gz  
 　　**ICU4C:** https://github.com/unicode-org/icu/releases/download/release-73-1/icu4c-73_1-src.tgz  
 　　**Inetutils:** https://ftp.gnu.org/gnu/inetutils/inetutils-2.4.tar.xz  
@@ -317,7 +317,7 @@ pushd ${SYSDIR}/downloads
 　　**Libxml2:** https://download.gnome.org/sources/libxml2/2.10/libxml2-2.10.4.tar.xz  
 　　**Libxslt:** https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.37.tar.xz  
 　　**Links:** http://links.twibright.com/download/links-2.29.tar.bz2  
-　　**Linux-headers:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.2.12.tar.xz  
+　　**Linux-headers:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.3.tar.xz  
 　　**Linux:** ```https://github.com/loongson/linux.git 分支名“loongarch-next”```  
 　　**Linux-Firmware:** https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/linux-firmware-20230404.tar.xz  
 　　**LLVM:** https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.2/llvm-project-16.0.2.src.tar.xz  
@@ -351,8 +351,8 @@ pushd ${SYSDIR}/downloads
 　　**Procps-NG:** https://sourceforge.net/projects/procps-ng/files/Production/procps-ng-4.0.3.tar.xz  
 　　**PSmisc:** https://sourceforge.net/projects/psmisc/files/psmisc/psmisc-23.6.tar.xz  
 　　**Python:** https://www.python.org/ftp/python/3.11.3/Python-3.11.3.tar.xz  
-　　**Python-Pip:** https://files.pythonhosted.org/packages/source/p/pip/pip-23.1.1.tar.gz  
-　　**Python-Setuptools:** https://files.pythonhosted.org/packages/source/s/setuptools/setuptools-67.7.1.tar.gz  
+　　**Python-Pip:** https://files.pythonhosted.org/packages/source/p/pip/pip-23.1.2.tar.gz  
+　　**Python-Setuptools:** https://files.pythonhosted.org/packages/source/s/setuptools/setuptools-67.7.2.tar.gz  
 　　**QEMU:** https://download.qemu.org/qemu-8.0.0.tar.xz  
 　　**Readline:** https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz  
 　　**Ruby:** https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.1.tar.xz  
@@ -373,7 +373,7 @@ pushd ${SYSDIR}/downloads
 　　**Userspace-RCU:** https://lttng.org/files/urcu/userspace-rcu-0.14.tar.bz2  
 　　**Util-Linux:** https://www.kernel.org/pub/linux/utils/util-linux/v2.38/util-linux-2.38.1.tar.xz  
 　　**Vala:** https://download.gnome.org/sources/vala/0.56/vala-0.56.7.tar.xz  
-　　**VIM:** https://github.com/vim/vim/archive/v9.0.1479/vim-9.0.1479.tar.gz  
+　　**VIM:** https://github.com/vim/vim/archive/v9.0.1491/vim-9.0.1491.tar.gz  
 　　**Wayland:** https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.22.0/downloads/wayland-1.22.0.tar.xz  
 　　**WGet:** https://ftp.gnu.org/gnu/wget/wget-1.21.3.tar.gz  
 　　**Wireless-Tools:** https://hewlettpackard.github.io/wireless-tools/wireless_tools.29.tar.gz  
@@ -412,8 +412,8 @@ popd
 　　按以下步骤制作Linux内核头文件并安装到目标系统目录中。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/linux-6.2.12.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-6.2.12
+tar xvf ${DOWNLOADDIR}/linux-6.3.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-6.3
 	make mrproper
 	make ARCH=loongarch INSTALL_HDR_PATH=dest headers_install
 	find dest/include -name '.*' -delete
@@ -484,28 +484,12 @@ popd
 
 ### 3.6 交叉编译器之GCC（精简版）
 
-* 代码准备  
-　　GCC需要专门获取代码的方式，以下是获取步骤：
-
-```sh
-git clone git://sourceware.org/git/gcc.git --depth 1
-pushd gcc
-    git archive --format=tar --output ../gcc-13.0.0.tar "master"
-popd
-mkdir gcc-13.0.0
-pushd gcc-13.0.0
-    tar xvf ../gcc-13.0.0.tar
-popd
-tar -czf ${DOWNLOADDIR}/gcc-13.0.0.tar.gz gcc-13.0.0
-```
-
-
 * 制作步骤  
 　　制作交叉编译器中的GCC，第一次编译交叉工具链的GCC需要采用精简方式进行编译和安装，否则会因为缺少目标系统的C库而导致部分内容编译链接失败，制作过程如下：
 
 ```sh
-tar xvf ${DOWNLOADDIR}/gcc-13.0.0.tar.gz -C ${BUILDDIR} 
-pushd ${BUILDDIR}/gcc-13.0.0
+tar xvf ${DOWNLOADDIR}/gcc-13.1.0.tar.xz -C ${BUILDDIR} 
+pushd ${BUILDDIR}/gcc-13.1.0
 	mkdir tools-build
 	pushd tools-build
 		AR=ar LDFLAGS="-Wl,-rpath,${SYSDIR}/cross-tools/lib" \
@@ -595,8 +579,8 @@ popd
 　　完成目标系统的Glibc之后就可以着手制作交叉工具链中完整版的GCC了，制作步骤如下：
 
 ```sh
-tar xvf ${DOWNLOADDIR}/gcc-13.0.0.tar.gz -C ${BUILDDIR} 
-pushd ${BUILDDIR}/gcc-13.0.0
+tar xvf ${DOWNLOADDIR}/gcc-13.1.0.tar.xz -C ${BUILDDIR} 
+pushd ${BUILDDIR}/gcc-13.1.0
 	mkdir tools-build-all
 	pushd tools-build-all
 		AR=ar LDFLAGS="-Wl,-rpath,${SYSDIR}/cross-tools/lib" \
@@ -1271,8 +1255,8 @@ popd
 　　与上面编译的Binutils一样，这次编译的GCC也是在目标系统中使用的编译器，在交叉编译阶段不会使用到它，但是其提供的libgcc、libstdc++等库可以为后续软件包的编译提供链接用的库。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/gcc-13.0.0.tar.gz -C ${BUILDDIR} 
-pushd ${BUILDDIR}/gcc-13.0.0
+tar xvf ${DOWNLOADDIR}/gcc-13.1.0.tar.gz -C ${BUILDDIR} 
+pushd ${BUILDDIR}/gcc-13.1.0
 	sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 	mkdir cross-build
 	pushd cross-build
@@ -2078,8 +2062,8 @@ popd
 
 #### VIM
 ```sh
-tar xvf ${DOWNLOADDIR}/vim-9.0.1479.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/vim-9.0.1479
+tar xvf ${DOWNLOADDIR}/vim-9.0.1491.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/vim-9.0.1491
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 cat > src/auto/config.cache << EOF
 	vim_cv_getcwd_broken=no
@@ -2540,8 +2524,8 @@ sed -i "/prefix_real/s@=.*@=${SYSDIR}/sysroot/usr@g" ${SYSDIR}/cross-tools/bin/p
 
 #### Python-Pip
 ```sh
-tar xvf ${DOWNLOADDIR}/pip-23.1.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/pip-23.1.1
+tar xvf ${DOWNLOADDIR}/pip-23.1.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/pip-23.1.2
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     ${SYSDIR}/cross-tools/bin/python3 setup.py install --root=${SYSDIR}/sysroot --prefix=/usr
     sed -i "s@${SYSDIR}/cross-tools@@g" ${SYSDIR}/sysroot/bin/pip{,3{,.11}}
@@ -2550,8 +2534,8 @@ popd
 
 #### Python-Setuptools
 ```sh
-tar xvf ${DOWNLOADDIR}/setuptools-67.7.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/setuptools-67.7.1
+tar xvf ${DOWNLOADDIR}/setuptools-67.7.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/setuptools-67.7.2
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     ${SYSDIR}/cross-tools/bin/python3 setup.py install --root=${SYSDIR}/sysroot --prefix=/usr
 popd
@@ -2793,8 +2777,8 @@ popd
 
 #### Git
 ```sh
-tar xvf ${DOWNLOADDIR}/git-2.40.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/git-2.40.0
+tar xvf ${DOWNLOADDIR}/git-2.40.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/git-2.40.1
     ./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET} \
                 --with-gitconfig=/etc/gitconfig --with-python=python3 --without-iconv \
                  ac_cv_fread_reads_directories=yes ac_cv_snprintf_returns_bogus=no
@@ -3262,8 +3246,8 @@ popd
 
 #### HarfBuzz
 ```sh
-tar xvf ${DOWNLOADDIR}/harfbuzz-7.1.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/harfbuzz-7.1.0
+tar xvf ${DOWNLOADDIR}/harfbuzz-7.2.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/harfbuzz-7.2.0
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -3297,8 +3281,8 @@ popd
 　　这次编译是加入对Graphite的支持。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/harfbuzz-7.1.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/harfbuzz-7.1.0
+tar xvf ${DOWNLOADDIR}/harfbuzz-7.2.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/harfbuzz-7.2.0
     mkdir cross-build-2
     pushd cross-build-2
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -4394,7 +4378,6 @@ Device Drivers --->
 
 #### Xorg-Dirvers
 Xorg-drivers-packages.txt
-https://www.linuxfromscratch.org/patches/blfs/svn/xf86-video-ati-19.1.0-upstream_fixes-1.patch
 
 下载软件包：
 
@@ -4423,7 +4406,6 @@ do
         done
         case $package in
            xf86-video-ati )
-             patch -Np1 -i ${DOWNLOADDIR}/xf86-video-ati-19.1.0-upstream_fixes-1.patch
              ;;
         esac
         ./configure $COMMON_CONFIG
@@ -7004,7 +6986,10 @@ pushd ${BUILDDIR}/ibus-1.5.28
     pushd cross-build
         ../configure --build=${CROSS_HOST} --host=${CROSS_TARGET} \
                      --prefix=/usr --libdir=/usr/lib64 --sysconfdir=/etc \
-                     --disable-emoji-dict --disable-unicode-dict \
+                     --enable-emoji-dict --enable-unicode-dict \
+                     --with-ucd-dir=${SYSDIR}/sysroot/usr/share/unicode/ucd \
+                     --with-unicode-emoji-dir=${SYSDIR}/sysroot/usr/share/unicode/emoji \
+                     --with-emoji-annotation-dir=${SYSDIR}/sysroot/usr/share/unicode/cldr/common/annotations \
                      --enable-xim --enable-gtk4 --enable-wayland \
                      --disable-python2 --with-python=${SYSDIR}/cross-tools/bin/python3
         sed -i "/pyoverridesdir/s@${SYSDIR}/cross-tools@/usr@g" bindings/pygobject/Makefile
@@ -7221,11 +7206,11 @@ popd
 ```
 
 #### Lit
-https://files.pythonhosted.org/packages/source/l/lit/lit-16.0.1.tar.gz
+https://files.pythonhosted.org/packages/source/l/lit/lit-16.0.2.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/lit-16.0.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/lit-16.0.1
+tar xvf ${DOWNLOADDIR}/lit-16.0.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/lit-16.0.2
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     ${SYSDIR}/cross-tools/bin/python3 setup.py install --root=${SYSDIR}/sysroot --prefix=/usr
     sed -i "s@${SYSDIR}/cross-tools@@g" ${SYSDIR}/sysroot/bin/lit
@@ -8110,10 +8095,10 @@ popd
 ```
 
 #### LibMediainfo
-http://mediaarea.net/download/source/libmediainfo/23.03/libmediainfo_23.03.tar.xz
+http://mediaarea.net/download/source/libmediainfo/23.04/libmediainfo_23.04.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libmediainfo_23.03.tar.bz2 -C ${BUILDDIR}
+tar xvf ${DOWNLOADDIR}/libmediainfo_23.04.tar.bz2 -C ${BUILDDIR}
 pushd ${BUILDDIR}/MediaInfoLib/Project/GNU/Library
     autoreconf -ifv
     ./configure $COMMON_CONFIG --enable-shared \
@@ -8714,7 +8699,7 @@ popd
 
 
 #### FireFox 111
-https://archive.mozilla.org/pub/firefox/releases/112.0/source/firefox-112.0.source.tar.xz
+https://archive.mozilla.org/pub/firefox/releases/112.0.2/source/firefox-112.0.2.source.tar.xz
 https://hg.mozilla.org/l10n-central/zh-CN/archive/tip.zip
 
 下载中文语言包：
@@ -8727,8 +8712,8 @@ mv -iv tip.zip ${DOWNLOADDIR}/firefox-112-l10.zip
 编译步骤：
 
 ```sh
-tar xvf ${DOWNLOADDIR}/firefox-112.0.source.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/firefox-112.0
+tar xvf ${DOWNLOADDIR}/firefox-112.0.2.source.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/firefox-112.0.2
     mkdir -pv mozbuild/l10n-central
     pushd mozbuild/l10n-central
         unzip ${DOWNLOADDIR}/firefox-110-l10.zip
@@ -8950,26 +8935,11 @@ popd
 ## 5 启动相关软件包
 
 #### Linux
-* 代码准备  
-　　目前Linux内核官方的代码还不能启动LoongArch的及其，目前需要获取专门的内核代码，以下是获取方式：
-
-```sh
-git clone https://github.com/loongson/linux.git -b loongarch-next --depth 1
-pushd linux
-    git archive --format=tar --output ../linux-6.git.tar "loongarch-next"
-popd
-mkdir linux-6.git
-pushd linux-6.git
-    tar xvf ../linux-6.git.tar
-popd
-tar -czf ${DOWNLOADDIR}/linux-6.git.tar.gz linux-6.git
-```
-
 * 制作步骤
 
 ```sh
-tar xvf ${DOWNLOADDIR}/linux-6.git.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-6.git
+tar xvf ${DOWNLOADDIR}/linux-6.3.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-6.3
 	make mrproper
 	make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}- defconfig
 	make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}- menuconfig
