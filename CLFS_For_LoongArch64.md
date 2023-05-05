@@ -46,7 +46,7 @@ sudo dnf install @core @c-development rpm-build git wget texinfo \
                  libxml2-devel cairo-devel libxslt-devel gettext-devel \
                  glib2-static libstdc++-static zlib-static \
                  fpc tcl ncurses-devel gperf openssl icu docbook-style-xsl \
-                 bc squashfs-tools graphviz doxygen xmlto xcursorgen dbus-glib \
+                 bc squashfs-tools graphviz doxygen xmlto xcursorgen dbus-glib lynx gtk-doc \
 
                  gdbm-devel gobject-introspection-devel \
                  xz-lzma-compat python3-devel perl-FindBin \
@@ -56,7 +56,7 @@ sudo dnf install @core @c-development rpm-build git wget texinfo \
                  mkfontscale itstool xmlto lynx \
                  gdk-pixbuf2-devel gmp-devel libss-devel \
                  bzip2-devel ghc asciidoc \
-                 sassc libatomic libnotify-devel gtk-doc polkit-devel \
+                 sassc libatomic libnotify-devel polkit-devel \
                  sqlite protobuf-c-compiler emacs \
                  autoconf213 sqlite-devel nodejs \
                  iso-codes-devel \
@@ -380,14 +380,14 @@ pushd ${SYSDIR}/downloads
 　　**Userspace-RCU:** https://lttng.org/files/urcu/userspace-rcu-0.14.tar.bz2  
 　　**Util-Linux:** https://www.kernel.org/pub/linux/utils/util-linux/v2.38/util-linux-2.38.1.tar.xz  
 　　**Vala:** https://download.gnome.org/sources/vala/0.56/vala-0.56.7.tar.xz  
-　　**VIM:** https://github.com/vim/vim/archive/v9.0.1506/vim-9.0.1506.tar.gz  
+　　**VIM:** https://github.com/vim/vim/archive/v9.0.1507/vim-9.0.1507.tar.gz  
 　　**Wayland:** https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.22.0/downloads/wayland-1.22.0.tar.xz  
 　　**WGet:** https://ftp.gnu.org/gnu/wget/wget-1.21.3.tar.gz  
 　　**Wireless-Tools:** https://hewlettpackard.github.io/wireless-tools/wireless_tools.29.tar.gz  
 　　**Wpa_Supplicant:** https://w1.fi/releases/wpa_supplicant-2.10.tar.gz  
 　　**Xfsprogs:** https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-6.2.0.tar.xz  
 　　**XML-Parser:** https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-2.46.tar.gz  
-　　**XZ:** https://tukaani.org/xz/xz-5.4.2.tar.xz  
+　　**XZ:** https://tukaani.org/xz/xz-5.4.3.tar.xz  
 　　**Zip:** ftp://ftp.info-zip.org/pub/infozip/src/zip30.tgz  
 　　**Zlib:** https://zlib.net/zlib-1.2.13.tar.xz  
 　　**Zstd:** https://github.com/facebook/zstd/releases/download/v1.5.5/zstd-1.5.5.tar.gz    
@@ -1309,8 +1309,8 @@ popd
 
 #### XZ
 ```sh
-tar xvf ${DOWNLOADDIR}/xz-5.4.2.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/xz-5.4.2
+tar xvf ${DOWNLOADDIR}/xz-5.4.3.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/xz-5.4.3
 	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET}
 	make ${JOBS}
 	make DESTDIR=${SYSDIR}/sysroot install
@@ -2069,8 +2069,8 @@ popd
 
 #### VIM
 ```sh
-tar xvf ${DOWNLOADDIR}/vim-9.0.1506.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/vim-9.0.1506
+tar xvf ${DOWNLOADDIR}/vim-9.0.1507.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/vim-9.0.1507
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 cat > src/auto/config.cache << EOF
 	vim_cv_getcwd_broken=no
@@ -4314,11 +4314,11 @@ popd
 
 
 #### Libevdev
-https://www.freedesktop.org/software/libevdev/libevdev-1.13.0.tar.xz
+https://www.freedesktop.org/software/libevdev/libevdev-1.13.1.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libevdev-1.13.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libevdev-1.13.0
+tar xvf ${DOWNLOADDIR}/libevdev-1.13.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libevdev-1.13.1
     PYTHON=python3 ./configure $COMMON_CONFIG
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
@@ -5048,11 +5048,11 @@ popd
 ```
 
 #### Alsa-Lib
-https://www.alsa-project.org/files/pub/lib/alsa-lib-1.2.8.tar.bz2
+https://www.alsa-project.org/files/pub/lib/alsa-lib-1.2.9.tar.bz2
 
 ```sh
-tar xvf ${DOWNLOADDIR}/alsa-lib-1.2.8.tar.bz2 -C ${BUILDDIR}
-pushd ${BUILDDIR}/alsa-lib-1.2.8
+tar xvf ${DOWNLOADDIR}/alsa-lib-1.2.9.tar.bz2 -C ${BUILDDIR}
+pushd ${BUILDDIR}/alsa-lib-1.2.9
     cp -v ${SYSDIR}/sysroot/usr/share/automake-*/config.* ./
     ./configure $COMMON_CONFIG
     make ${JOBS}
@@ -5402,11 +5402,11 @@ popd
 ```
 
 #### Alsa-Utils
-https://www.alsa-project.org/files/pub/utils/alsa-utils-1.2.8.tar.bz2
+https://www.alsa-project.org/files/pub/utils/alsa-utils-1.2.9.tar.bz2
 
 ```sh
-tar xvf ${DOWNLOADDIR}/alsa-utils-1.2.8.tar.bz2 -C ${BUILDDIR}
-pushd ${BUILDDIR}/alsa-utils-1.2.8
+tar xvf ${DOWNLOADDIR}/alsa-utils-1.2.9.tar.bz2 -C ${BUILDDIR}
+pushd ${BUILDDIR}/alsa-utils-1.2.9
     cp ${SYSDIR}/sysroot/usr/share/automake-*/config.* ./
     ./configure $COMMON_CONFIG --disable-alsaconf --disable-bat \
                 --disable-xmlto --with-curses=ncursesw
