@@ -47,19 +47,7 @@ sudo dnf install @core @c-development rpm-build git wget texinfo \
                  glib2-static libstdc++-static zlib-static \
                  fpc tcl ncurses-devel gperf openssl icu docbook-style-xsl \
                  bc squashfs-tools graphviz doxygen xmlto xcursorgen dbus-glib lynx gtk-doc \
-
-                 gdbm-devel gobject-introspection-devel \
-                 xz-lzma-compat python3-devel perl-FindBin \
-                 libgusb-devel libusb-devel libudev-devel libgudev-devel \
-                 perl-Pod-Html rpm-devel \
-                 meson ninja-build python3-jinja2 \
-                 mkfontscale itstool xmlto lynx \
-                 gdk-pixbuf2-devel gmp-devel libss-devel \
-                 bzip2-devel ghc asciidoc \
-                 sassc libatomic libnotify-devel polkit-devel \
-                 sqlite protobuf-c-compiler emacs \
-                 autoconf213 sqlite-devel nodejs \
-                 iso-codes-devel \
+                 asciidoc itstools \
                  --installroot ${HOME}/la-clfs --disablerepo="*" \
                  --repofrompath core,${DISTRO_URL} \
                  --releasever 38 --nogpgcheck
@@ -321,7 +309,7 @@ pushd ${SYSDIR}/downloads
 　　**Libusb:** https://github.com/libusb/libusb/releases/download/v1.0.26/libusb-1.0.26.tar.bz2  
 　　**Libunistring:** https://ftp.gnu.org/gnu/libunistring/libunistring-1.1.tar.xz  
 　　**Libxcrypt:** https://github.com/besser82/libxcrypt/releases/download/v4.4.33/libxcrypt-4.4.33.tar.xz  
-　　**Libxml2:** https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.1.tar.xz  
+　　**Libxml2:** https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.2.tar.xz  
 　　**Libxslt:** https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.37.tar.xz  
 　　**Links:** http://links.twibright.com/download/links-2.29.tar.bz2  
 　　**Linux-headers:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.3.1.tar.xz  
@@ -380,7 +368,7 @@ pushd ${SYSDIR}/downloads
 　　**Userspace-RCU:** https://lttng.org/files/urcu/userspace-rcu-0.14.tar.bz2  
 　　**Util-Linux:** https://www.kernel.org/pub/linux/utils/util-linux/v2.38/util-linux-2.38.1.tar.xz  
 　　**Vala:** https://download.gnome.org/sources/vala/0.56/vala-0.56.7.tar.xz  
-　　**VIM:** https://github.com/vim/vim/archive/v9.0.1507/vim-9.0.1507.tar.gz  
+　　**VIM:** https://github.com/vim/vim/archive/v9.0.1510/vim-9.0.1510.tar.gz  
 　　**Wayland:** https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.22.0/downloads/wayland-1.22.0.tar.xz  
 　　**WGet:** https://ftp.gnu.org/gnu/wget/wget-1.21.3.tar.gz  
 　　**Wireless-Tools:** https://hewlettpackard.github.io/wireless-tools/wireless_tools.29.tar.gz  
@@ -2069,8 +2057,8 @@ popd
 
 #### VIM
 ```sh
-tar xvf ${DOWNLOADDIR}/vim-9.0.1507.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/vim-9.0.1507
+tar xvf ${DOWNLOADDIR}/vim-9.0.1510.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/vim-9.0.1510
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 cat > src/auto/config.cache << EOF
 	vim_cv_getcwd_broken=no
@@ -2621,8 +2609,8 @@ popd
 
 #### Libxml2
 ```sh
-tar xvf ${DOWNLOADDIR}/libxml2-2.11.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libxml2-2.11.1
+tar xvf ${DOWNLOADDIR}/libxml2-2.11.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libxml2-2.11.2
     rm config.{sub,guess}
     automake -a
     mkdir native-build
@@ -7213,11 +7201,11 @@ popd
 ```
 
 #### Lit
-https://files.pythonhosted.org/packages/source/l/lit/lit-16.0.2.tar.gz
+https://files.pythonhosted.org/packages/source/l/lit/lit-16.0.3.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/lit-16.0.2.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/lit-16.0.2
+tar xvf ${DOWNLOADDIR}/lit-16.0.3.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/lit-16.0.3
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     ${SYSDIR}/cross-tools/bin/python3 setup.py install --root=${SYSDIR}/sysroot --prefix=/usr
     sed -i "s@${SYSDIR}/cross-tools@@g" ${SYSDIR}/sysroot/bin/lit
