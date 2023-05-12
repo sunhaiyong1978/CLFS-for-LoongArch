@@ -1912,10 +1912,13 @@ popd
 　　IPRoute2软件包没有配置阶段，直接在make命令中使用“CC”变量指定交叉编译器，而对于在编译过程中会临时编译一些在本地运行的程序时就需要使用“HOSTCC”变量来指定本地编译器，否则“HOSTCC”会使用“CC”变量的指定编译器，那么编译出来的程序就无法在交叉编译的主系统中运行了。
 
 #### KBD
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/kbd/2.5.1/0001-Save-font-support-UTF-8.patch
+
 ```sh
 tar xvf ${DOWNLOADDIR}/kbd-2.5.1.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/kbd-2.5.1
 	patch -Np1 -i ${DOWNLOADDIR}/kbd-2.4.0-backspace-1.patch
+	patch -Np1 -i ${DOWNLOADDIR}/0001-Save-font-support-UTF-8.patch
 	sed -i '/RESIZECONS_PROGS=/s/yes/no/' configure
 	sed -i 's/resizecons.8 //' docs/man/man8/Makefile.in
 	autoreconf -ifv
@@ -8929,11 +8932,44 @@ popd
 ## 5 启动相关软件包
 
 #### Linux
+* 补丁文件
+
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0001-double-tty-VT-screenbuf-for-univt.patch
+
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0002-Add-several-function-for-Univt.patch
+
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0003-UniVT-Fix-charcount-size-to-65536.patch
+
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0004-UniVT-Add-a-old_screen_size-variable-saves-the-origi.patch
+
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0005-Univt-Add-support-for-writing-UTF-8-encoding.patch
+
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0006-UniVT-Add-support-for-displaying-UTF-8-text.patch
+
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0007-UniVT-Support-displaying-UTF-8-text-for-90-degree-ro.patch
+
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0008-UniVT-Support-displaying-UTF-8-text-for-180-degree-r.patch
+
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0009-UniVT-Support-displaying-UTF-8-text-for-270-degree-r.patch
+
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/font-data/0001-UniVT-Add-Chinese-fonts-support-in-console.patch
+
+
 * 制作步骤
 
 ```sh
 tar xvf ${DOWNLOADDIR}/linux-6.3.2.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/linux-6.3.2
+	patch -Np1 -i ${DOWNLOADDIR}/0001-double-tty-VT-screenbuf-for-univt.patch
+	patch -Np1 -i ${DOWNLOADDIR}/0002-Add-several-function-for-Univt.patch
+	patch -Np1 -i ${DOWNLOADDIR}/0003-UniVT-Fix-charcount-size-to-65536.patch
+	patch -Np1 -i ${DOWNLOADDIR}/0004-UniVT-Add-a-old_screen_size-variable-saves-the-origi.patch
+	patch -Np1 -i ${DOWNLOADDIR}/0005-Univt-Add-support-for-writing-UTF-8-encoding.patch
+	patch -Np1 -i ${DOWNLOADDIR}/0006-UniVT-Add-support-for-displaying-UTF-8-text.patch
+	patch -Np1 -i ${DOWNLOADDIR}/0007-UniVT-Support-displaying-UTF-8-text-for-90-degree-ro.patch
+	patch -Np1 -i ${DOWNLOADDIR}/0008-UniVT-Support-displaying-UTF-8-text-for-180-degree-r.patch
+	patch -Np1 -i ${DOWNLOADDIR}/0009-UniVT-Support-displaying-UTF-8-text-for-270-degree-r.patch
+	patch -Np1 -i ${DOWNLOADDIR}/0001-UniVT-Add-Chinese-fonts-support-in-console.patch
 	make mrproper
 	make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}- defconfig
 	make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}- menuconfig
