@@ -40,13 +40,13 @@
 
 ```sh
 export DISTRO_URL=https://mirrors.bfsu.edu.cn/fedora/releases/38/Everything/x86_64/os/
-sudo dnf install @core @c-development rpm-build git wget texinfo \
+sudo dnf install @core @c-development glibc-langpack-zh rpm-build git wget texinfo \
                  zlib-devel rsync libunistring-devel libffi-devel gc-devel \
                  expat-devel pcre2-devel glib2-devel cmake openssl-devel libyaml-devel \
                  libxml2-devel cairo-devel libxslt-devel gettext-devel \
                  glib2-static libstdc++-static zlib-static \
-                 fpc tcl ncurses-devel gperf openssl icu docbook-style-xsl \
-                 bc squashfs-tools graphviz doxygen xmlto xcursorgen dbus-glib lynx gtk-doc \
+                 fpc tcl ncurses-devel gperf openssl icu docbook-style-xsl bc squashfs-tools \
+                 graphviz doxygen xmlto xcursorgen dbus-glib lynx gtk-doc sqlite \
                  asciidoc itstools \
                  --installroot ${HOME}/la-clfs --disablerepo="*" \
                  --repofrompath core,${DISTRO_URL} \
@@ -247,7 +247,7 @@ pushd ${SYSDIR}/downloads
 　　**Dosfstools:** https://github.com/dosfstools/dosfstools/releases/download/v4.2/dosfstools-4.2.tar.gz  
 　　**Doxygen:** https://www.doxygen.nl/files/doxygen-1.9.6.src.tar.gz  
 　　**E2fsprogs:** https://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v1.46.5/e2fsprogs-1.47.0.tar.gz  
-　　**Ethtool:** https://www.kernel.org/pub/software/network/ethtool/ethtool-6.2.tar.xz  
+　　**Ethtool:** https://mirrors.edge.kernel.org/pub/software/network/ethtool/ethtool-6.3.tar.xz  
 　　**Expat:** https://prdownloads.sourceforge.net/expat/expat-2.5.0.tar.xz  
 　　**Expect:** https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz  
 　　**File:** https://astron.com/pub/file/file-5.44.tar.gz  
@@ -256,7 +256,7 @@ pushd ${SYSDIR}/downloads
 　　**Fontconfig:** https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.14.2.tar.xz  
 　　**Freetype:** https://downloads.sourceforge.net/freetype/freetype-2.13.0.tar.xz  
 　　**Fribidi:** https://github.com/fribidi/fribidi/releases/download/v1.0.12/fribidi-1.0.12.tar.xz  
-　　**Gawk:** https://ftp.gnu.org/gnu/gawk/gawk-5.2.1.tar.xz  
+　　**Gawk:** https://ftp.gnu.org/gnu/gawk/gawk-5.2.2.tar.xz  
 　　**GCC:** https://ftp.gnu.org/gnu/gcc/gcc-13.1.0/gcc-13.1.0.tar.xz  
 　　**GC:** https://www.hboehm.info/gc/gc_source/gc-8.2.2.tar.gz  
 　　**GDB:** https://ftp.gnu.org/gnu/gdb/gdb-13.1.tar.xz  
@@ -277,7 +277,7 @@ pushd ${SYSDIR}/downloads
 　　**Grub2:** ```https://github.com/loongarch64/grub  分支名“dev/patchwork/efi”```  
 　　**Guile:** https://ftp.gnu.org/gnu/guile/guile-3.0.9.tar.xz  
 　　**Gzip:** https://ftp.gnu.org/gnu/gzip/gzip-1.12.tar.xz  
-　　**Harfbuzz:** https://github.com/harfbuzz/harfbuzz/releases/download/7.2.0/harfbuzz-7.2.0.tar.xz  
+　　**Harfbuzz:** https://github.com/harfbuzz/harfbuzz/releases/download/7.3.0/harfbuzz-7.3.0.tar.xz  
 　　**Iana-Etc:** https://github.com/Mic92/iana-etc/releases/download/20230418/iana-etc-20230418.tar.gz  
 　　**ICU4C:** https://github.com/unicode-org/icu/releases/download/release-73-1/icu4c-73_1-src.tgz  
 　　**Inetutils:** https://ftp.gnu.org/gnu/inetutils/inetutils-2.4.tar.xz  
@@ -309,10 +309,10 @@ pushd ${SYSDIR}/downloads
 　　**Libusb:** https://github.com/libusb/libusb/releases/download/v1.0.26/libusb-1.0.26.tar.bz2  
 　　**Libunistring:** https://ftp.gnu.org/gnu/libunistring/libunistring-1.1.tar.xz  
 　　**Libxcrypt:** https://github.com/besser82/libxcrypt/releases/download/v4.4.33/libxcrypt-4.4.33.tar.xz  
-　　**Libxml2:** https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.2.tar.xz  
-　　**Libxslt:** https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.37.tar.xz  
+　　**Libxml2:** https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.3.tar.xz  
+　　**Libxslt:** https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.38.tar.xz  
 　　**Links:** http://links.twibright.com/download/links-2.29.tar.bz2  
-　　**Linux-headers:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.3.1.tar.xz  
+　　**Linux-headers:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.3.2.tar.xz  
 　　**Linux:** ```https://github.com/loongson/linux.git 分支名“loongarch-next”```  
 　　**Linux-Firmware:** https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/linux-firmware-20230404.tar.xz  
 　　**LLVM:** https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.3/llvm-project-16.0.3.src.tar.xz  
@@ -368,9 +368,9 @@ pushd ${SYSDIR}/downloads
 　　**Userspace-RCU:** https://lttng.org/files/urcu/userspace-rcu-0.14.tar.bz2  
 　　**Util-Linux:** https://www.kernel.org/pub/linux/utils/util-linux/v2.38/util-linux-2.38.1.tar.xz  
 　　**Vala:** https://download.gnome.org/sources/vala/0.56/vala-0.56.7.tar.xz  
-　　**VIM:** https://github.com/vim/vim/archive/v9.0.1510/vim-9.0.1510.tar.gz  
+　　**VIM:** https://github.com/vim/vim/archive/v9.0.1539/vim-9.0.1539.tar.gz  
 　　**Wayland:** https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.22.0/downloads/wayland-1.22.0.tar.xz  
-　　**WGet:** https://ftp.gnu.org/gnu/wget/wget-1.21.3.tar.gz  
+　　**WGet:** https://ftp.gnu.org/gnu/wget/wget-1.21.4.tar.gz  
 　　**Wireless-Tools:** https://hewlettpackard.github.io/wireless-tools/wireless_tools.29.tar.gz  
 　　**Wpa_Supplicant:** https://w1.fi/releases/wpa_supplicant-2.10.tar.gz  
 　　**Xfsprogs:** https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-6.2.0.tar.xz  
@@ -407,8 +407,8 @@ popd
 　　按以下步骤制作Linux内核头文件并安装到目标系统目录中。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/linux-6.3.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-6.3.1
+tar xvf ${DOWNLOADDIR}/linux-6.3.2.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-6.3.2
 	make mrproper
 	make ARCH=loongarch INSTALL_HDR_PATH=dest headers_install
 	find dest/include -name '.*' -delete
@@ -1827,8 +1827,8 @@ popd
 
 #### Gawk
 ```sh
-tar xvf ${DOWNLOADDIR}/gawk-5.2.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/gawk-5.2.1
+tar xvf ${DOWNLOADDIR}/gawk-5.2.2.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gawk-5.2.2
 	sed -i 's/extras//' Makefile.in
 	./configure --prefix=/usr  --libdir=/usr/lib64 --build=${CROSS_HOST} --host=${CROSS_TARGET}
 	make ${JOBS}
@@ -2057,8 +2057,8 @@ popd
 
 #### VIM
 ```sh
-tar xvf ${DOWNLOADDIR}/vim-9.0.1510.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/vim-9.0.1510
+tar xvf ${DOWNLOADDIR}/vim-9.0.1539.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/vim-9.0.1539
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 cat > src/auto/config.cache << EOF
 	vim_cv_getcwd_broken=no
@@ -2280,8 +2280,8 @@ popd
 
 #### WGet
 ```sh
-tar xvf ${DOWNLOADDIR}/wget-1.21.3.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/wget-1.21.3
+tar xvf ${DOWNLOADDIR}/wget-1.21.4.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/wget-1.21.4
 	rm build-aux/config.{sub,guess}
 	automake --add-missing
 	./configure --prefix=/usr --sysconfdir=/etc \
@@ -2609,8 +2609,8 @@ popd
 
 #### Libxml2
 ```sh
-tar xvf ${DOWNLOADDIR}/libxml2-2.11.2.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libxml2-2.11.2
+tar xvf ${DOWNLOADDIR}/libxml2-2.11.3.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libxml2-2.11.3
     rm config.{sub,guess}
     automake -a
     mkdir native-build
@@ -2636,8 +2636,8 @@ popd
 
 #### Libxslt
 ```sh
-tar xvf ${DOWNLOADDIR}/libxslt-1.1.37.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libxslt-1.1.37
+tar xvf ${DOWNLOADDIR}/libxslt-1.1.38.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libxslt-1.1.38
     rm config.{sub,guess}
     automake -a
     ./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
@@ -3241,8 +3241,8 @@ popd
 
 #### HarfBuzz
 ```sh
-tar xvf ${DOWNLOADDIR}/harfbuzz-7.2.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/harfbuzz-7.2.0
+tar xvf ${DOWNLOADDIR}/harfbuzz-7.3.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/harfbuzz-7.3.0
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -3276,8 +3276,8 @@ popd
 　　这次编译是加入对Graphite的支持。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/harfbuzz-7.2.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/harfbuzz-7.2.0
+tar xvf ${DOWNLOADDIR}/harfbuzz-7.3.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/harfbuzz-7.3.0
     mkdir cross-build-2
     pushd cross-build-2
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -3969,11 +3969,11 @@ popd
 ```
 
 #### Mesa
-https://archive.mesa3d.org/mesa-23.0.3.tar.xz
+https://archive.mesa3d.org/mesa-23.1.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/mesa-23.0.3.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/mesa-23.0.3
+tar xvf ${DOWNLOADDIR}/mesa-23.1.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/mesa-23.1.0
     sed -i -e "/dep_wl_scanner/s@, native: true@@g" \
            -e "/prog_wl_scanner/s@find_program\(.*\)\$@'wayland-scanner'@g" meson.build
     mkdir cross-build
@@ -4438,11 +4438,11 @@ popd
 
 
 #### XTerm
-https://invisible-mirror.net/archives/xterm/xterm-379.tgz
+https://invisible-mirror.net/archives/xterm/xterm-380.tgz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/xterm-379.tgz -C ${BUILDDIR}
-pushd ${BUILDDIR}/xterm-379
+tar xvf ${DOWNLOADDIR}/xterm-380.tgz -C ${BUILDDIR}
+pushd ${BUILDDIR}/xterm-380
     sed -i '/v0/{n;s/new:/new:kb=^?:/}' termcap
     printf '\tkbs=\\177,\n' >> terminfo
     TERMINFO=/usr/share/terminfo \
@@ -4716,11 +4716,11 @@ popd
 ```
 
 #### At-Spi2-Core
-https://download.gnome.org/sources/at-spi2-core/2.48/at-spi2-core-2.48.0.tar.xz
+https://download.gnome.org/sources/at-spi2-core/2.48/at-spi2-core-2.48.2.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/at-spi2-core-2.48.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/at-spi2-core-2.48.0
+tar xvf ${DOWNLOADDIR}/at-spi2-core-2.48.2.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/at-spi2-core-2.48.2
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -5357,11 +5357,11 @@ popd
 ```
 
 #### GTK4
-https://download.gnome.org/sources/gtk/4.11/gtk-4.11.1.tar.xz
+https://download.gnome.org/sources/gtk/4.11/gtk-4.11.2.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/gtk-4.11.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/gtk-4.11.1
+tar xvf ${DOWNLOADDIR}/gtk-4.11.2.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gtk-4.11.2
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -5574,11 +5574,11 @@ popd
 ```
 
 #### RPCSVC-Proto
-https://github.com/thkukuk/rpcsvc-proto/releases/download/v1.4.3/rpcsvc-proto-1.4.3.tar.xz
+https://github.com/thkukuk/rpcsvc-proto/releases/download/v1.4.4/rpcsvc-proto-1.4.4.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/rpcsvc-proto-1.4.3.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/rpcsvc-proto-1.4.3
+tar xvf ${DOWNLOADDIR}/rpcsvc-proto-1.4.4.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/rpcsvc-proto-1.4.4
     ./configure --sysconfdir=/etc
     make ${JOBS}
     make -C rpcsvc DESTDIR=${SYSDIR}/sysroot install
@@ -5639,11 +5639,11 @@ popd
 ```
 
 #### Linux-PAM
-https://github.com/linux-pam/linux-pam/releases/download/v1.5.2/Linux-PAM-1.5.2.tar.xz
+https://github.com/linux-pam/linux-pam/releases/download/v1.5.3/Linux-PAM-1.5.3.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/Linux-PAM-1.5.2.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/Linux-PAM-1.5.2
+tar xvf ${DOWNLOADDIR}/Linux-PAM-1.5.3.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/Linux-PAM-1.5.3
     ./configure $COMMON_CONFIG --enable-securedir=/usr/lib64/security \
                 ac_cv_func_yp_get_default_domain=no
     make ${JOBS}
@@ -6559,11 +6559,11 @@ popd
 ```
 
 #### Weston
-https://wayland.freedesktop.org/releases/weston-11.0.92.tar.xz
+https://wayland.freedesktop.org/releases/weston-11.0.93.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/weston-11.0.92.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/weston-11.0.92
+tar xvf ${DOWNLOADDIR}/weston-11.0.93.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/weston-11.0.93
     sed -i -e "/dep_scanner =/s@, native: true@@g" \
            -e "/prog_scanner =/s@find_program\(.*\)\$@find_program('wayland-scanner')@g" \
            protocol/meson.build
@@ -6614,11 +6614,11 @@ popd
 ```
 
 #### Fmt
-https://github.com/fmtlib/fmt/archive/9.1.0/fmt-9.1.0.tar.gz
+https://github.com/fmtlib/fmt/archive/10.0.0/fmt-10.0.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/fmt-9.1.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/fmt-9.1.0
+tar xvf ${DOWNLOADDIR}/fmt-10.0.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/fmt-10.0.0
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -7226,11 +7226,11 @@ popd
 ```
 
 #### Mlt
-https://github.com/mltframework/mlt/releases/download/v7.14.0/mlt-7.14.0.tar.gz
+https://github.com/mltframework/mlt/releases/download/v7.16.0/mlt-7.16.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/mlt-7.14.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/mlt-7.14.0
+tar xvf ${DOWNLOADDIR}/mlt-7.16.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/mlt-7.16.0
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -7271,14 +7271,14 @@ popd
 ```
 
 #### Exiv2
-https://github.com/Exiv2/exiv2/releases/download/v0.27.6/exiv2-0.27.6-Source.tar.gz
+https://github.com/Exiv2/exiv2/archive/v0.28.0/exiv2-0.28.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/exiv2-0.27.6-Source.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/exiv2-0.27.6-Source
+tar xvf ${DOWNLOADDIR}/exiv2-0.28.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/exiv2-0.28.0
     mkdir cross-build
     pushd cross-build
-        CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
+        CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" -DCMAKE_CROSSCOMPILING_EMULATOR=qemu-loongarch64 \
         cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release \
               -DPKG_CONFIG_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-pkg-config \
               -DCMAKE_SYSROOT=${SYSDIR}/sysroot \
@@ -7423,11 +7423,11 @@ popd
 ```
 
 #### Docutils
-https://downloads.sourceforge.net/docutils/docutils-0.19.tar.gz
+https://downloads.sourceforge.net/docutils/docutils-0.20.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/docutils-0.19.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/docutils-0.19
+tar xvf ${DOWNLOADDIR}/docutils-0.20.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/docutils-0.20
     _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
@@ -8146,11 +8146,11 @@ popd
 ```
 
 #### Nghttp2
-https://github.com/nghttp2/nghttp2/releases/download/v1.52.0/nghttp2-1.52.0.tar.xz
+https://github.com/nghttp2/nghttp2/releases/download/v1.53.0/nghttp2-1.53.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/nghttp2-1.52.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/nghttp2-1.52.0
+tar xvf ${DOWNLOADDIR}/nghttp2-1.53.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/nghttp2-1.53.0
     ./configure $COMMON_CONFIG
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
@@ -8218,11 +8218,11 @@ popd
 ```
 
 #### Libwpe
-https://wpewebkit.org/releases/libwpe-1.14.1.tar.xz
+https://wpewebkit.org/releases/libwpe-1.15.1.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libwpe-1.14.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libwpe-1.14.1
+tar xvf ${DOWNLOADDIR}/libwpe-1.15.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libwpe-1.15.1
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -8693,21 +8693,21 @@ popd
 
 
 #### FireFox 111
-https://archive.mozilla.org/pub/firefox/releases/112.0.2/source/firefox-112.0.2.source.tar.xz
+https://archive.mozilla.org/pub/firefox/releases/113.0/source/firefox-113.0.source.tar.xz
 https://hg.mozilla.org/l10n-central/zh-CN/archive/tip.zip
 
 下载中文语言包：
 
 ```sh
 wget https://hg.mozilla.org/l10n-central/zh-CN/archive/tip.zip
-mv -iv tip.zip ${DOWNLOADDIR}/firefox-112-l10.zip
+mv -iv tip.zip ${DOWNLOADDIR}/firefox-113-l10.zip
 ```
 
 编译步骤：
 
 ```sh
-tar xvf ${DOWNLOADDIR}/firefox-112.0.2.source.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/firefox-112.0.2
+tar xvf ${DOWNLOADDIR}/firefox-113.0.source.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/firefox-113.0
     mkdir -pv mozbuild/l10n-central
     pushd mozbuild/l10n-central
         unzip ${DOWNLOADDIR}/firefox-110-l10.zip
@@ -8932,8 +8932,8 @@ popd
 * 制作步骤
 
 ```sh
-tar xvf ${DOWNLOADDIR}/linux-6.3.1tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-6.3.1
+tar xvf ${DOWNLOADDIR}/linux-6.3.2.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-6.3.2
 	make mrproper
 	make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}- defconfig
 	make ARCH=loongarch CROSS_COMPILE=${CROSS_TARGET}- menuconfig
