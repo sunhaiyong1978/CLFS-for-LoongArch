@@ -1,0 +1,25 @@
+From a2c2144b5af770b8f935a93af83450c78d9c85ee Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Tue, 16 May 2023 01:26:16 +0000
+Subject: [PATCH] Fix loongarch64 double float define to loongarch64-linux-gnu.
+
+---
+ src/basic/architecture.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/basic/architecture.h b/src/basic/architecture.h
+index c8ffcc5..f7d795b 100644
+--- a/src/basic/architecture.h
++++ b/src/basic/architecture.h
+@@ -203,7 +203,7 @@ Architecture uname_architecture(void);
+ #elif defined(__loongarch64)
+ #  define native_architecture() ARCHITECTURE_LOONGARCH64
+ #  if defined(__loongarch_double_float)
+-#    define LIB_ARCH_TUPLE "loongarch64-linux-gnuf64"
++#    define LIB_ARCH_TUPLE "loongarch64-linux-gnu"
+ #  elif defined(__loongarch_single_float)
+ #    define LIB_ARCH_TUPLE "loongarch64-linux-gnuf32"
+ #  elif defined(__loongarch_soft_float)
+-- 
+2.31.1
+

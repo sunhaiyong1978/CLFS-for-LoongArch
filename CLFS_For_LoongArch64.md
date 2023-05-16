@@ -272,7 +272,7 @@ pushd ${SYSDIR}/downloads
 　　**GPerf:** https://ftp.gnu.org/gnu/gperf/gperf-3.1.tar.gz  
 　　**GPM:** https://www.nico.schottelius.org/software/gpm/archives/gpm-1.20.7.tar.bz2  
 　　**Graphite:** https://github.com/silnrsi/graphite/releases/download/1.3.14/graphite-1.3.14.tar.gz  
-　　**Grep:** https://ftp.gnu.org/gnu/grep/grep-3.10.tar.xz  
+　　**Grep:** https://ftp.gnu.org/gnu/grep/grep-3.11.tar.xz  
 　　**Groff:** https://ftp.gnu.org/gnu/groff/groff-1.22.4.tar.gz  
 　　**Grub2:** ```https://github.com/loongarch64/grub  分支名“dev/patchwork/efi”```  
 　　**Guile:** https://ftp.gnu.org/gnu/guile/guile-3.0.9.tar.xz  
@@ -290,7 +290,7 @@ pushd ${SYSDIR}/downloads
 　　**Less:** https://www.greenwoodsoftware.com/less/less-633.tar.gz  
 　　**Lcms:** https://downloads.sourceforge.net/lcms/lcms2-2.15.tar.gz  
 　　**Libaio:** https://ftp.debian.org/debian/pool/main/liba/libaio/libaio_0.3.113.orig.tar.gz  
-　　**Libcap:** https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-2.68.tar.xz  
+　　**Libcap:** https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-2.69.tar.xz  
 　　**Libelf:** https://sourceware.org/ftp/elfutils/0.189/elfutils-0.189.tar.bz2  
 　　**Libevent:** https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz  
 　　**Libffi:** https://github.com/libffi/libffi/archive/v3.4.4/libffi-3.4.4.tar.gz  
@@ -314,9 +314,9 @@ pushd ${SYSDIR}/downloads
 　　**Links:** http://links.twibright.com/download/links-2.29.tar.bz2  
 　　**Linux-headers:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.3.2.tar.xz  
 　　**Linux:** ```https://github.com/loongson/linux.git 分支名“loongarch-next”```  
-　　**Linux-Firmware:** https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/linux-firmware-20230404.tar.xz  
+　　**Linux-Firmware:** https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/linux-firmware-20230515.tar.xz  
 　　**LLVM:** https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.3/llvm-project-16.0.3.src.tar.xz  
-　　**Lua:** https://www.lua.org/ftp/lua-5.4.5.tar.gz  
+　　**Lua:** https://www.lua.org/ftp/lua-5.4.6.tar.gz  
 　　**LVM2:** https://sourceware.org/ftp/lvm2/LVM2.2.03.21.tgz  
 　　**M4:** https://ftp.gnu.org/gnu/m4/m4-1.4.19.tar.xz  
 　　**Make:** https://ftp.gnu.org/gnu/make/make-4.4.1.tar.gz  
@@ -329,7 +329,7 @@ pushd ${SYSDIR}/downloads
 　　**MPFR:** https://ftp.gnu.org/gnu/mpfr/mpfr-4.2.0.tar.xz  
 　　**Ncurses:** https://ftp.gnu.org/gnu/ncurses/ncurses-6.4.tar.gz  
 　　**Net-Tools:** https://downloads.sourceforge.net/project/net-tools/net-tools-2.10.tar.xz  
-　　**Nettle:** https://ftp.gnu.org/gnu/nettle/nettle-3.8.1.tar.gz  
+　　**Nettle:** https://ftp.gnu.org/gnu/nettle/nettle-3.9.tar.gz  
 　　**Ninja:** https://github.com/ninja-build/ninja/archive/v1.11.1/ninja-1.11.1.tar.gz  
 　　**NSPR:** https://archive.mozilla.org/pub/nspr/releases/v4.35/src/nspr-4.35.tar.gz  
 　　**NSS:** https://archive.mozilla.org/pub/security/nss/releases/NSS_3_89_RTM/src/nss-3.89.tar.gz  
@@ -361,14 +361,14 @@ pushd ${SYSDIR}/downloads
 　　**Tcl:** https://downloads.sourceforge.net/tcl/tcl8.6.13-src.tar.gz  
 　　**Texinfo:** https://ftp.gnu.org/gnu/texinfo/texinfo-7.0.3.tar.xz  
 　　**Tiff:** https://download.osgeo.org/libtiff/tiff-4.5.0.tar.xz  
-　　**UnRAR:** https://www.rarlab.com/rar/unrarsrc-6.2.6.tar.gz  
+　　**UnRAR:** https://www.rarlab.com/rar/unrarsrc-6.2.7.tar.gz  
 　　**UnZip:** ftp://ftp.info-zip.org/pub/infozip/src/unzip60.tgz  
 　　**URI:** https://www.cpan.org/authors/id/O/OA/OALDERS/URI-5.17.tar.gz  
 　　**Usbutils:** https://www.kernel.org/pub/linux/utils/usb/usbutils/usbutils-015.tar.xz  
 　　**Userspace-RCU:** https://lttng.org/files/urcu/userspace-rcu-0.14.tar.bz2  
 　　**Util-Linux:** https://www.kernel.org/pub/linux/utils/util-linux/v2.38/util-linux-2.38.1.tar.xz  
 　　**Vala:** https://download.gnome.org/sources/vala/0.56/vala-0.56.7.tar.xz  
-　　**VIM:** https://github.com/vim/vim/archive/v9.0.1539/vim-9.0.1539.tar.gz  
+　　**VIM:** https://github.com/vim/vim/archive/v9.0.1561/vim-9.0.1561.tar.gz  
 　　**Wayland:** https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.22.0/downloads/wayland-1.22.0.tar.xz  
 　　**WGet:** https://ftp.gnu.org/gnu/wget/wget-1.21.4.tar.gz  
 　　**Wireless-Tools:** https://hewlettpackard.github.io/wireless-tools/wireless_tools.29.tar.gz  
@@ -947,8 +947,8 @@ popd
 ### 3.29 Lua
 
 ```sh
-tar xvf ${DOWNLOADDIR}/lua-5.4.5.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/lua-5.4.5
+tar xvf ${DOWNLOADDIR}/lua-5.4.6.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/lua-5.4.6
     sed -i '/#define LUA_ROOT/s:/usr/local/:/usr/:' src/luaconf.h
     make MYCFLAGS="-fPIC" linux ${JOBS}
     make INSTALL_TOP=${SYSDIR}/cross-tools \
@@ -1436,8 +1436,8 @@ popd
 
 #### Libcap
 ```sh
-tar xvf ${DOWNLOADDIR}/libcap-2.68.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libcap-2.68
+tar xvf ${DOWNLOADDIR}/libcap-2.69.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libcap-2.69
 	make CROSS_COMPILE="${CROSS_TARGET}-" BUILD_CC="gcc" GOLANG=no prefix=/usr lib=lib64 ${JOBS}
 	make CROSS_COMPILE="${CROSS_TARGET}-" BUILD_CC="gcc" GOLANG=no prefix=/usr lib=lib64 \
 		 DESTDIR=${SYSDIR}/sysroot install
@@ -1604,8 +1604,8 @@ popd
 
 #### Grep
 ```sh
-tar xvf ${DOWNLOADDIR}/grep-3.10.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/grep-3.10
+tar xvf ${DOWNLOADDIR}/grep-3.11.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/grep-3.11
 	./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET}
 	make ${JOBS}
 	make DESTDIR=${SYSDIR}/sysroot install
@@ -2060,8 +2060,8 @@ popd
 
 #### VIM
 ```sh
-tar xvf ${DOWNLOADDIR}/vim-9.0.1539.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/vim-9.0.1539
+tar xvf ${DOWNLOADDIR}/vim-9.0.1561.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/vim-9.0.1561
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 cat > src/auto/config.cache << EOF
 	vim_cv_getcwd_broken=no
@@ -2980,7 +2980,7 @@ cp -a ${SYSDIR}/cross-tools/bin/{${CROSS_TARGET}-,}glib-compile-schemas
 
 #### UnRAR
 ```sh
-tar xvf ${DOWNLOADDIR}/unrarsrc-6.2.6.tar.gz -C ${BUILDDIR}
+tar xvf ${DOWNLOADDIR}/unrarsrc-6.2.7.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/unrar
     make CXX="${CROSS_TARGET}-g++" STRIP=${CROSS_TARGET}-strip -f makefile ${JOBS}
     install -v -m755 unrar ${SYSDIR}/sysroot/usr/bin
@@ -3341,8 +3341,8 @@ popd
 
 #### Nettle
 ```sh
-tar xvf ${DOWNLOADDIR}/nettle-3.8.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/nettle-3.8.1
+tar xvf ${DOWNLOADDIR}/nettle-3.9.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/nettle-3.9
     cp ${SYSDIR}/sysroot/usr/share/automake-*/config.* ./
     ./configure --prefix=/usr --libdir=/usr/lib64 \
                 --build=${CROSS_HOST} --host=${CROSS_TARGET}
@@ -5799,12 +5799,12 @@ popd
 ```
 
 #### Elogind
-https://github.com/elogind/elogind/archive/v246.10/elogind-246.10.tar.gz
+https://github.com/elogind/elogind/archive/v252.9/elogind-252.9.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/elogind-246.10.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/elogind-246.10
-    patch -Np1 -i ${DOWNLOADDIR}/elogind-246-add-loongarch64.patch
+tar xvf ${DOWNLOADDIR}/elogind-252.9.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/elogind-252.9
+    patch -Np1 -i ${DOWNLOADDIR}/0001-Fix-loongarch64-double-float-define-to-loongarch64-l.patch
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -6635,11 +6635,11 @@ popd
 ```
 
 #### Extra-cmake-modules
-https://download.kde.org/stable/frameworks/5.105/extra-cmake-modules-5.105.0.tar.xz
+https://download.kde.org/stable/frameworks/5.106/extra-cmake-modules-5.106.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/extra-cmake-modules-5.105.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/extra-cmake-modules-5.105.0
+tar xvf ${DOWNLOADDIR}/extra-cmake-modules-5.106.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/extra-cmake-modules-5.106.0
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -6923,8 +6923,8 @@ popd
 #### Lua
 
 ```sh
-tar xvf ${DOWNLOADDIR}/lua-5.4.5.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/lua-5.4.5
+tar xvf ${DOWNLOADDIR}/lua-5.4.6.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/lua-5.4.6
     patch -Np1 -i ${DOWNLOADDIR}/lua-5.4.4-shared_library-1.patch
     sed -i '/#define LUA_ROOT/s:/usr/local/:/usr/:' src/luaconf.h
     make CC=${CROSS_TARGET}-gcc MYCFLAGS="-fPIC" linux ${JOBS}
@@ -7034,6 +7034,7 @@ https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/
 ```sh
 tar xvf ${DOWNLOADDIR}/ibus-pinyin-1.5.0.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/ibus-pinyin-1.5.0
+    patch -Np1 -i ${DOWNLOADDIR}/0001-Fix-english-db-build-error.patch
     ./configure $COMMON_CONFIG
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
@@ -8161,11 +8162,11 @@ popd
 ```
 
 #### Libproxy
-https://github.com/libproxy/libproxy/archive/0.4.18/libproxy-0.4.18.tar.gz
+https://github.com/libproxy/libproxy/archive/refs/tags/libproxy-0.5.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libproxy-0.4.18.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libproxy-0.4.18
+tar xvf ${DOWNLOADDIR}/libproxy-0.5.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libproxy-0.5.0
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -8696,7 +8697,7 @@ popd
 
 
 #### FireFox 111
-https://archive.mozilla.org/pub/firefox/releases/113.0/source/firefox-113.0.source.tar.xz
+https://archive.mozilla.org/pub/firefox/releases/113.0.1/source/firefox-113.0.1.source.tar.xz
 https://hg.mozilla.org/l10n-central/zh-CN/archive/tip.zip
 
 下载中文语言包：
@@ -8709,8 +8710,8 @@ mv -iv tip.zip ${DOWNLOADDIR}/firefox-113-l10.zip
 编译步骤：
 
 ```sh
-tar xvf ${DOWNLOADDIR}/firefox-113.0.source.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/firefox-113.0
+tar xvf ${DOWNLOADDIR}/firefox-113.0.1.source.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/firefox-113.0.1
     mkdir -pv mozbuild/l10n-central
     pushd mozbuild/l10n-central
         unzip ${DOWNLOADDIR}/firefox-110-l10.zip
@@ -8935,25 +8936,15 @@ popd
 * 补丁文件
 
 https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0001-double-tty-VT-screenbuf-for-univt.patch
-
 https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0002-Add-several-function-for-Univt.patch
-
 https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0003-UniVT-Fix-charcount-size-to-65536.patch
-
 https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0004-UniVT-Add-a-old_screen_size-variable-saves-the-origi.patch
-
 https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0005-Univt-Add-support-for-writing-UTF-8-encoding.patch
-
 https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0006-UniVT-Add-support-for-displaying-UTF-8-text.patch
-
 https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0007-UniVT-Support-displaying-UTF-8-text-for-90-degree-ro.patch
-
 https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0008-UniVT-Support-displaying-UTF-8-text-for-180-degree-r.patch
-
 https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/core/0009-UniVT-Support-displaying-UTF-8-text-for-270-degree-r.patch
-
 https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/font-data/0001-UniVT-Add-Chinese-fonts-support-in-console.patch
-
 
 * 制作步骤
 
@@ -9016,8 +9007,8 @@ Device Drivers  --->
 
 #### Linux-Firmware
 ```sh
-tar xvf ${DOWNLOADDIR}/linux-firmware-20230404.tar.xz   -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-firmware-20230404
+tar xvf ${DOWNLOADDIR}/linux-firmware-20230515.tar.xz   -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-firmware-20230515
 	make DESTDIR=${SYSDIR}/sysroot install
 popd
 ```
