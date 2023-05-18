@@ -239,7 +239,7 @@ pushd ${SYSDIR}/downloads
 　　**CMake:** https://cmake.org/files/v3.26/cmake-3.26.3.tar.gz  
 　　**CPIO:** https://ftp.gnu.org/gnu/cpio/cpio-2.14.tar.bz2  
 　　**Ctags:** http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz  
-　　**CURL:** https://curl.se/download/curl-8.0.1.tar.gz  
+　　**CURL:** https://curl.se/download/curl-8.1.0.tar.gz  
 　　**D-Bus:** https://dbus.freedesktop.org/releases/dbus/dbus-1.15.4.tar.xz  
 　　**Dejagnu:** https://ftp.gnu.org/gnu/dejagnu/dejagnu-1.6.3.tar.gz  
 　　**DHCPCD:** https://github.com/NetworkConfiguration/dhcpcd/archive/v10.0.1/dhcpcd-10.0.1.tar.gz  
@@ -255,7 +255,7 @@ pushd ${SYSDIR}/downloads
 　　**Flex:** https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz  
 　　**Fontconfig:** https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.14.2.tar.xz  
 　　**Freetype:** https://downloads.sourceforge.net/freetype/freetype-2.13.0.tar.xz  
-　　**Fribidi:** https://github.com/fribidi/fribidi/releases/download/v1.0.12/fribidi-1.0.12.tar.xz  
+　　**Fribidi:** https://github.com/fribidi/fribidi/archive/v1.0.13/fribidi-1.0.13.tar.gz  
 　　**Gawk:** https://ftp.gnu.org/gnu/gawk/gawk-5.2.2.tar.xz  
 　　**GCC:** https://ftp.gnu.org/gnu/gcc/gcc-13.1.0/gcc-13.1.0.tar.xz  
 　　**GC:** https://www.hboehm.info/gc/gc_source/gc-8.2.2.tar.gz  
@@ -312,10 +312,10 @@ pushd ${SYSDIR}/downloads
 　　**Libxml2:** https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.3.tar.xz  
 　　**Libxslt:** https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.38.tar.xz  
 　　**Links:** http://links.twibright.com/download/links-2.29.tar.bz2  
-　　**Linux-headers:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.3.2.tar.xz  
-　　**Linux:** ```https://github.com/loongson/linux.git 分支名“loongarch-next”```  
+　　**Linux-headers:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.3.3.tar.xz  
+　　**Linux:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.3.3.tar.xz  
 　　**Linux-Firmware:** https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/linux-firmware-20230515.tar.xz  
-　　**LLVM:** https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.3/llvm-project-16.0.3.src.tar.xz  
+　　**LLVM:** https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.4/llvm-project-16.0.4.src.tar.xz  
 　　**Lua:** https://www.lua.org/ftp/lua-5.4.6.tar.gz  
 　　**LVM2:** https://sourceware.org/ftp/lvm2/LVM2.2.03.21.tgz  
 　　**M4:** https://ftp.gnu.org/gnu/m4/m4-1.4.19.tar.xz  
@@ -354,7 +354,7 @@ pushd ${SYSDIR}/downloads
 　　**Rust:** https://static.rust-lang.org/dist/rustc-1.69.0-src.tar.gz  
 　　**Sed:** https://ftp.gnu.org/gnu/sed/sed-4.9.tar.xz  
 　　**Shadow:** https://github.com/shadow-maint/shadow/releases/download/v4.11.1/shadow-4.11.1.tar.xz  
-　　**Sqlite3:** https://github.com/sqlite/sqlite/archive/version-3.41.2/sqlite-3.41.2.tar.gz  
+　　**Sqlite3:** https://github.com/sqlite/sqlite/archive/version-3.42.0/sqlite-3.42.0.tar.gz  
 　　**Systemd:** https://github.com/systemd/systemd/archive/v253/systemd-253.tar.gz  
 　　**Sudo:** https://www.sudo.ws/dist/sudo-1.9.13p3.tar.gz  
 　　**Tar:** https://ftp.gnu.org/gnu/tar/tar-1.34.tar.xz  
@@ -366,7 +366,7 @@ pushd ${SYSDIR}/downloads
 　　**URI:** https://www.cpan.org/authors/id/O/OA/OALDERS/URI-5.17.tar.gz  
 　　**Usbutils:** https://www.kernel.org/pub/linux/utils/usb/usbutils/usbutils-015.tar.xz  
 　　**Userspace-RCU:** https://lttng.org/files/urcu/userspace-rcu-0.14.tar.bz2  
-　　**Util-Linux:** https://www.kernel.org/pub/linux/utils/util-linux/v2.38/util-linux-2.38.1.tar.xz  
+　　**Util-Linux:** https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.39/util-linux-2.39.tar.xz  
 　　**Vala:** https://download.gnome.org/sources/vala/0.56/vala-0.56.7.tar.xz  
 　　**VIM:** https://github.com/vim/vim/archive/v9.0.1561/vim-9.0.1561.tar.gz  
 　　**Wayland:** https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.22.0/downloads/wayland-1.22.0.tar.xz  
@@ -407,8 +407,8 @@ popd
 　　按以下步骤制作Linux内核头文件并安装到目标系统目录中。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/linux-6.3.2.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-6.3.2
+tar xvf ${DOWNLOADDIR}/linux-6.3.3.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-6.3.3
 	make mrproper
 	make ARCH=loongarch INSTALL_HDR_PATH=dest headers_install
 	find dest/include -name '.*' -delete
@@ -855,8 +855,8 @@ chmod +x ${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-valac
 ### 3.26 LLVM
 
 ```sh
-tar xvf ${DOWNLOADDIR}/llvm-project-16.0.3.src.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/llvm-project-16.0.3.src/llvm
+tar xvf ${DOWNLOADDIR}/llvm-project-16.0.4.src.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/llvm-project-16.0.4.src/llvm
     mkdir native-build
     pushd native-build
         LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" \
@@ -885,8 +885,8 @@ popd
 ### 3.27 Clang
 
 ```sh
-tar xvf ${DOWNLOADDIR}/llvm-project-16.0.3.src.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/llvm-project-16.0.3.src/clang
+tar xvf ${DOWNLOADDIR}/llvm-project-16.0.4.src.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/llvm-project-16.0.4.src/clang
     mkdir native-build
     pushd native-build
         LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" \
@@ -925,8 +925,8 @@ popd
 tar xvf ${DOWNLOADDIR}/rustc-1.69.0-src.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/rustc-1.69.0-src
     rm -rf src/llvm-project
-    tar xvf ${DOWNLOADDIR}/llvm-project-16.0.3.src.tar.xz -C src/
-    mv src/llvm-project-16.0.3.src src/llvm-project
+    tar xvf ${DOWNLOADDIR}/llvm-project-16.0.4.src.tar.xz -C src/
+    mv src/llvm-project-16.0.4.src src/llvm-project
     patch -Np1 -i ${DOWNLOADDIR}/0001-rustc-1.69.0-add-loongarch-support.patch
     patch -Np1 -i ${DOWNLOADDIR}/0001-rustc-1.69.0-vendor-nix-add-loongarch64-support.patch
     patch -Np1 -i ${DOWNLOADDIR}/0001-linux-raw-sys-add-loongarch64-support.patch
@@ -1964,8 +1964,8 @@ popd
 
 #### CURL
 ```sh
-tar xvf ${DOWNLOADDIR}/curl-8.0.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/curl-8.0.1
+tar xvf ${DOWNLOADDIR}/curl-8.1.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/curl-8.1.0
     ./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
                 --host=${CROSS_TARGET} --with-openssl \
                 --enable-threaded-resolver --with-ca-path=/etc/ssl/certs
@@ -2099,8 +2099,8 @@ EOF
 
 #### Util-Linux
 ```sh
-tar xvf ${DOWNLOADDIR}/util-linux-2.38.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/util-linux-2.38.1
+tar xvf ${DOWNLOADDIR}/util-linux-2.39.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/util-linux-2.39
 	cp ${SYSDIR}/sysroot/usr/share/automake-1.16/config.* config/
 	./configure  --build=${CROSS_HOST} --host=${CROSS_TARGET} \
         ADJTIME_PATH=/var/lib/hwclock/adjtime \
@@ -2395,8 +2395,8 @@ sed -i "/wheel ALL=(ALL:ALL) ALL/s@# @@g" ${SYSDIR}/sysroot/etc/sudoers.dist
 
 #### SQLite3
 ```sh
-unzip ${DOWNLOADDIR}/sqlite-3.41.2.tar.gz -d ${BUILDDIR}
-pushd ${BUILDDIR}/sqlite-3.41.2
+unzip ${DOWNLOADDIR}/sqlite-3.42.0.tar.gz -d ${BUILDDIR}
+pushd ${BUILDDIR}/sqlite-3.42.0
     cp ${SYSDIR}/cross-tools/share/automake-*/config.* ./
     ./configure --prefix=/usr --libdir=/usr/lib64 \
                 --build=${CROSS_HOST} --host=${CROSS_TARGET} \
@@ -3326,8 +3326,8 @@ popd
 
 #### Fribidi
 ```sh
-tar xvf ${DOWNLOADDIR}/fribidi-1.0.12.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/fribidi-1.0.12
+tar xvf ${DOWNLOADDIR}/fribidi-1.0.13.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/fribidi-1.0.13
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -3792,8 +3792,8 @@ popd
 #### LLVM
 
 ```sh
-tar xvf ${DOWNLOADDIR}/llvm-project-16.0.3.src.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/llvm-project-16.0.3.src/llvm
+tar xvf ${DOWNLOADDIR}/llvm-project-16.0.4.src.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/llvm-project-16.0.4.src/llvm
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -3818,8 +3818,8 @@ popd
 #### Clang
 
 ```sh
-tar xvf ${DOWNLOADDIR}/llvm-project-16.0.3.src.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/llvm-project-16.0.3.src/clang
+tar xvf ${DOWNLOADDIR}/llvm-project-16.0.4.src.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/llvm-project-16.0.4.src/clang
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -3846,8 +3846,8 @@ popd
 #### Compiler-RT
 
 ```sh
-tar xvf ${DOWNLOADDIR}/llvm-project-16.0.3.src.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/llvm-project-16.0.3.src/compiler-rt
+tar xvf ${DOWNLOADDIR}/llvm-project-16.0.4.src.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/llvm-project-16.0.4.src/compiler-rt
     mkdir cross-build
     pushd cross-build
             CC="clang" CXX="clang++" \
@@ -3879,8 +3879,8 @@ https://static.rust-lang.org/dist/rustc-1.69.0-src.tar.gz
 tar xvf ${DOWNLOADDIR}/rustc-1.69.0-src.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/rustc-1.69.0-src
     rm -rf src/llvm-project
-    tar xvf ${DOWNLOADDIR}/llvm-project-16.0.3.src.tar.xz -C src/
-    mv src/llvm-project-16.0.3.src src/llvm-project
+    tar xvf ${DOWNLOADDIR}/llvm-project-16.0.4.src.tar.xz -C src/
+    mv src/llvm-project-16.0.4.src src/llvm-project
     patch -Np1 -i ${DOWNLOADDIR}/0001-rustc-1.69.0-add-loongarch-support.patch
     patch -Np1 -i ${DOWNLOADDIR}/0001-rustc-1.69.0-vendor-nix-add-loongarch64-support.patch
     patch -Np1 -i ${DOWNLOADDIR}/0001-linux-raw-sys-add-loongarch64-support.patch
@@ -4318,11 +4318,11 @@ popd
 
 
 #### Libwacom
-https://github.com/linuxwacom/libwacom/releases/download/libwacom-2.6.0/libwacom-2.6.0.tar.xz
+https://github.com/linuxwacom/libwacom/releases/download/libwacom-2.7.0/libwacom-2.7.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libwacom-2.6.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libwacom-2.6.0
+tar xvf ${DOWNLOADDIR}/libwacom-2.7.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libwacom-2.7.0
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -6407,11 +6407,11 @@ popd
 ```
 
 #### NetworkManager
-https://download.gnome.org/sources/NetworkManager/1.43/NetworkManager-1.43.7.tar.xz
+https://download.gnome.org/sources/NetworkManager/1.43/NetworkManager-1.43.8.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/NetworkManager-1.43.7.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/NetworkManager-1.43.7
+tar xvf ${DOWNLOADDIR}/NetworkManager-1.43.8.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/NetworkManager-1.43.8
     sed -i "s@jansson_libdir,@'${SYSDIR}/sysroot' + &@g" meson.build
     mkdir cross-prebuild
     pushd cross-prebuild
@@ -6544,11 +6544,11 @@ popd
 ```
 
 #### Pipewire
-https://github.com/PipeWire/pipewire/archive/0.3.70/pipewire-0.3.70.tar.gz
+https://github.com/PipeWire/pipewire/archive/0.3.71/pipewire-0.3.71.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/pipewire-0.3.70.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/pipewire-0.3.70
+tar xvf ${DOWNLOADDIR}/pipewire-0.3.71.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/pipewire-0.3.71
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -6562,11 +6562,11 @@ popd
 ```
 
 #### Weston
-https://wayland.freedesktop.org/releases/weston-11.0.93.tar.xz
+https://gitlab.freedesktop.org/wayland/weston/-/releases/12.0.0/downloads/weston-12.0.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/weston-11.0.93.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/weston-11.0.93
+tar xvf ${DOWNLOADDIR}/weston-12.0.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/weston-12.0.0
     sed -i -e "/dep_scanner =/s@, native: true@@g" \
            -e "/prog_scanner =/s@find_program\(.*\)\$@find_program('wayland-scanner')@g" \
            protocol/meson.build
@@ -6869,8 +6869,8 @@ EOF
 
 #### Util-Linux(再次编译)
 ```sh
-tar xvf ${DOWNLOADDIR}/util-linux-2.38.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/util-linux-2.38.1
+tar xvf ${DOWNLOADDIR}/util-linux-2.39.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/util-linux-2.39
 	cp ${SYSDIR}/sysroot/usr/share/automake-1.16/config.* config/
 	./configure  --build=${CROSS_HOST} --host=${CROSS_TARGET} \
         ADJTIME_PATH=/var/lib/hwclock/adjtime \
@@ -7205,11 +7205,11 @@ popd
 ```
 
 #### Lit
-https://files.pythonhosted.org/packages/source/l/lit/lit-16.0.3.tar.gz
+https://files.pythonhosted.org/packages/source/l/lit/lit-16.0.5.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/lit-16.0.3.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/lit-16.0.3
+tar xvf ${DOWNLOADDIR}/lit-16.0.5.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/lit-16.0.5
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     ${SYSDIR}/cross-tools/bin/python3 setup.py install --root=${SYSDIR}/sysroot --prefix=/usr
     sed -i "s@${SYSDIR}/cross-tools@@g" ${SYSDIR}/sysroot/bin/lit
@@ -7427,11 +7427,11 @@ popd
 ```
 
 #### Docutils
-https://downloads.sourceforge.net/docutils/docutils-0.20.tar.gz
+https://downloads.sourceforge.net/docutils/docutils-0.20.1.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/docutils-0.20.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/docutils-0.20
+tar xvf ${DOWNLOADDIR}/docutils-0.20.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/docutils-0.20.1
     _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
@@ -8108,11 +8108,11 @@ popd
 ```
 
 #### Frei0r
-https://github.com/dyne/frei0r/archive/v2.2.0/frei0r-2.2.0.tar.gz
+https://github.com/dyne/frei0r/archive/v2.3.0/frei0r-2.3.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/frei0r-2.2.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/frei0r-2.2.0
+tar xvf ${DOWNLOADDIR}/frei0r-2.3.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/frei0r-2.3.0
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -8397,11 +8397,11 @@ popd
 ```
 
 #### WebKitGTK
-https://webkitgtk.org/releases/webkitgtk-2.41.3.tar.xz
+https://webkitgtk.org/releases/webkitgtk-2.41.4.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/webkitgtk-2.41.3.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/webkitgtk-2.41.3
+tar xvf ${DOWNLOADDIR}/webkitgtk-2.41.4.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/webkitgtk-2.41.4
     mkdir cross-prebuild
     pushd cross-prebuild
         WK_USE_CCACHE=NO CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -8668,11 +8668,11 @@ popd
 ```
 
 #### Nodejs
-https://github.com/nodejs/node/archive/v20.1.0/node-20.1.0.tar.gz
+https://github.com/nodejs/node/archive/v20.2.0/node-20.2.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/node-v20.1.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/node-20.1.0
+tar xvf ${DOWNLOADDIR}/node-v20.2.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/node-20.2.0
     sed -i "s@registry.npmjs.org@registry.loongnix.cn:5873@g" deps/npm/lib/utils/config/definitions.js
     mkdir -pv out/Release
     for i in bytecode_builtins_list_generator gen-regexp-special-case torque mksnapshot
@@ -8696,7 +8696,7 @@ popd
 ```
 
 
-#### FireFox 111
+#### FireFox
 https://archive.mozilla.org/pub/firefox/releases/113.0.1/source/firefox-113.0.1.source.tar.xz
 https://hg.mozilla.org/l10n-central/zh-CN/archive/tip.zip
 
@@ -8949,8 +8949,8 @@ https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.3/font-data/0
 * 制作步骤
 
 ```sh
-tar xvf ${DOWNLOADDIR}/linux-6.3.2.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-6.3.2
+tar xvf ${DOWNLOADDIR}/linux-6.3.3.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-6.3.3
 	patch -Np1 -i ${DOWNLOADDIR}/0001-double-tty-VT-screenbuf-for-univt.patch
 	patch -Np1 -i ${DOWNLOADDIR}/0002-Add-several-function-for-Univt.patch
 	patch -Np1 -i ${DOWNLOADDIR}/0003-UniVT-Fix-charcount-size-to-65536.patch
