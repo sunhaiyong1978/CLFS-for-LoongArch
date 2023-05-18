@@ -1030,30 +1030,30 @@ popd
 　　Grub2需要进行扩充式移植的软件包，在没有软件官方支持的情况下需要专门的获取代码的方式进行，以下是获取方式：
 
 ```sh
-git clone -b "dev/patchwork/efi" https://github.com/loongarch64/grub.git --depth 1
+git clone -b "master" https://git.savannah.gnu.org/git/grub.git --depth 1
 pushd grub
-    git archive --format=tar --output ../grub-2.11.tar "dev/patchwork/efi"
+    git archive --format=tar --output ../grub-2.12.tar "master"
     ./bootstrap
     pushd gnulib
         git archive --format=tar --output ../../gnulib.tar HEAD
     popd
 popd
-mkdir grub-2.11
-pushd grub-2.11
-    tar xvf ../grub-2.11.tar
+mkdir grub-2.12
+pushd grub-2.12
+    tar xvf ../grub-2.12.tar
     mkdir gnulib
     tar xvf ../gnulib.tar -C gnulib
     ./bootstrap
 popd
-tar -czf ${DOWNLOADDIR}/grub-2.11.tar.gz grub-2.11
+tar -czf ${DOWNLOADDIR}/grub-2.12.tar.gz grub-2.12
 
 ```
 
 * 制作步骤  
 
 ```sh
-tar -xvf ${DOWNLOADDIR}/grub-2.11.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/grub-2.11
+tar -xvf ${DOWNLOADDIR}/grub-2.12.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/grub-2.12
     autoreconf -ifv
 	mkdir build
 	pushd build
@@ -9026,8 +9026,8 @@ rm -rf ${SYSDIR}/sysroot/usr/lib/firmware.orig
 
 #### Grub2
 ```sh
-tar -xvf ${DOWNLOADDIR}/grub-2.11.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/grub-2.11
+tar -xvf ${DOWNLOADDIR}/grub-2.12.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/grub-2.12
     autoreconf -ifv
 	mkdir cross-build
 	pushd cross-build
