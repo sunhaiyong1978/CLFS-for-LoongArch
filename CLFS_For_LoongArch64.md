@@ -974,7 +974,7 @@ popd
 　　完成主系统的Rust安装后，就可以给编译交叉工具链制作Rust软件包了，这样才能在后续进行目标系统Rust的制作。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/rustc-1.85.0-src.tar.g -C ${BUILDDIR}
+tar xvf ${DOWNLOADDIR}/rustc-1.85.0-src.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/rustc-1.85.0-src
     sed -i "s@ifdef LLVM_RUSTLLVM@if 0@g" compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp
     ./configure --target=${CROSS_TARGET},$(echo ${CROSS_HOST} | sed 's@cross@unknown@g') \
