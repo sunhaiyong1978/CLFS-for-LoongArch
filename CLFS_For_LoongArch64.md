@@ -236,13 +236,13 @@ pushd ${SYSDIR}/downloads
 　　**BC:** https://github.com/gavinhoward/bc/archive/7.1.0/bc-7.1.0.tar.gz  
 　　**Binutils:**  https://ftp.gnu.org/gnu/binutils/binutils-2.45.tar.xz  
 　　**Bison:** https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.xz  
-　　**Boost:** https://archives.boost.io/release/1.88.0/source/boost_1_88_0.tar.bz2  
+　　**Boost:** https://archives.boost.io/release/1.89.0/source/boost_1_89_0.tar.bz2  
 　　**Brotli:** https://github.com/google/brotli/archive/v1.1.0/brotli-1.1.0.tar.gz  
 　　**Bzip2:** https://www.sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz  
 　　**Cargo-C:** https://github.com/lu-zero/cargo-c/archive/v0.10.15/cargo-c-0.10.15.tar.gz  
 　　**Coreutils:** https://ftp.gnu.org/gnu/coreutils/coreutils-9.7.tar.xz  
 　　**Check:** https://github.com/libcheck/check/releases/download/0.15.2/check-0.15.2.tar.gz  
-　　**CMake:** https://cmake.org/files/v4.1/cmake-4.1.0.tar.gz  
+　　**CMake:** https://cmake.org/files/v4.1/cmake-4.1.1.tar.gz  
 　　**CPIO:** https://ftp.gnu.org/gnu/cpio/cpio-2.15.tar.bz2  
 　　**CTags:** https://sourceforge.net/projects/ctags/files/ctags/5.8/ctags-5.8.tar.gz  
 　　**CURL:** https://curl.se/download/curl-8.15.0.tar.xz  
@@ -265,7 +265,7 @@ pushd ${SYSDIR}/downloads
 　　**Firewalld:** https://github.com/firewalld/firewalld/releases/download/v2.3.1/firewalld-2.3.1.tar.bz2  
 　　**Flex:** https://github.com/westes/flex/files/981163/flex-2.6.4.tar.gz  
 　　**Flit_Core:** https://files.pythonhosted.org/packages/source/f/flit_core/flit_core-3.12.0.tar.gz  
-　　**Fontconfig:** https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.16.0.tar.xz  
+　　**Fontconfig:** https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/2.17.1/fontconfig-2.17.1.tar.gz  
 　　**FreeType:** https://sourceforge.net/projects/freetype/files/freetype2/2.13.3/freetype-2.13.3.tar.xz  
 　　**Fribidi:** https://github.com/fribidi/fribidi/archive/v1.0.16/fribidi-1.0.16.tar.gz  
 　　**Gawk:** https://ftp.gnu.org/gnu/gawk/gawk-5.3.2.tar.xz  
@@ -274,7 +274,7 @@ pushd ${SYSDIR}/downloads
 　　**GDB:** https://ftp.gnu.org/gnu/gdb/gdb-16.3.tar.xz  
 　　**GDBM:** https://ftp.gnu.org/gnu/gdbm/gdbm-1.26.tar.gz  
 　　**Gettext:** https://ftp.gnu.org/gnu/gettext/gettext-0.26.tar.xz  
-　　**Git:** https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.50.1.tar.xz  
+　　**Git:** https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.51.0.tar.xz  
 　　**Glib:** https://download.gnome.org/sources/glib/2.85/glib-2.85.0.tar.xz  
 　　**Glibc:** https://ftp.gnu.org/gnu/glibc/glibc-2.42.tar.xz  
 　　**Glslang:** https://github.com/KhronosGroup/glslang/archive/15.4.0/glslang-15.4.0.tar.gz  
@@ -289,10 +289,10 @@ pushd ${SYSDIR}/downloads
 　　**Grub2:** https://ftp.gnu.org/gnu/grub/grub-2.12.tar.xz  
 　　**Guile:** https://ftp.gnu.org/gnu/guile/guile-3.0.10.tar.xz  
 　　**Gzip:** https://ftp.gnu.org/gnu/gzip/gzip-1.14.tar.xz  
-　　**HarfBuzz:** https://github.com/harfbuzz/harfbuzz/releases/download/11.4.1/harfbuzz-11.4.1.tar.xz  
+　　**HarfBuzz:** https://github.com/harfbuzz/harfbuzz/releases/download/11.4.5/harfbuzz-11.4.5.tar.xz  
 　　**Hatchling:** https://files.pythonhosted.org/packages/source/h/hatchling/hatchling-1.27.0.tar.gz  
 　　**HWData:** https://github.com/vcrhonek/hwdata/archive/v0.398/hwdata-0.398.tar.gz  
-　　**Iana-Etc:** https://github.com/Mic92/iana-etc/releases/download/20250807/iana-etc-20250807.tar.gz  
+　　**Iana-Etc:** https://github.com/Mic92/iana-etc/releases/download/20250826/iana-etc-20250826.tar.gz  
 　　**ICU4C:** https://github.com/unicode-org/icu/releases/download/release-77-1/icu4c-77_1-src.tgz  
 　　**Inetutils:** https://ftp.gnu.org/gnu/inetutils/inetutils-2.6.tar.xz  
 　　**Inih:** https://github.com/benhoyt/inih/archive/r61/inih-r61.tar.gz  
@@ -333,10 +333,10 @@ pushd ${SYSDIR}/downloads
 　　**Libxml2:** https://download.gnome.org/sources/libxml2/2.14/libxml2-2.14.5.tar.xz  
 　　**Libxslt:** https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.43.tar.xz  
 　　**Links:** http://links.twibright.com/download/links-2.30.tar.bz2  
-　　**Linux-headers:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.16.tar.xz  
-　　**Linux:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.16.tar.xz  
+　　**Linux-headers:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.16.3.tar.xz  
+　　**Linux:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.16.3.tar.xz  
 　　**Linux-Firmware:** https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/linux-firmware-20250808.tar.xz  
-　　**LLVM:** https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/llvm-project-20.1.8.src.tar.xz  
+　　**LLVM:** https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.0/llvm-project-21.1.0.src.tar.xz  
 　　**Lua:** https://www.lua.org/ftp/lua-5.4.8.tar.gz  
 　　**LVM2:** https://sourceware.org/ftp/lvm2/LVM2.2.03.34.tgz  
 　　**LZO:** http://www.oberhumer.com/opensource/lzo/download/lzo-2.10.tar.gz  
@@ -346,14 +346,14 @@ pushd ${SYSDIR}/downloads
 　　**Man-Pages:** https://mirrors.edge.kernel.org/pub/linux/docs/man-pages/man-pages-6.15.tar.xz  
 　　**Make-CA:** https://github.com/lfs-book/make-ca/archive/v1.16.1/make-ca-1.16.1.tar.gz  
 　　**MarkupSafe:** https://files.pythonhosted.org/packages/source/m/markupsafe/markupsafe-3.0.2.tar.gz  
-　　**Mdadm:** https://mirrors.edge.kernel.org/pub/linux/utils/raid/mdadm/mdadm-4.3.tar.xz  
-　　**Meson:** https://github.com/mesonbuild/meson/archive/1.8.3/meson-1.8.3.tar.gz  
+　　**Mdadm:** https://mirrors.edge.kernel.org/pub/linux/utils/raid/mdadm/mdadm-4.4.tar.xz  
+　　**Meson:** https://github.com/mesonbuild/meson/archive/1.9.0/meson-1.9.0.tar.gz  
 　　**MPC:** https://ftp.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz  
 　　**MPFR:** https://ftp.gnu.org/gnu/mpfr/mpfr-4.2.2.tar.xz  
 　　**Ncurses:** https://ftp.gnu.org/gnu/ncurses/ncurses-6.5.tar.gz  
 　　**Net-Tools:** https://sourceforge.net/projects/net-tools/files/net-tools-2.10.tar.xz  
 　　**Nettle:** https://ftp.gnu.org/gnu/nettle/nettle-3.10.2.tar.gz  
-　　**Nftables:** https://www.netfilter.org/pub/nftables/nftables-1.1.4.tar.xz  
+　　**Nftables:** https://www.netfilter.org/pub/nftables/nftables-1.1.5.tar.xz  
 　　**Ninja:** https://github.com/ninja-build/ninja/archive/v1.13.1/ninja-1.13.1.tar.gz  
 　　**NSPR:** https://archive.mozilla.org/pub/nspr/releases/v4.37/src/nspr-4.37.tar.gz  
 　　**NSS:** https://archive.mozilla.org/pub/security/nss/releases/NSS_3_115_RTM/src/nss-3.115.tar.gz  
@@ -366,7 +366,7 @@ pushd ${SYSDIR}/downloads
 　　**Pathspec:** https://files.pythonhosted.org/packages/source/p/pathspec/pathspec-0.12.1.tar.gz  
 　　**PCIUtils:** https://mirrors.edge.kernel.org/pub/software/utils/pciutils/pciutils-3.14.0.tar.xz  
 　　**PCRE:** https://sourceforge.net/projects/pcre/files/pcre/8.45/pcre-8.45.tar.bz2  
-　　**PCRE2:** https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.45/pcre2-10.45.tar.bz2  
+　　**PCRE2:** https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.46/pcre2-10.46.tar.bz2  
 　　**Perl5:** https://www.cpan.org/src/5.0/perl-5.40.2.tar.xz  
 　　**Pkg-Config:** https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz  
 　　**PkgConf:** https://distfiles.dereferenced.org/pkgconf/pkgconf-2.5.1.tar.xz  
@@ -376,7 +376,7 @@ pushd ${SYSDIR}/downloads
 　　**Python3:** https://www.python.org/ftp/python/3.13.7/Python-3.13.7.tar.xz  
 　　**Python-Pip:** https://github.com/pypa/pip/archive/25.2/pip-25.2.tar.gz  
 　　**Python-Setuptools:** https://files.pythonhosted.org/packages/source/s/setuptools/setuptools-80.9.0.tar.gz  
-　　**QEMU:** https://download.qemu.org/qemu-10.0.3.tar.xz  
+　　**QEMU:** https://download.qemu.org/qemu-10.1.0.tar.xz  
 　　**Readline:** https://ftp.gnu.org/gnu/readline/readline-8.3.tar.gz  
 　　**Ruby:** https://cache.ruby-lang.org/pub/ruby/3.4/ruby-3.4.5.tar.xz  
 　　**Rust:** https://static.rust-lang.org/dist/rustc-1.89.0-src.tar.gz  
@@ -390,7 +390,7 @@ pushd ${SYSDIR}/downloads
 　　**TCL:** https://sourceforge.net/projects/tcl/files/Tcl/8.6.14/tcl8.6.14-src.tar.gz  
 　　**Texinfo:** https://ftp.gnu.org/gnu/texinfo/texinfo-7.2.tar.xz  
 　　**TIFF:** https://download.osgeo.org/libtiff/tiff-4.7.0.tar.xz  
-　　**Trove-classifiers:** https://files.pythonhosted.org/packages/source/t/trove_classifiers/trove_classifiers-2025.8.6.13.tar.gz  
+　　**Trove-classifiers:** https://files.pythonhosted.org/packages/source/t/trove_classifiers/trove_classifiers-2025.8.26.11.tar.gz  
 　　**Unifdef:** https://dotat.at/prog/unifdef/unifdef-2.12.tar.xz  
 　　**UnRAR:** https://www.rarlab.com/rar/unrarsrc-7.1.10.tar.gz  
 　　**UnZip:** ftp://ftp.info-zip.org/pub/infozip/src/unzip60.tgz  
@@ -405,7 +405,7 @@ pushd ${SYSDIR}/downloads
 　　**Wheel:** https://files.pythonhosted.org/packages/source/w/wheel/wheel-0.46.1.tar.gz  
 　　**Wireless-Tools:** https://hewlettpackard.github.io/wireless-tools/wireless_tools.29.tar.gz  
 　　**WPA_Supplicant:** https://w1.fi/releases/wpa_supplicant-2.11.tar.gz  
-　　**Xfsprogs:** https://mirrors.edge.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-6.15.0.tar.xz  
+　　**Xfsprogs:** https://mirrors.edge.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-6.16.0.tar.xz  
 　　**XML-Parser:** https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-2.47.tar.gz  
 　　**XZ:** https://github.com/tukaani-project/xz/releases/download/v5.8.1/xz-5.8.1.tar.xz  
 　　**Zip:** ftp://ftp.info-zip.org/pub/infozip/src/zip30.tgz  
@@ -439,8 +439,8 @@ popd
 　　按以下步骤制作Linux内核头文件并安装到目标系统目录中。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/linux-6.16.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-6.16
+tar xvf ${DOWNLOADDIR}/linux-6.16.3.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-6.16.3
 	make mrproper
 	make ARCH=loongarch INSTALL_HDR_PATH=dest headers_install
 	find dest/include -name '.*' -delete
@@ -851,8 +851,8 @@ popd
 ### 3.28 QEMU
 
 ```sh
-tar xvf ${DOWNLOADDIR}/qemu-10.0.3.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/qemu-10.0.3
+tar xvf ${DOWNLOADDIR}/qemu-10.1.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/qemu-10.1.0
     sed -i "/HAVE_OPENAT2_H/d" meson.build
     mkdir build
     pushd build
@@ -879,8 +879,8 @@ chmod +x ${SYSDIR}/cross-tools/bin/qemu-loongarch64{,-ldd}
 　　目标系统中部分软件对meson有版本要求，我们在交叉工具链的环境中提供一个较高版本的meson。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/meson-1.8.3.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/meson-1.8.3
+tar xvf ${DOWNLOADDIR}/meson-1.9.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/meson-1.9.0
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     ${SYSDIR}/cross-tools/bin/python3 setup.py install
 popd
@@ -960,8 +960,8 @@ chmod +x ${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-valac
 
 ### 3.33 LLVM
 ```sh
-tar xvf ${DOWNLOADDIR}/llvm-project-20.1.8.src.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/llvm-project-20.1.8.src/llvm
+tar xvf ${DOWNLOADDIR}/llvm-project-21.1.0.src.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/llvm-project-21.1.0.src/llvm
     mkdir -p native-build
     pushd native-build
         LDFLAGS="${LDFLAGS} -lutil" PKG_CONFIG_SYSROOT_DIR="" \
@@ -1065,8 +1065,8 @@ popd
 ### 3.38 CMake
 
 ```
-tar xvf ${DOWNLOADDIR}/cmake-4.1.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/cmake-4.1.0
+tar xvf ${DOWNLOADDIR}/cmake-4.1.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/cmake-4.1.1
     patch -Np1 -i ${DOWNLOADDIR}/cmake-3.22.3-add-loongarch64-to-checktypesize.patch
     mkdir build
     pushd build
@@ -1194,8 +1194,8 @@ popd
 ### 3.49 Trove-classifiers
 
 ```sh
-tar xvf ${DOWNLOADDIR}/trove_classifiers-2025.8.6.13.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/trove_classifiers-2025.8.6.13
+tar xvf ${DOWNLOADDIR}/trove_classifiers-2025.8.26.11.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/trove_classifiers-2025.8.26.11
     ${SYSDIR}/cross-tools/bin/pip3 wheel -w dist --no-build-isolation --no-deps ${PWD}
     ${SYSDIR}/cross-tools/bin/pip3 install --no-index --find-links dist --no-cache-dir --no-deps --force-reinstall --no-user trove-classifiers
 popd
@@ -1390,8 +1390,8 @@ popd
 
 #### Iana-Etc
 ```sh
-tar xvf ${DOWNLOADDIR}/iana-etc-20250807.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/iana-etc-20250807
+tar xvf ${DOWNLOADDIR}/iana-etc-20250826.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/iana-etc-20250826
 	cp -v services protocols ${SYSDIR}/sysroot/etc
 popd
 ```
@@ -2249,13 +2249,13 @@ popd
 
 #### CMake
 ```sh
-tar xvf ${DOWNLOADDIR}/cmake-4.1.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/cmake-4.1.0
+tar xvf ${DOWNLOADDIR}/cmake-4.1.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/cmake-4.1.1
     patch -Np1 -i ${DOWNLOADDIR}/cmake-3.22.3-add-loongarch64-to-checktypesize.patch
     mkdir build
     pushd build
         cmake -DCMAKE_CXX_COMPILER="${CROSS_TARGET}-g++" -DCMAKE_C_COMPILER="${CROSS_TARGET}-gcc" \
-              -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_DOC_DIR=/share/doc/cmake-4.1.0 \
+              -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_DOC_DIR=/share/doc/cmake-4.1.1 \
               -DOPENSSL_ROOT_DIR=${SYSDIR}/sysroot/usr -DCMAKE_BUILD_TYPE=Release ../
         sed -i "/P cmake_install.cmake/s@\tbin/cmake@\t/bin/cmake@g" Makefile
         make ${JOBS}
@@ -2840,8 +2840,8 @@ popd
 
 #### Meson
 ```sh
-tar xvf ${DOWNLOADDIR}/meson-1.8.3.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/meson-1.8.3
+tar xvf ${DOWNLOADDIR}/meson-1.9.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/meson-1.9.0
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     ${SYSDIR}/cross-tools/bin/python3 setup.py install --root=${SYSDIR}/sysroot --prefix=/usr
     sed -i "s@${SYSDIR}/cross-tools@@g" ${SYSDIR}/sysroot/bin/meson
@@ -3104,8 +3104,8 @@ popd
 
 #### Git
 ```sh
-tar xvf ${DOWNLOADDIR}/git-2.50.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/git-2.50.1
+tar xvf ${DOWNLOADDIR}/git-2.51.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/git-2.51.0
     ./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET} \
                 --with-gitconfig=/etc/gitconfig --with-python=python3 --without-iconv \
                  ac_cv_fread_reads_directories=yes ac_cv_snprintf_returns_bogus=no
@@ -3208,8 +3208,8 @@ popd
 
 #### Xfsprogs
 ```sh
-tar xvf ${DOWNLOADDIR}/xfsprogs-6.15.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/xfsprogs-6.15.0
+tar xvf ${DOWNLOADDIR}/xfsprogs-6.16.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/xfsprogs-6.16.0
     patch -Np1 -i ${DOWNLOADDIR}/0001-Fix-for-cross-build.patch
     patch -Np1 -i ${DOWNLOADDIR}/0002-Fix-for-gcc-13.patch
     LDFLAGS="${LDFLAGS} -Wl,--copy-dt-needed-entries" \
@@ -3231,9 +3231,9 @@ popd
 
 #### Mdadm
 ```sh
-tar xvf ${DOWNLOADDIR}/mdadm-4.3.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/mdadm-4.3
-    make CC="${CROSS_TARGET}-gcc" ${JOBS}
+tar xvf ${DOWNLOADDIR}/mdadm-4.4.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/mdadm-4.4
+    make CC="${CROSS_TARGET}-gcc" CXFLAGS="${CFLAGS} -Wno-error=unterminated-string-initialization -Wno-error=format-truncation" ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot PKG_CONFIG=${CROSS_TARGET}-pkg-config install
 popd
 ```
@@ -3269,8 +3269,8 @@ popd
 
 #### PCRE2
 ```sh
-tar xvf ${DOWNLOADDIR}/pcre2-10.45.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/pcre2-10.45
+tar xvf ${DOWNLOADDIR}/pcre2-10.46.tar.bz2 -C ${BUILDDIR}
+pushd ${BUILDDIR}/pcre2-10.46
     ./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
                 --host=${CROSS_TARGET} --enable-unicode --enable-jit \
                 --enable-pcre2-16 --enable-pcre2-32 --enable-pcre2grep-libz \
@@ -3376,8 +3376,8 @@ popd
 
 #### Boost
 ```sh
-tar xvf ${DOWNLOADDIR}/boost_1_88_0.tar.bz2 -C ${BUILDDIR}
-pushd ${BUILDDIR}/boost_1_88_0
+tar xvf ${DOWNLOADDIR}/boost_1_89_0.tar.bz2 -C ${BUILDDIR}
+pushd ${BUILDDIR}/boost_1_89_0
     ./bootstrap.sh ICU_ROOT=${SYSDIR}/sysroot/usr --prefix=/usr --libdir=/usr/lib64 --with-python=python3
     sed -i "/using gcc/s@using gcc@& : loongarch64 : ${CROSS_TARGET}-gcc@g" project-config.jam
     sed -i "/using python/s@${CROSSTOOLS_DIR}@${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3@g" project-config.jam
@@ -3573,8 +3573,8 @@ cp -a ${SYSDIR}/sysroot/usr/bin/glib-mkenums ${SYSDIR}/cross-tools/bin/
 
 #### HarfBuzz
 ```sh
-tar xvf ${DOWNLOADDIR}/harfbuzz-11.4.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/harfbuzz-11.4.1
+tar xvf ${DOWNLOADDIR}/harfbuzz-11.4.5.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/harfbuzz-11.4.5
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -3609,8 +3609,8 @@ popd
 　　这次编译是加入对Graphite的支持。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/harfbuzz-11.4.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/harfbuzz-11.4.1
+tar xvf ${DOWNLOADDIR}/harfbuzz-11.4.5.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/harfbuzz-11.4.5
     mkdir cross-build-2
     pushd cross-build-2
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -3656,8 +3656,8 @@ popd
 
 #### Fontconfig
 ```sh
-tar xvf ${DOWNLOADDIR}/fontconfig-2.16.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/fontconfig-2.16.0
+tar xvf ${DOWNLOADDIR}/fontconfig-2.17.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/fontconfig-2.17.1
     ./configure --prefix=/usr --libdir=/usr/lib64 \
                 --build=${CROSS_HOST} --host=${CROSS_TARGET} \
                 --sysconfdir=/etc --localstatedir=/var --disable-docs
@@ -3893,8 +3893,8 @@ EOF
 
 #### LLVM
 ```sh
-tar xvf ${DOWNLOADDIR}/llvm-project-20.1.8.src.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/llvm-project-20.1.8.src/llvm
+tar xvf ${DOWNLOADDIR}/llvm-project-21.1.0.src.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/llvm-project-21.1.0.src/llvm
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc -mcmodel=medium" CXX="${CROSS_TARGET}-g++ -mcmodel=medium" \
@@ -3910,7 +3910,7 @@ pushd ${BUILDDIR}/llvm-project-20.1.8.src/llvm
               -DLLVM_BUILD_LLVM_DYLIB:BOOL=ON \
               -DLLVM_LINK_LLVM_DYLIB:BOOL=ON -DLLVM_BUILD_EXTERNAL_COMPILER_RT:BOOL=ON \
               -DLLVM_INSTALL_TOOLCHAIN_ONLY:BOOL=OFF \
-              -DLLVM_ENABLE_PROJECTS='llvm;clang;clang-tools-extra;lld;lldb;mlir;polly;pstl' \
+              -DLLVM_ENABLE_PROJECTS='llvm;clang;clang-tools-extra;lld;lldb;mlir;polly' \
               -DLLVM_HOST_TRIPLE=${CROSS_TARGET} \
               -DLLVM_TARGET_ARCH=LoongArch -DLLVM_DEFAULT_TARGET_TRIPLE=${CROSS_TARGET}
         ninja
@@ -3930,8 +3930,8 @@ chmod +x ${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-llvm-config
 
 #### Compiler-RT
 ```sh
-tar xvf ${DOWNLOADDIR}/llvm-project-20.1.8.src.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/llvm-project-20.1.8.src/compiler-rt
+tar xvf ${DOWNLOADDIR}/llvm-project-21.1.0.src.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/llvm-project-21.1.0.src/compiler-rt
     mkdir cross-build
     pushd cross-build
             CC="clang" CXX="clang++" \
@@ -4053,8 +4053,8 @@ popd
 
 #### Nftables
 ```sh
-tar xvf ${DOWNLOADDIR}/nftables-1.1.4.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/nftables-1.1.4
+tar xvf ${DOWNLOADDIR}/nftables-1.1.5.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/nftables-1.1.5
     ./configure --prefix=/usr --libdir=/usr/lib64 \
                 --build=${CROSS_HOST} --host=${CROSS_TARGET}
     make ${JOBS}
@@ -4098,11 +4098,11 @@ popd
 ```
 
 #### Glibmm
-https://download.gnome.org/sources/glibmm/2.83/glibmm-2.83.1.tar.xz
+https://download.gnome.org/sources/glibmm/2.85/glibmm-2.85.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/glibmm-2.83.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/glibmm-2.83.1
+tar xvf ${DOWNLOADDIR}/glibmm-2.85.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/glibmm-2.85.0
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -4217,7 +4217,7 @@ libXt-1.3.1.tar.xz
 libXmu-1.2.1.tar.xz
 libXpm-3.5.17.tar.xz
 libXaw-1.0.16.tar.xz
-libXfixes-6.0.1.tar.xz
+libXfixes-6.0.2.tar.xz
 libXcomposite-0.4.6.tar.xz
 libXrender-0.9.12.tar.xz
 libXcursor-1.2.3.tar.xz
@@ -4555,11 +4555,11 @@ popd
 ```
 
 #### SDL2
-https://www.libsdl.org/release/SDL2-2.32.8.tar.gz
+https://www.libsdl.org/release/SDL2-2.32.10.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/SDL2-2.32.8.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/SDL2-2.32.8
+tar xvf ${DOWNLOADDIR}/SDL2-2.32.10.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/SDL2-2.32.10
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -4812,11 +4812,11 @@ popd
 ```
 
 #### Mesa
-https://archive.mesa3d.org/mesa-25.2.0.tar.xz
+https://archive.mesa3d.org/mesa-25.2.1.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/mesa-25.2.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/mesa-25.2.0
+tar xvf ${DOWNLOADDIR}/mesa-25.2.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/mesa-25.2.1
     sed -i -e "/dep_wl_scanner/s@, native: true@@g" \
            -e "/prog_wl_scanner/s@find_program\(.*\)\$@'wayland-scanner'@g" meson.build
     mkdir cross-build
@@ -5139,11 +5139,11 @@ popd
 ```
 
 #### Libtirpc
-https://sourceforge.net/projects/libtirpc/files/libtirpc/1.3.6/libtirpc-1.3.6.tar.bz2
+https://sourceforge.net/projects/libtirpc/files/libtirpc/1.3.7/libtirpc-1.3.7.tar.bz2
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libtirpc-1.3.6.tar.bz2 -C ${BUILDDIR}
-pushd ${BUILDDIR}/libtirpc-1.3.6
+tar xvf ${DOWNLOADDIR}/libtirpc-1.3.7.tar.bz2 -C ${BUILDDIR}
+pushd ${BUILDDIR}/libtirpc-1.3.7
     ./configure $COMMON_CONFIG --disable-gssapi
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
@@ -5481,11 +5481,11 @@ popd
 ```
 
 #### Pango
-https://download.gnome.org/sources/pango/1.56/pango-1.56.4.tar.xz
+https://download.gnome.org/sources/pango/1.57/pango-1.57.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/pango-1.56.4.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/pango-1.56.4
+tar xvf ${DOWNLOADDIR}/pango-1.57.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/pango-1.57.0
     mkdir cross-prebuild
     pushd cross-prebuild
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -5629,11 +5629,11 @@ popd
 ```
 
 #### At-Spi2-Core
-https://download.gnome.org/sources/at-spi2-core/2.57/at-spi2-core-2.57.0.tar.xz
+https://download.gnome.org/sources/at-spi2-core/2.57/at-spi2-core-2.57.2.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/at-spi2-core-2.57.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/at-spi2-core-2.57.0
+tar xvf ${DOWNLOADDIR}/at-spi2-core-2.57.2.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/at-spi2-core-2.57.2
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -5841,11 +5841,11 @@ popd
 ```
 
 #### Librsvg
-https://download.gnome.org/sources/librsvg/2.60/librsvg-2.60.0.tar.xz
+https://download.gnome.org/sources/librsvg/2.61/librsvg-2.61.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/librsvg-2.60.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/librsvg-2.60.0
+tar xvf ${DOWNLOADDIR}/librsvg-2.61.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/librsvg-2.61.0
     mkdir cross-prebuild
     pushd cross-prebuild
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -5994,12 +5994,12 @@ popd
 ```
 
 #### X264
-https://anduin.linuxfromscratch.org/BLFS/x264/x264-20250212.tar.xz
+https://anduin.linuxfromscratch.org/BLFS/x264/x264-20250815.tar.xz
 https://code.videolan.org/videolan/x264.git
 
 ```sh
-tar xvf ${DOWNLOADDIR}/x264-20250212.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/x264-20250212
+tar xvf ${DOWNLOADDIR}/x264-20250815.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/x264-20250815
     ./configure ${COMMON_CONFIG} \
                 --cross-prefix=${CROSS_TARGET}- --sysroot=${SYSDIR}/sysroot \
                 --host=${CROSS_TARGET} --enable-shared --disable-cli \
@@ -6062,11 +6062,11 @@ popd
 ```
 
 #### GTK4
-https://download.gnome.org/sources/gtk/4.19/gtk-4.19.2.tar.xz
+https://download.gnome.org/sources/gtk/4.19/gtk-4.19.4.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/gtk-4.19.2.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/gtk-4.19.2
+tar xvf ${DOWNLOADDIR}/gtk-4.19.4.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gtk-4.19.4
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -6381,11 +6381,11 @@ EOF
 ```
 
 #### Mozjs-115
-https://archive.mozilla.org/pub/firefox/releases/115.26.0esr/source/firefox-115.26.0esr.source.tar.xz
+https://archive.mozilla.org/pub/firefox/releases/115.27.0esr/source/firefox-115.27.0esr.source.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/firefox-115.26.0esr.source.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/firefox-115.26.0
+tar xvf ${DOWNLOADDIR}/firefox-115.27.0esr.source.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/firefox-115.27.0
     mkdir cross-build
     pushd cross-build
         export RUSTFLAGS="$RUSTFLAGS -Ccode-model=large"
@@ -6461,11 +6461,11 @@ popd
 ```
 
 #### Krb5
-https://kerberos.org/dist/krb5/1.22/krb5-1.22.tar.gz
+https://kerberos.org/dist/krb5/1.22/krb5-1.22.1.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/krb5-1.22.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/krb5-1.22/src
+tar xvf ${DOWNLOADDIR}/krb5-1.22.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/krb5-1.22.1/src
     cp ${SYSDIR}/sysroot/usr/share/automake-*/config.* config/
     sed -i "s@error=discarded-qualifiers@@g" configure
     ./configure ${COMMON_CONFIG} --runstatedir=/run \
@@ -6518,11 +6518,11 @@ popd
 ```
 
 #### Abseil-CPP
-https://github.com/abseil/abseil-cpp/archive/20250512.1/abseil-cpp-20250512.1.tar.gz
+https://github.com/abseil/abseil-cpp/archive/20250814.0/abseil-cpp-20250814.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/abseil-cpp-20250512.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/abseil-cpp-20250512.1
+tar xvf ${DOWNLOADDIR}/abseil-cpp-20250814.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/abseil-cpp-20250814.0
         mkdir cross-build
         pushd cross-build
                 CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -6876,11 +6876,11 @@ popd
 ```
 
 #### UPower
-https://gitlab.freedesktop.org/upower/upower/-/archive/v1.90.9/upower-v1.90.9.tar.gz
+https://gitlab.freedesktop.org/upower/upower/-/archive/v1.90.10/upower-v1.90.10.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/upower-v1.90.9.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/upower-v1.90.9
+tar xvf ${DOWNLOADDIR}/upower-v1.90.10.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/upower-v1.90.10
     mkdir cross-prebuild
     pushd cross-prebuild
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -7431,11 +7431,11 @@ popd
 ```
 
 #### PyGobject
-https://download.gnome.org/sources/pygobject/3.52/pygobject-3.52.3.tar.gz
+https://download.gnome.org/sources/pygobject/3.53/pygobject-3.53.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/pygobject-3.52.3.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/pygobject-3.52.3
+tar xvf ${DOWNLOADDIR}/pygobject-3.53.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/pygobject-3.53.0
     mkdir cross-build
     pushd cross-build
         PYTHON=${SYSDIR}/cross-tools/bin/python3 \
@@ -7916,11 +7916,11 @@ popd
 ```
 
 #### Exiv2
-https://github.com/Exiv2/exiv2/archive/v0.28.5/exiv2-0.28.5.tar.gz
+https://github.com/Exiv2/exiv2/archive/v0.28.7/exiv2-0.28.7.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/exiv2-0.28.5.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/exiv2-0.28.5
+tar xvf ${DOWNLOADDIR}/exiv2-0.28.7.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/exiv2-0.28.7
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -8003,16 +8003,16 @@ popd
 ```
 
 #### Lxml
-https://github.com/lxml/lxml/archive/lxml-6.0.0/lxml-6.0.0.tar.gz
+https://github.com/lxml/lxml/archive/lxml-6.0.1/lxml-6.0.1.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/lxml-6.0.0.tar.gz -C ${BUILDDIR}
-cp -a ${BUILDDIR}/lxml-6.0.0{,.native}
-pushd ${BUILDDIR}/lxml-6.0.0.native
+tar xvf ${DOWNLOADDIR}/lxml-6.0.1.tar.gz -C ${BUILDDIR}
+cp -a ${BUILDDIR}/lxml-6.0.1{,.native}
+pushd ${BUILDDIR}/lxml-6.0.1.native
     ${SYSDIR}/cross-tools/bin/pip3 wheel -w dist --no-build-isolation --no-deps ${PWD}
     ${SYSDIR}/cross-tools/bin/pip3 install --no-index --find-links dist --no-cache-dir --no-deps --force-reinstall --no-user lxml
 popd
-pushd ${BUILDDIR}/lxml-6.0.0
+pushd ${BUILDDIR}/lxml-6.0.1
     CC=${CROSS_TARGET}-gcc CXX=${CROSS_TARGET}-g++ _PYTHON_HOST_PLATFORM=linux-loongarch64 \
     _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
@@ -9127,11 +9127,11 @@ chmod -v 777 ${SYSDIR}/sysroot/mnt/usb
 ```
 
 #### Squashfs-Tools
-https://sourceforge.net/projects/squashfs/files/squashfs/squashfs4.7/squashfs4.7.tar.gz
+https://sourceforge.net/projects/squashfs/files/squashfs/squashfs4.7.2/squashfs4.7.2.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/squashfs-tools-4.7.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/squashfs-tools-4.7/squashfs-tools
+tar xvf ${DOWNLOADDIR}/squashfs4.7.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/squashfs-tools-4.7.2/squashfs-tools
     for i in mksquashfs unsquashfs sqfstar sqfscat
     do
         sed -i.orig "s@^\$1@qemu-loongarch64 \$1@g" ../generate-manpages/$i-manpage.sh
@@ -9232,11 +9232,11 @@ popd
 ```
 
 #### Nodejs
-https://github.com/nodejs/node/archive/v24.6.0/node-24.6.0.tar.gz
+https://github.com/nodejs/node/archive/v24.7.0/node-24.7.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/node-24.6.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/node-24.6.0
+tar xvf ${DOWNLOADDIR}/node-24.7.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/node-24.7.0
     sed -i "s@registry.npmjs.org@registry.loongnix.cn:5873@g" deps/npm/lib/utils/config/definitions.js
     mkdir -pv out/Release
     for i in bytecode_builtins_list_generator gen-regexp-special-case torque mksnapshot node_js2c node_mksnapshot
@@ -9260,7 +9260,7 @@ popd
 ```
 
 #### FireFox
-https://archive.mozilla.org/pub/firefox/releases/140.1.0esr/source/firefox-140.1.0esr.source.tar.xz
+https://archive.mozilla.org/pub/firefox/releases/140.2.0esr/source/firefox-140.2.0esr.source.tar.xz
 https://hg.mozilla.org/l10n-central/zh-CN/archive/tip.zip
 
 下载中文语言包：
@@ -9273,8 +9273,8 @@ mv -iv tip.zip ${DOWNLOADDIR}/firefox-140-l10.zip
 编译步骤：
 
 ```sh
-tar xvf ${DOWNLOADDIR}/firefox-140.1.0esr.source.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/firefox-140.1.0
+tar xvf ${DOWNLOADDIR}/firefox-140.2.0esr.source.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/firefox-140.2.0
     mkdir -pv mozbuild/l10n-central
     pushd mozbuild/l10n-central
         unzip ${DOWNLOADDIR}/firefox-140-l10.zip
@@ -9491,31 +9491,31 @@ popd
 #### Linux
 * 补丁文件
 
-https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.8/core/0001-double-tty-VT-screenbuf-for-univt.patch
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.16/core/0001-double-tty-VT-screenbuf-for-univt.patch
 
-https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.8/core/0002-Add-several-function-for-Univt.patch
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.16/core/0002-Add-several-function-for-Univt.patch
 
-https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.8/core/0003-UniVT-Fix-charcount-size-to-65536.patch
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.16/core/0003-UniVT-Fix-charcount-size-to-65536.patch
 
-https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.8/core/0004-UniVT-Add-a-old_screen_size-variable-saves-the-origi.patch
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.16/core/0004-UniVT-Add-a-old_screen_size-variable-saves-the-origi.patch
 
-https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.8/core/0005-Univt-Add-support-for-writing-UTF-8-encoding.patch
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.16/core/0005-Univt-Add-support-for-writing-UTF-8-encoding.patch
 
-https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.8/core/0006-UniVT-Add-support-for-displaying-UTF-8-text.patch
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.16/core/0006-UniVT-Add-support-for-displaying-UTF-8-text.patch
 
-https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.8/core/0007-UniVT-Support-displaying-UTF-8-text-for-90-degree-ro.patch
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.16/core/0007-UniVT-Support-displaying-UTF-8-text-for-90-degree-ro.patch
 
-https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.8/core/0008-UniVT-Support-displaying-UTF-8-text-for-180-degree-r.patch
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.16/core/0008-UniVT-Support-displaying-UTF-8-text-for-180-degree-r.patch
 
-https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.8/core/0009-UniVT-Support-displaying-UTF-8-text-for-270-degree-r.patch
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.16/core/0009-UniVT-Support-displaying-UTF-8-text-for-270-degree-r.patch
 
-https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.8/font-data/0001-UniVT-Add-Chinese-fonts-support-in-console.patch
+https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.16/font-data/0001-UniVT-Add-Chinese-fonts-support-in-console.patch
 
 * 制作步骤
 
 ```sh
-tar xvf ${DOWNLOADDIR}/linux-6.16.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-6.16
+tar xvf ${DOWNLOADDIR}/linux-6.16.3.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-6.16.3
 	patch -Np1 -i ${DOWNLOADDIR}/0001-double-tty-VT-screenbuf-for-univt.patch
 	patch -Np1 -i ${DOWNLOADDIR}/0002-Add-several-function-for-Univt.patch
 	patch -Np1 -i ${DOWNLOADDIR}/0003-UniVT-Fix-charcount-size-to-65536.patch
