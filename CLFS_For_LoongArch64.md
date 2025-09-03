@@ -291,7 +291,7 @@ pushd ${SYSDIR}/downloads
 　　**Gzip:** https://ftp.gnu.org/gnu/gzip/gzip-1.14.tar.xz  
 　　**HarfBuzz:** https://github.com/harfbuzz/harfbuzz/releases/download/11.4.5/harfbuzz-11.4.5.tar.xz  
 　　**Hatchling:** https://files.pythonhosted.org/packages/source/h/hatchling/hatchling-1.27.0.tar.gz  
-　　**HWData:** https://github.com/vcrhonek/hwdata/archive/v0.398/hwdata-0.398.tar.gz  
+　　**HWData:** https://github.com/vcrhonek/hwdata/archive/v0.399/hwdata-0.399.tar.gz  
 　　**Iana-Etc:** https://github.com/Mic92/iana-etc/releases/download/20250826/iana-etc-20250826.tar.gz  
 　　**ICU4C:** https://github.com/unicode-org/icu/releases/download/release-77-1/icu4c-77_1-src.tgz  
 　　**Inetutils:** https://ftp.gnu.org/gnu/inetutils/inetutils-2.6.tar.xz  
@@ -3998,8 +3998,8 @@ popd
 
 #### HWData
 ```sh
-tar xvf ${DOWNLOADDIR}/hwdata-0.398.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/hwdata-0.398
+tar xvf ${DOWNLOADDIR}/hwdata-0.399.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/hwdata-0.399
     ./configure --prefix=/usr --libdir=/usr/lib64 \
                 --build=${CROSS_HOST} --host=${CROSS_TARGET}
     make ${JOBS}
@@ -10279,3 +10279,5 @@ passwd loongson
 LFS： https://www.linuxfromscratch.org/lfs/  
 
 BLFS: https://www.linuxfromscratch.org/blfs/
+
+更新：2025.9.3
