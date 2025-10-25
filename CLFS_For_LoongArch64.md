@@ -242,11 +242,11 @@ pushd ${SYSDIR}/downloads
 　　**Cargo-C:** https://github.com/lu-zero/cargo-c/archive/v0.10.15/cargo-c-0.10.15.tar.gz  
 　　**Coreutils:** https://ftp.gnu.org/gnu/coreutils/coreutils-9.7.tar.xz  
 　　**Check:** https://github.com/libcheck/check/releases/download/0.15.2/check-0.15.2.tar.gz  
-　　**CMake:** https://cmake.org/files/v4.1/cmake-4.1.1.tar.gz  
+　　**CMake:** https://cmake.org/files/v4.1/cmake-4.1.2.tar.gz  
 　　**CPIO:** https://ftp.gnu.org/gnu/cpio/cpio-2.15.tar.bz2  
 　　**CTags:** https://sourceforge.net/projects/ctags/files/ctags/5.8/ctags-5.8.tar.gz  
-　　**CURL:** https://curl.se/download/curl-8.15.0.tar.xz  
-　　**Cython:** https://github.com/cython/cython/archive/3.1.3/cython-3.1.3.tar.gz  
+　　**CURL:** https://curl.se/download/curl-8.16.0.tar.xz  
+　　**Cython:** https://github.com/cython/cython/archive/3.2.0b1-3/cython-3.2.0b1-3.tar.gz  
 　　**D-Bus:** https://dbus.freedesktop.org/releases/dbus/dbus-1.16.2.tar.xz  
 　　**Dejagnu:** https://ftp.gnu.org/gnu/dejagnu/dejagnu-1.6.3.tar.gz  
 　　**Dejavu-Fonts:** https://sourceforge.net/projects/dejavu/files/dejavu/2.37/dejavu-fonts-ttf-2.37.tar.bz2  
@@ -254,11 +254,11 @@ pushd ${SYSDIR}/downloads
 　　**Diffutils:** https://ftp.gnu.org/gnu/diffutils/diffutils-3.12.tar.xz  
 　　**Distlib:** https://files.pythonhosted.org/packages/source/d/distlib/distlib-0.4.0.tar.gz  
 　　**Dosfstools:** https://github.com/dosfstools/dosfstools/releases/download/v4.2/dosfstools-4.2.tar.gz  
-　　**Doxygen:** https://www.doxygen.nl/files/doxygen-1.14.0.src.tar.gz  
+　　**Doxygen:** https://www.doxygen.nl/files/doxygen-1.15.0.src.tar.gz  
 　　**E2fsprogs:** https://sourceforge.net/projects/e2fsprogs/files/e2fsprogs/v1.47.3/e2fsprogs-1.47.3.tar.gz  
 　　**Elfutils:** https://sourceware.org/ftp/elfutils/0.193/elfutils-0.193.tar.bz2  
 　　**Ethtool:** https://mirrors.edge.kernel.org/pub/software/network/ethtool/ethtool-6.15.tar.xz  
-　　**Expat:** https://sourceforge.net/projects/expat/files/expat/2.7.1/expat-2.7.1.tar.xz  
+　　**Expat:** https://sourceforge.net/projects/expat/files/expat/2.7.3/expat-2.7.3.tar.xz  
 　　**Expect:** https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz  
 　　**File:** https://astron.com/pub/file/file-5.46.tar.gz  
 　　**Findutils:** https://ftp.gnu.org/gnu/findutils/findutils-4.10.0.tar.xz  
@@ -266,7 +266,7 @@ pushd ${SYSDIR}/downloads
 　　**Flex:** https://github.com/westes/flex/files/981163/flex-2.6.4.tar.gz  
 　　**Flit_Core:** https://files.pythonhosted.org/packages/source/f/flit_core/flit_core-3.12.0.tar.gz  
 　　**Fontconfig:** https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/2.17.1/fontconfig-2.17.1.tar.gz  
-　　**FreeType:** https://sourceforge.net/projects/freetype/files/freetype2/2.13.3/freetype-2.13.3.tar.xz  
+　　**FreeType:** https://sourceforge.net/projects/freetype/files/freetype2/2.14.1/freetype-2.14.1.tar.xz  
 　　**Fribidi:** https://github.com/fribidi/fribidi/archive/v1.0.16/fribidi-1.0.16.tar.gz  
 　　**Gawk:** https://ftp.gnu.org/gnu/gawk/gawk-5.3.2.tar.xz  
 　　**GCC:** https://ftp.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz  
@@ -274,13 +274,13 @@ pushd ${SYSDIR}/downloads
 　　**GDB:** https://ftp.gnu.org/gnu/gdb/gdb-16.3.tar.xz  
 　　**GDBM:** https://ftp.gnu.org/gnu/gdbm/gdbm-1.26.tar.gz  
 　　**Gettext:** https://ftp.gnu.org/gnu/gettext/gettext-0.26.tar.xz  
-　　**Git:** https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.51.0.tar.xz  
-　　**Glib:** https://download.gnome.org/sources/glib/2.85/glib-2.85.0.tar.xz  
+　　**Git:** https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.51.1.tar.xz  
+　　**Glib:** https://download.gnome.org/sources/glib/2.86/glib-2.86.1.tar.xz  
 　　**Glibc:** https://ftp.gnu.org/gnu/glibc/glibc-2.42.tar.xz  
-　　**Glslang:** https://github.com/KhronosGroup/glslang/archive/15.4.0/glslang-15.4.0.tar.gz  
+　　**Glslang:** https://github.com/KhronosGroup/glslang/archive/16.0.0/glslang-16.0.0.tar.gz  
 　　**GMP:** https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz  
 　　**GnuTLS:** https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.10.tar.xz  
-　　**Gobject-Introspection:** https://download.gnome.org/sources/gobject-introspection/1.84/gobject-introspection-1.84.0.tar.xz  
+　　**Gobject-Introspection:** https://download.gnome.org/sources/gobject-introspection/1.86/gobject-introspection-1.86.0.tar.xz  
 　　**GPerf:** https://ftp.gnu.org/gnu/gperf/gperf-3.3.tar.gz  
 　　**GPM:** https://github.com/telmich/gpm/archive/1.20.7/gpm-1.20.7.tar.gz  
 　　**Graphite:** https://github.com/silnrsi/graphite/archive/1.3.14/graphite-1.3.14.tar.gz  
@@ -289,30 +289,30 @@ pushd ${SYSDIR}/downloads
 　　**Grub2:** https://ftp.gnu.org/gnu/grub/grub-2.12.tar.xz  
 　　**Guile:** https://ftp.gnu.org/gnu/guile/guile-3.0.10.tar.xz  
 　　**Gzip:** https://ftp.gnu.org/gnu/gzip/gzip-1.14.tar.xz  
-　　**HarfBuzz:** https://github.com/harfbuzz/harfbuzz/releases/download/11.4.5/harfbuzz-11.4.5.tar.xz  
+　　**HarfBuzz:** https://github.com/harfbuzz/harfbuzz/releases/download/12.1.0/harfbuzz-12.1.0.tar.xz  
 　　**Hatchling:** https://files.pythonhosted.org/packages/source/h/hatchling/hatchling-1.27.0.tar.gz  
-　　**HWData:** https://github.com/vcrhonek/hwdata/archive/v0.399/hwdata-0.399.tar.gz  
-　　**Iana-Etc:** https://github.com/Mic92/iana-etc/releases/download/20250826/iana-etc-20250826.tar.gz  
+　　**HWData:** https://github.com/vcrhonek/hwdata/archive/v0.400/hwdata-0.400.tar.gz  
+　　**Iana-Etc:** https://github.com/Mic92/iana-etc/releases/download/20251016/iana-etc-20251016.tar.gz  
 　　**ICU4C:** https://github.com/unicode-org/icu/releases/download/release-77-1/icu4c-77_1-src.tgz  
 　　**Inetutils:** https://ftp.gnu.org/gnu/inetutils/inetutils-2.6.tar.xz  
-　　**Inih:** https://github.com/benhoyt/inih/archive/r61/inih-r61.tar.gz  
+　　**Inih:** https://github.com/benhoyt/inih/archive/r62/inih-r62.tar.gz  
 　　**Intltool:** https://launchpad.net/intltool/trunk/0.51.0/+download/intltool-0.51.0.tar.gz  
-　　**IPRoute2:** https://mirrors.edge.kernel.org/pub/linux/utils/net/iproute2/iproute2-6.16.0.tar.xz  
+　　**IPRoute2:** https://mirrors.edge.kernel.org/pub/linux/utils/net/iproute2/iproute2-6.17.0.tar.xz  
 　　**Jasper:** https://github.com/jasper-software/jasper/archive/version-4.2.8/jasper-4.2.8.tar.gz  
 　　**Jinja2:** https://files.pythonhosted.org/packages/source/j/jinja2/jinja2-3.1.6.tar.gz  
-　　**Json-Glib:** https://download.gnome.org/sources/json-glib/1.10/json-glib-1.10.6.tar.xz  
-　　**KBD:** https://mirrors.edge.kernel.org/pub/linux/utils/kbd/kbd-2.8.0.tar.xz  
+　　**Json-Glib:** https://download.gnome.org/sources/json-glib/1.10/json-glib-1.10.8.tar.xz  
+　　**KBD:** https://mirrors.edge.kernel.org/pub/linux/utils/kbd/kbd-2.9.0.tar.xz  
 　　**Kmod:** https://mirrors.edge.kernel.org/pub/linux/utils/kernel/kmod/kmod-34.2.tar.xz  
-　　**Less:** https://www.greenwoodsoftware.com/less/less-679.tar.gz  
+　　**Less:** https://www.greenwoodsoftware.com/less/less-685.tar.gz  
 　　**LCMS2:** https://sourceforge.net/projects/lcms/files/lcms/2.17/lcms2-2.17.tar.gz  
 　　**Libaio:** https://ftp.debian.org/debian/pool/main/liba/libaio/libaio_0.3.113.orig.tar.gz  
 　　**Libassuan:** https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-3.0.2.tar.bz2  
 　　**Libcap:** https://mirrors.edge.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-2.76.tar.xz  
-　　**Libedit:** https://www.thrysoee.dk/editline/libedit-20250104-3.1.tar.gz  
+　　**Libedit:** https://www.thrysoee.dk/editline/libedit-20251016-3.1.tar.gz  
 　　**Libevent:** https://github.com/libevent/libevent/archive/release-2.1.12-stable/libevent-release-2.1.12-stable.tar.gz  
 　　**Libffi:** https://github.com/libffi/libffi/archive/v3.5.2/libffi-3.5.2.tar.gz  
 　　**Libgcrypt:** https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.11.2.tar.bz2  
-　　**Libgpg-Error:** https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.55.tar.bz2  
+　　**Libgpg-Error:** https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.56.tar.bz2  
 　　**LibGUdev:** https://download.gnome.org/sources/libgudev/238/libgudev-238.tar.xz  
 　　**LibGUSB:** https://github.com/hughsie/libgusb/archive/0.4.9/libgusb-0.4.9.tar.gz  
 　　**Libidn2:** https://ftp.gnu.org/gnu/libidn/libidn2-2.3.8.tar.gz  
@@ -328,24 +328,24 @@ pushd ${SYSDIR}/downloads
 　　**Libtasn1:** https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.20.0.tar.gz  
 　　**Libtool:** https://ftp.gnu.org/gnu/libtool/libtool-2.5.4.tar.xz  
 　　**LibUSB:** https://github.com/libusb/libusb/archive/v1.0.29/libusb-1.0.29.tar.gz  
-　　**Libunistring:** https://ftp.gnu.org/gnu/libunistring/libunistring-1.3.tar.xz  
+　　**Libunistring:** https://ftp.gnu.org/gnu/libunistring/libunistring-1.4.1.tar.xz  
 　　**Libxcrypt:** https://github.com/besser82/libxcrypt/releases/download/v4.4.38/libxcrypt-4.4.38.tar.xz  
-　　**Libxml2:** https://download.gnome.org/sources/libxml2/2.14/libxml2-2.14.5.tar.xz  
+　　**Libxml2:** https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.1.tar.xz  
 　　**Libxslt:** https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.43.tar.xz  
 　　**Links:** http://links.twibright.com/download/links-2.30.tar.bz2  
-　　**Linux-headers:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.16.3.tar.xz  
-　　**Linux:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.16.3.tar.xz  
-　　**Linux-Firmware:** https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/linux-firmware-20250808.tar.xz  
-　　**LLVM:** https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.0/llvm-project-21.1.0.src.tar.xz  
+　　**Linux-headers:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.17.3.tar.xz  
+　　**Linux:** https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.17.3.tar.xz  
+　　**Linux-Firmware:** https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/linux-firmware-20251021.tar.xz  
+　　**LLVM:** https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.4/llvm-project-21.1.4.src.tar.xz  
 　　**Lua:** https://www.lua.org/ftp/lua-5.4.8.tar.gz  
-　　**LVM2:** https://sourceware.org/ftp/lvm2/LVM2.2.03.34.tgz  
+　　**LVM2:** https://sourceware.org/ftp/lvm2/LVM2.2.03.35.tgz  
 　　**LZO:** http://www.oberhumer.com/opensource/lzo/download/lzo-2.10.tar.gz  
 　　**M4:** https://ftp.gnu.org/gnu/m4/m4-1.4.20.tar.xz  
 　　**Make:** https://ftp.gnu.org/gnu/make/make-4.4.1.tar.gz  
 　　**Man-DB:** https://download.savannah.gnu.org/releases/man-db/man-db-2.13.1.tar.xz  
 　　**Man-Pages:** https://mirrors.edge.kernel.org/pub/linux/docs/man-pages/man-pages-6.15.tar.xz  
 　　**Make-CA:** https://github.com/lfs-book/make-ca/archive/v1.16.1/make-ca-1.16.1.tar.gz  
-　　**MarkupSafe:** https://files.pythonhosted.org/packages/source/m/markupsafe/markupsafe-3.0.2.tar.gz  
+　　**MarkupSafe:** https://files.pythonhosted.org/packages/source/m/markupsafe/markupsafe-3.0.3.tar.gz  
 　　**Mdadm:** https://mirrors.edge.kernel.org/pub/linux/utils/raid/mdadm/mdadm-4.4.tar.xz  
 　　**Meson:** https://github.com/mesonbuild/meson/archive/1.9.0/meson-1.9.0.tar.gz  
 　　**MPC:** https://ftp.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz  
@@ -356,56 +356,56 @@ pushd ${SYSDIR}/downloads
 　　**Nftables:** https://www.netfilter.org/pub/nftables/nftables-1.1.5.tar.xz  
 　　**Ninja:** https://github.com/ninja-build/ninja/archive/v1.13.1/ninja-1.13.1.tar.gz  
 　　**NSPR:** https://archive.mozilla.org/pub/nspr/releases/v4.37/src/nspr-4.37.tar.gz  
-　　**NSS:** https://archive.mozilla.org/pub/security/nss/releases/NSS_3_115_RTM/src/nss-3.115.tar.gz  
+　　**NSS:** https://archive.mozilla.org/pub/security/nss/releases/NSS_3_117_RTM/src/nss-3.117.tar.gz  
 　　**Openjpeg:** https://github.com/uclouvain/openjpeg/archive/v2.5.3/openjpeg-2.5.3.tar.gz  
-　　**OpenSSL:** https://github.com/openssl/openssl/releases/download/openssl-3.5.2/openssl-3.5.2.tar.gz  
-　　**OpenSSH:** https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-10.0p2.tar.gz  
-　　**P11-Kit:** https://github.com/p11-glue/p11-kit/releases/download/0.25.5/p11-kit-0.25.5.tar.xz  
+　　**OpenSSL:** https://github.com/openssl/openssl/releases/download/openssl-3.6.0/openssl-3.6.0.tar.gz  
+　　**OpenSSH:** https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-10.2p1.tar.gz  
+　　**P11-Kit:** https://github.com/p11-glue/p11-kit/releases/download/0.25.9/p11-kit-0.25.9.tar.xz  
 　　**Packaging:** https://files.pythonhosted.org/packages/source/p/packaging/packaging-25.0.tar.gz  
 　　**Patch:** https://ftp.gnu.org/gnu/patch/patch-2.8.tar.xz  
 　　**Pathspec:** https://files.pythonhosted.org/packages/source/p/pathspec/pathspec-0.12.1.tar.gz  
 　　**PCIUtils:** https://mirrors.edge.kernel.org/pub/software/utils/pciutils/pciutils-3.14.0.tar.xz  
 　　**PCRE:** https://sourceforge.net/projects/pcre/files/pcre/8.45/pcre-8.45.tar.bz2  
-　　**PCRE2:** https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.46/pcre2-10.46.tar.bz2  
+　　**PCRE2:** https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.47/pcre2-10.47.tar.bz2  
 　　**Perl5:** https://www.cpan.org/src/5.0/perl-5.40.2.tar.xz  
 　　**Pkg-Config:** https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz  
 　　**PkgConf:** https://distfiles.dereferenced.org/pkgconf/pkgconf-2.5.1.tar.xz  
 　　**Pluggy:** https://files.pythonhosted.org/packages/source/p/pluggy/pluggy-1.6.0.tar.gz  
 　　**Procps-NG:** https://sourceforge.net/projects/procps-ng/files/Production/procps-ng-4.0.5.tar.xz  
 　　**PSmisc:** https://sourceforge.net/projects/psmisc/files/psmisc/psmisc-23.7.tar.xz  
-　　**Python3:** https://www.python.org/ftp/python/3.13.7/Python-3.13.7.tar.xz  
+　　**Python3:** https://www.python.org/ftp/python/3.14.0/Python-3.14.0.tar.xz  
 　　**Python-Pip:** https://github.com/pypa/pip/archive/25.2/pip-25.2.tar.gz  
 　　**Python-Setuptools:** https://files.pythonhosted.org/packages/source/s/setuptools/setuptools-80.9.0.tar.gz  
-　　**QEMU:** https://download.qemu.org/qemu-10.1.0.tar.xz  
+　　**QEMU:** https://download.qemu.org/qemu-10.1.2.tar.xz  
 　　**Readline:** https://ftp.gnu.org/gnu/readline/readline-8.3.tar.gz  
-　　**Ruby:** https://cache.ruby-lang.org/pub/ruby/3.4/ruby-3.4.5.tar.xz  
-　　**Rust:** https://static.rust-lang.org/dist/rustc-1.89.0-src.tar.gz  
-　　**SCons:** https://sourceforge.net/projects/scons/files/scons/4.9.1/SCons-4.9.1.tar.gz  
+　　**Ruby:** https://cache.ruby-lang.org/pub/ruby/3.4/ruby-3.4.7.tar.xz  
+　　**Rust:** https://static.rust-lang.org/dist/rustc-1.90.0-src.tar.gz  
+　　**SCons:** https://sourceforge.net/projects/scons/files/scons/4.10.0/SCons-4.10.0.tar.gz  
 　　**Sed:** https://ftp.gnu.org/gnu/sed/sed-4.9.tar.xz  
 　　**Shadow:** https://github.com/shadow-maint/shadow/archive/4.18.0/shadow-4.18.0.tar.gz  
 　　**SQLite3:** https://github.com/sqlite/sqlite/archive/version-3.50.4/sqlite-3.50.4.tar.gz  
-　　**Systemd:** https://github.com/systemd/systemd/archive/v257.8/systemd-257.8.tar.gz  
+　　**Systemd:** https://github.com/systemd/systemd/archive/v258.1/systemd-258.1.tar.gz  
 　　**Sudo:** https://www.sudo.ws/dist/sudo-1.9.17p2.tar.gz  
 　　**Tar:** https://ftp.gnu.org/gnu/tar/tar-1.35.tar.xz  
 　　**TCL:** https://sourceforge.net/projects/tcl/files/Tcl/8.6.14/tcl8.6.14-src.tar.gz  
 　　**Texinfo:** https://ftp.gnu.org/gnu/texinfo/texinfo-7.2.tar.xz  
-　　**TIFF:** https://download.osgeo.org/libtiff/tiff-4.7.0.tar.xz  
-　　**Trove-classifiers:** https://files.pythonhosted.org/packages/source/t/trove_classifiers/trove_classifiers-2025.8.26.11.tar.gz  
+　　**TIFF:** https://download.osgeo.org/libtiff/tiff-4.7.1.tar.xz  
+　　**Trove-classifiers:** https://files.pythonhosted.org/packages/source/t/trove_classifiers/trove_classifiers-2025.9.11.17.tar.gz  
 　　**Unifdef:** https://dotat.at/prog/unifdef/unifdef-2.12.tar.xz  
 　　**UnRAR:** https://www.rarlab.com/rar/unrarsrc-7.1.10.tar.gz  
 　　**UnZip:** ftp://ftp.info-zip.org/pub/infozip/src/unzip60.tgz  
-　　**URI:** https://www.cpan.org/authors/id/O/OA/OALDERS/URI-5.32.tar.gz  
-　　**USBUtils:** https://mirrors.edge.kernel.org/pub/linux/utils/usb/usbutils/usbutils-018.tar.xz  
+　　**URI:** https://www.cpan.org/authors/id/O/OA/OALDERS/URI-5.34.tar.gz  
+　　**USBUtils:** https://mirrors.edge.kernel.org/pub/linux/utils/usb/usbutils/usbutils-019.tar.xz  
 　　**Userspace-RCU:** https://lttng.org/files/urcu/userspace-rcu-0.15.3.tar.bz2  
 　　**Util-Linux:** https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.41/util-linux-2.41.1.tar.xz  
 　　**Vala:** https://download.gnome.org/sources/vala/0.56/vala-0.56.18.tar.xz  
-　　**VIM:** https://github.com/vim/vim/archive/v9.1.1533/vim-9.1.1533.tar.gz  
+　　**VIM:** https://github.com/vim/vim/archive/v9.1.1815/vim-9.1.1815.tar.gz  
 　　**Wayland:** https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.24.0/downloads/wayland-1.24.0.tar.xz  
 　　**WGet:** https://ftp.gnu.org/gnu/wget/wget-1.25.0.tar.gz  
 　　**Wheel:** https://files.pythonhosted.org/packages/source/w/wheel/wheel-0.46.1.tar.gz  
 　　**Wireless-Tools:** https://hewlettpackard.github.io/wireless-tools/wireless_tools.29.tar.gz  
 　　**WPA_Supplicant:** https://w1.fi/releases/wpa_supplicant-2.11.tar.gz  
-　　**Xfsprogs:** https://mirrors.edge.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-6.16.0.tar.xz  
+　　**Xfsprogs:** https://mirrors.edge.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-6.17.0.tar.xz  
 　　**XML-Parser:** https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-2.47.tar.gz  
 　　**XZ:** https://github.com/tukaani-project/xz/releases/download/v5.8.1/xz-5.8.1.tar.xz  
 　　**Zip:** ftp://ftp.info-zip.org/pub/infozip/src/zip30.tgz  
@@ -439,8 +439,8 @@ popd
 　　按以下步骤制作Linux内核头文件并安装到目标系统目录中。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/linux-6.16.3.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-6.16.3
+tar xvf ${DOWNLOADDIR}/linux-6.17.3.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-6.17.3
 	make mrproper
 	make ARCH=loongarch INSTALL_HDR_PATH=dest headers_install
 	find dest/include -name '.*' -delete
@@ -754,8 +754,8 @@ popd
 　　给交叉工具链中的Perl提供URI软件包提供的Perl组件。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/URI-5.32.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/URI-5.32
+tar xvf ${DOWNLOADDIR}/URI-5.34.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/URI-5.34
     ${SYSDIR}/cross-tools/bin/perl Makefile.PL
     make ${JOBS}
     make install
@@ -765,8 +765,8 @@ popd
 ### 3.21 Python3
 
 ```sh
-tar xvf ${DOWNLOADDIR}/Python-3.13.7.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/Python-3.13.7
+tar xvf ${DOWNLOADDIR}/Python-3.14.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/Python-3.14.0
 	./configure --prefix=${SYSDIR}/cross-tools --with-platlibdir=lib64 \
 	            --disable-shared --with-system-expat --with-system-ffi \
 	            --with-ensurepip=yes --enable-optimizations \
@@ -821,8 +821,8 @@ popd
 ### 3.25 MarkupSafe
 
 ```sh
-tar xvf ${DOWNLOADDIR}/markupsafe-3.0.2.tar.gz -C ${BUILD_DIRECTORY}
-pushd ${BUILD_DIRECTORY}/markupsafe-3.0.2
+tar xvf ${DOWNLOADDIR}/markupsafe-3.0.3.tar.gz -C ${BUILD_DIRECTORY}
+pushd ${BUILD_DIRECTORY}/markupsafe-3.0.3
 	${SYSDIR}/cross-tools/bin/pip3 wheel -w dist --no-build-isolation --no-deps ${PWD}
 	${SYSDIR}/cross-tools/bin/pip3 install --no-index --find-links dist --no-cache-dir --no-deps --force-reinstall --no-user MarkupSafe
 popd
@@ -851,8 +851,8 @@ popd
 ### 3.28 QEMU
 
 ```sh
-tar xvf ${DOWNLOADDIR}/qemu-10.1.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/qemu-10.1.0
+tar xvf ${DOWNLOADDIR}/qemu-10.1.2.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/qemu-10.1.2
     sed -i "/HAVE_OPENAT2_H/d" meson.build
     mkdir build
     pushd build
@@ -888,8 +888,8 @@ popd
 
 ### 3.30 Glib
 ```sh
-tar xvf ${DOWNLOADDIR}/glib-2.85.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/glib-2.85.0
+tar xvf ${DOWNLOADDIR}/glib-2.86.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/glib-2.86.1
     mkdir native-build
     pushd native-build
         meson --prefix=${SYSDIR}/cross-tools --libdir=${SYSDIR}/cross-tools/lib64 \
@@ -903,8 +903,8 @@ popd
 
 ### 3.31 Gobject-Introspection
 ```sh
-tar xvf ${DOWNLOADDIR}/gobject-introspection-1.84.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/gobject-introspection-1.84.0
+tar xvf ${DOWNLOADDIR}/gobject-introspection-1.86.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gobject-introspection-1.86.0
     mkdir native-build
     pushd native-build
         meson --prefix=${SYSDIR}/cross-tools --libdir=${SYSDIR}/cross-tools/lib64 \
@@ -960,8 +960,8 @@ chmod +x ${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-valac
 
 ### 3.33 LLVM
 ```sh
-tar xvf ${DOWNLOADDIR}/llvm-project-21.1.0.src.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/llvm-project-21.1.0.src/llvm
+tar xvf ${DOWNLOADDIR}/llvm-project-21.1.4.src.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/llvm-project-21.1.4.src/llvm
     mkdir -p native-build
     pushd native-build
         LDFLAGS="${LDFLAGS} -lutil" PKG_CONFIG_SYSROOT_DIR="" \
@@ -1002,8 +1002,8 @@ popd
 　　完成主系统的Rust安装后，就可以给编译交叉工具链制作Rust软件包了，这样才能在后续进行目标系统Rust的制作。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/rustc-1.89.0-src.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/rustc-1.89.0-src
+tar xvf ${DOWNLOADDIR}/rustc-1.90.0-src.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/rustc-1.90.0-src
     ./configure --target=${CROSS_TARGET},$(echo ${CROSS_HOST} | sed 's@cross@unknown@g') \
                 --prefix=${SYSDIR}/cross-tools --sysconfdir=${SYSDIR}/cross-tools/etc \
                 --local-rust-root=${SYSDIR}/cross-tools/rust/usr/local \
@@ -1039,8 +1039,8 @@ popd
 ### 3.36 Ruby
 
 ```sh
-tar xvf ${DOWNLOADDIR}/ruby-3.4.5.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/ruby-3.4.5
+tar xvf ${DOWNLOADDIR}/ruby-3.4.7.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/ruby-3.4.7
     ./configure --prefix=${SYSDIR}/cross-tools --without-baseruby
     make ${JOBS}
     make install
@@ -1065,8 +1065,8 @@ popd
 ### 3.38 CMake
 
 ```
-tar xvf ${DOWNLOADDIR}/cmake-4.1.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/cmake-4.1.1
+tar xvf ${DOWNLOADDIR}/cmake-4.1.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/cmake-4.1.2
     patch -Np1 -i ${DOWNLOADDIR}/cmake-3.22.3-add-loongarch64-to-checktypesize.patch
     mkdir build
     pushd build
@@ -1102,8 +1102,8 @@ popd
 ### 3.41 Glslang
 
 ```sh
-tar xvf ${DOWNLOADDIR}/glslang-15.4.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/glslang-15.4.0
+tar xvf ${DOWNLOADDIR}/glslang-16.0.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/glslang-16.0.0
     mkdir build
     pushd build
         cmake -DCMAKE_INSTALL_PREFIX=${SYSDIR}/cross-tools -DCMAKE_BUILD_TYPE=RELEASE -DENABLE_OPT=0 ..
@@ -1125,8 +1125,8 @@ popd
 ### 3.43 SCons
 
 ```sh
-tar xvf ${DOWNLOADDIR}/SCons-4.9.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/SCons-4.9.1
+tar xvf ${DOWNLOADDIR}/SCons-4.10.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/SCons-4.10.0
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     ${SYSDIR}/cross-tools/bin/python3 setup.py install --optimize=1
 popd
@@ -1154,8 +1154,8 @@ popd
 ### 3.45 Cython
 
 ```sh
-tar xvf ${DOWNLOADDIR}/cython-3.1.3.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/cython-3.1.3
+tar xvf ${DOWNLOADDIR}/cython-3.2.0b1-3.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/cython-3.2.0b1-3
     ${SYSDIR}/cross-tools/bin/pip3 wheel -w dist --no-build-isolation --no-deps ${PWD}
     ${SYSDIR}/cross-tools/bin/pip3 install --no-index --find-links dist --no-cache-dir --no-deps --force-reinstall --no-user Cython
 popd
@@ -1194,8 +1194,8 @@ popd
 ### 3.49 Trove-classifiers
 
 ```sh
-tar xvf ${DOWNLOADDIR}/trove_classifiers-2025.8.26.11.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/trove_classifiers-2025.8.26.11
+tar xvf ${DOWNLOADDIR}/trove_classifiers-2025.9.11.17.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/trove_classifiers-2025.9.11.17
     ${SYSDIR}/cross-tools/bin/pip3 wheel -w dist --no-build-isolation --no-deps ${PWD}
     ${SYSDIR}/cross-tools/bin/pip3 install --no-index --find-links dist --no-cache-dir --no-deps --force-reinstall --no-user trove-classifiers
 popd
@@ -1390,8 +1390,8 @@ popd
 
 #### Iana-Etc
 ```sh
-tar xvf ${DOWNLOADDIR}/iana-etc-20250826.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/iana-etc-20250826
+tar xvf ${DOWNLOADDIR}/iana-etc-20251016.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/iana-etc-20251016
 	cp -v services protocols ${SYSDIR}/sysroot/etc
 popd
 ```
@@ -1926,8 +1926,8 @@ popd
 
 #### Expat
 ```sh
-tar xvf ${DOWNLOADDIR}/expat-2.7.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/expat-2.7.1
+tar xvf ${DOWNLOADDIR}/expat-2.7.3.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/expat-2.7.3
 	./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
 	            --host=${CROSS_TARGET} --without-docbook
 	make ${JOBS}
@@ -2025,8 +2025,8 @@ popd
 
 #### OpenSSL
 ```sh
-tar xvf ${DOWNLOADDIR}/openssl-3.5.2.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/openssl-3.5.2
+tar xvf ${DOWNLOADDIR}/openssl-3.6.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/openssl-3.6.0
 	CC="${CROSS_TARGET}-gcc" \
 	./Configure --prefix=/usr --openssldir=/etc/ssl \
 				--libdir=lib64 shared zlib linux64-loongarch64
@@ -2124,8 +2124,8 @@ popd
 
 #### Less
 ```sh
-tar xvf ${DOWNLOADDIR}/less-679.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/less-679
+tar xvf ${DOWNLOADDIR}/less-685.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/less-685
 	./configure --prefix=/usr --sysconfdir=/etc --build=${CROSS_HOST} --host=${CROSS_TARGET}
 	make ${JOBS}
 	make DESTDIR=${SYSDIR}/sysroot install
@@ -2146,8 +2146,8 @@ popd
 
 #### IPRoute2
 ```sh
-tar xvf ${DOWNLOADDIR}/iproute2-6.16.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/iproute2-6.16.0
+tar xvf ${DOWNLOADDIR}/iproute2-6.17.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/iproute2-6.17.0
 	sed -i /ARPD/d Makefile
 	rm -fv man/man8/arpd.8
 	PKG_CONFIG=${CROSS_TARGET}-pkg-config \
@@ -2165,8 +2165,8 @@ popd
 https://github.com/sunhaiyong1978/univt3/blob/main/patches/kbd/2.6.0/0001-Save-font-support-UTF-8.patch
 
 ```sh
-tar xvf ${DOWNLOADDIR}/kbd-2.8.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/kbd-2.8.0
+tar xvf ${DOWNLOADDIR}/kbd-2.9.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/kbd-2.9.0
 	patch -Np1 -i ${DOWNLOADDIR}/0001-Save-font-support-UTF-8.patch
 	sed -i '/RESIZECONS_PROGS=/s/yes/no/' configure
 	sed -i 's/resizecons.8 //' docs/man/man8/Makefile.in
@@ -2224,8 +2224,8 @@ popd
 
 #### CURL
 ```sh
-tar xvf ${DOWNLOADDIR}/curl-8.15.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/curl-8.15.0
+tar xvf ${DOWNLOADDIR}/curl-8.16.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/curl-8.16.0
     ./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
                 --host=${CROSS_TARGET} --with-openssl \
                 --enable-threaded-resolver --with-ca-path=/etc/ssl/certs
@@ -2249,13 +2249,13 @@ popd
 
 #### CMake
 ```sh
-tar xvf ${DOWNLOADDIR}/cmake-4.1.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/cmake-4.1.1
+tar xvf ${DOWNLOADDIR}/cmake-4.1.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/cmake-4.1.2
     patch -Np1 -i ${DOWNLOADDIR}/cmake-3.22.3-add-loongarch64-to-checktypesize.patch
     mkdir build
     pushd build
         cmake -DCMAKE_CXX_COMPILER="${CROSS_TARGET}-g++" -DCMAKE_C_COMPILER="${CROSS_TARGET}-gcc" \
-              -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_DOC_DIR=/share/doc/cmake-4.1.1 \
+              -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_DOC_DIR=/share/doc/cmake-4.1.2 \
               -DOPENSSL_ROOT_DIR=${SYSDIR}/sysroot/usr -DCMAKE_BUILD_TYPE=Release ../
         sed -i "/P cmake_install.cmake/s@\tbin/cmake@\t/bin/cmake@g" Makefile
         make ${JOBS}
@@ -2266,8 +2266,8 @@ popd
 
 #### Python3
 ```sh
-tar xvf ${DOWNLOADDIR}/Python-3.13.7.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/Python-3.13.7
+tar xvf ${DOWNLOADDIR}/Python-3.14.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/Python-3.14.0
     cat > config.cache << "EOF"
     ac_cv_aligned_required=no
     ac_cv_broken_sem_getvalue=no
@@ -2356,8 +2356,8 @@ popd
 
 #### MarkupSafe
 ```sh
-tar xvf ${DOWNLOADDIR}/markupsafe-3.0.2.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/markupsafe-3.0.2
+tar xvf ${DOWNLOADDIR}/markupsafe-3.0.3.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/markupsafe-3.0.3
     CC=${CROSS_TARGET}-gcc CXX=${CROSS_TARGET}-g++ _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     CC=${CROSS_TARGET}-gcc CXX=${CROSS_TARGET}-g++ _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
@@ -2425,8 +2425,8 @@ popd
 
 #### VIM
 ```sh
-tar xvf ${DOWNLOADDIR}/vim-9.1.1533.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/vim-9.1.1533
+tar xvf ${DOWNLOADDIR}/vim-9.1.1815.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/vim-9.1.1815
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 cat > src/auto/config.cache << EOF
 	vim_cv_getcwd_broken=no
@@ -2450,10 +2450,14 @@ popd
 
 ```sh
 cat > ${SYSDIR}/sysroot/etc/vimrc << "EOF"
-let skip_defaults_vim=1 
+source $VIMRUNTIME/defaults.vim
+
+let skip_defaults_vim=1
 set nocompatible
 set backspace=2
 set mouse=
+
+syntax on
 
 if (&term == "xterm") || (&term == "putty")
   set background=dark
@@ -2509,20 +2513,10 @@ popd
 　　Systemd采用的是meson命令进行配置阶段的操作，meson与其他常见的configure脚本配置有明显的不同，在当前需要进行交叉编译的情况下要采用特定的配置操作步骤，以下将展开进行说明。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/systemd-257.8.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/systemd-257.8
-	pushd src/basic
-        python3 missing_syscalls.py missing_syscall_def.h $(ls syscalls-*.txt)
-	popd
+tar xvf ${DOWNLOADDIR}/systemd-258.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/systemd-258.1
 	sed -i -e 's/GROUP="render"/GROUP="video"/' \
            -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
-```
-
-　　以上步骤是为了更新LoongArch64架构的系统调用表，并且对代码进行必要的修正。
-
-　　以下是配置和编译的步骤：
-
-```sh
 	mkdir -p build
 	pushd build
 		meson --prefix=/usr --libdir=/usr/lib64 --sysconfdir=/etc --localstatedir=/var \
@@ -2600,8 +2594,8 @@ sed -i "s@=/usr@=${SYSDIR}/sysroot/usr@g" ${SYSDIR}/cross-tools/bin/mk_cmds
 
 #### OpenSSH
 ```sh
-tar xvf ${DOWNLOADDIR}/openssh-10.0p2.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/openssh-10.0p2
+tar xvf ${DOWNLOADDIR}/openssh-10.2p1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/openssh-10.2p1
 	rm config.{sub,guess}
 	automake --add-missing
 	./configure --prefix=/usr  --libdir=/usr/lib64 --sysconfdir=/etc/ssh \
@@ -2781,8 +2775,8 @@ popd
 
 #### NSS
 ```sh
-tar xvf ${DOWNLOADDIR}/nss-3.115.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/nss-3.115/nss
+tar xvf ${DOWNLOADDIR}/nss-3.117.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/nss-3.117/nss
     sed -i "s@ uname -m@ cross-uname -m@g" coreconf/arch.mk
     make CC="gcc" -C coreconf/nsinstall BUILD_OPT=1 USE_64=1 \
          CPU_ARCH="loongarch64" CROSS_COMPILE=1 NSS_ENABLE_WERROR=0 OS_TEST="loongarch64" ${JOBS}
@@ -2809,7 +2803,7 @@ pushd ${BUILDDIR}/nss-3.115/nss
             | grep "#define.*PR_VERSION" | awk '{print $3}'),g" \
         > ${SYSDIR}/sysroot/usr/lib64/pkgconfig/nss.pc
 popd
-pushd ${BUILDDIR}/nss-3.115/dist
+pushd ${BUILDDIR}/nss-3.117/dist
     install -v -m755 Linux*/lib/*.so ${SYSDIR}/sysroot/usr/lib64
     install -v -m644 Linux*/lib/libcrmf.a ${SYSDIR}/sysroot/usr/lib64
     install -v -m755 -d ${SYSDIR}/sysroot/usr/include/nss
@@ -2898,8 +2892,8 @@ popd
 
 #### URI
 ```sh
-tar xvf ${DOWNLOADDIR}/URI-5.32.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/URI-5.32
+tar xvf ${DOWNLOADDIR}/URI-5.34.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/URI-5.34
     ${SYSDIR}/cross-tools/bin/perl Makefile.PL CC=${CROSS_TARGET}-gcc LD=${CROSS_TARGET}-ld
     sed -i "/^INSTALL/s@${SYSDIR}/cross-tools@/usr@g" Makefile
     sed -i "/^PERL_INC/s@${SYSDIR}/cross-tools@${SYSDIR}/sysroot/usr@g" Makefile
@@ -2911,8 +2905,8 @@ popd
 
 #### Libgpg-Error
 ```sh
-tar xvf ${DOWNLOADDIR}/libgpg-error-1.55.tar.bz2 -C ${BUILDDIR}
-pushd ${BUILDDIR}/libgpg-error-1.55
+tar xvf ${DOWNLOADDIR}/libgpg-error-1.56.tar.bz2 -C ${BUILDDIR}
+pushd ${BUILDDIR}/libgpg-error-1.56
     ./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
                 --host=${CROSS_TARGET}
     make ${JOBS}
@@ -2937,8 +2931,8 @@ popd
 
 #### Libxml2
 ```sh
-tar xvf ${DOWNLOADDIR}/libxml2-2.14.5.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libxml2-2.14.5
+tar xvf ${DOWNLOADDIR}/libxml2-2.15.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libxml2-2.15.1
     rm config.{sub,guess}
     automake -a
     mkdir native-build
@@ -3089,8 +3083,8 @@ popd
 
 #### Doxygen
 ```sh
-tar xvf ${DOWNLOADDIR}/doxygen-1.14.0.src.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/doxygen-1.14.0
+tar xvf ${DOWNLOADDIR}/doxygen-1.15.0.src.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/doxygen-1.15.0.src
     mkdir build
     pushd build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -3104,8 +3098,8 @@ popd
 
 #### Git
 ```sh
-tar xvf ${DOWNLOADDIR}/git-2.51.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/git-2.51.0
+tar xvf ${DOWNLOADDIR}/git-2.51.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/git-2.51.1
     ./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET} \
                 --with-gitconfig=/etc/gitconfig --with-python=python3 --without-iconv \
                  ac_cv_fread_reads_directories=yes ac_cv_snprintf_returns_bogus=no
@@ -3172,8 +3166,8 @@ popd
 
 #### Inih
 ```sh
-tar xvf ${DOWNLOADDIR}/inih-r61.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/inih-r61
+tar xvf ${DOWNLOADDIR}/inih-r62.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/inih-r62
     mkdir build
     pushd build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -3208,8 +3202,8 @@ popd
 
 #### Xfsprogs
 ```sh
-tar xvf ${DOWNLOADDIR}/xfsprogs-6.16.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/xfsprogs-6.16.0
+tar xvf ${DOWNLOADDIR}/xfsprogs-6.17.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/xfsprogs-6.17.0
     patch -Np1 -i ${DOWNLOADDIR}/0001-Fix-for-cross-build.patch
     patch -Np1 -i ${DOWNLOADDIR}/0002-Fix-for-gcc-13.patch
     LDFLAGS="${LDFLAGS} -Wl,--copy-dt-needed-entries" \
@@ -3240,8 +3234,8 @@ popd
 
 #### LVM2
 ```sh
-tar xvf ${DOWNLOADDIR}/LVM2.2.03.34.tgz -C ${BUILDDIR}
-pushd ${BUILDDIR}/LVM2.2.03.34
+tar xvf ${DOWNLOADDIR}/LVM2.2.03.35.tgz -C ${BUILDDIR}
+pushd ${BUILDDIR}/LVM2.2.03.35
     ./configure --prefix=/usr --libdir=/usr/lib64 --with-usrlibdir=/usr/lib64 \
                 --build=${CROSS_HOST} --host=${CROSS_TARGET} \
                 --enable-cmdlib --enable-pkgconfig --enable-udev_sync \
@@ -3269,8 +3263,8 @@ popd
 
 #### PCRE2
 ```sh
-tar xvf ${DOWNLOADDIR}/pcre2-10.46.tar.bz2 -C ${BUILDDIR}
-pushd ${BUILDDIR}/pcre2-10.46
+tar xvf ${DOWNLOADDIR}/pcre2-10.47.tar.bz2 -C ${BUILDDIR}
+pushd ${BUILDDIR}/pcre2-10.47
     ./configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
                 --host=${CROSS_TARGET} --enable-unicode --enable-jit \
                 --enable-pcre2-16 --enable-pcre2-32 --enable-pcre2grep-libz \
@@ -3293,8 +3287,8 @@ popd
 
 #### Glib
 ```sh
-tar xvf ${DOWNLOADDIR}/glib-2.85.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/glib-2.85.0
+tar xvf ${DOWNLOADDIR}/glib-2.86.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/glib-2.86.1
     mkdir build
     pushd build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -3423,8 +3417,8 @@ popd
 
 #### TIFF
 ```sh
-tar xvf ${DOWNLOADDIR}/tiff-4.7.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/tiff-4.7.0
+tar xvf ${DOWNLOADDIR}/tiff-4.7.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/tiff-4.7.1
     mkdir build
     pushd build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -3510,8 +3504,8 @@ popd
 
 #### FreeType
 ```sh
-tar xvf ${DOWNLOADDIR}/freetype-2.13.3.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/freetype-2.13.3
+tar xvf ${DOWNLOADDIR}/freetype-2.14.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/freetype-2.14.1
     sed -ri "s:.*(AUX_MODULES.*valid):\1:" modules.cfg
     sed -r "s:.*(#.*SUBPIXEL_RENDERING) .*:\1:" \
            -i include/freetype/config/ftoption.h
@@ -3528,8 +3522,8 @@ sed -i -e "s@${SYSDIR}/cross-tools/bin@/usr/bin@g" \
 
 #### Gobject-Introspection
 ```sh
-tar xvf ${DOWNLOADDIR}/gobject-introspection-1.84.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/gobject-introspection-1.84.0
+tar xvf ${DOWNLOADDIR}/gobject-introspection-1.86.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gobject-introspection-1.86.0
     sed -i -e "/gircompiler_command/s@gircompiler,@'${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-g-ir-compiler',@g" \
            -e "/g-ir-scanner/s@'g-ir-scanner'@'${CROSS_TARGET}-g-ir-scanner'@g" \
            gir/meson.build
@@ -3547,8 +3541,8 @@ popd
 #### Glib （再次编译）
 　　再次编译Glib的目的是为了增加对Gobject-Introspection的支持。
 ```sh
-tar xvf ${DOWNLOADDIR}/glib-2.85.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/glib-2.85.0
+tar xvf ${DOWNLOADDIR}/glib-2.86.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/glib-2.86.1
     mkdir build
     pushd build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -3573,8 +3567,8 @@ cp -a ${SYSDIR}/sysroot/usr/bin/glib-mkenums ${SYSDIR}/cross-tools/bin/
 
 #### HarfBuzz
 ```sh
-tar xvf ${DOWNLOADDIR}/harfbuzz-11.4.5.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/harfbuzz-11.4.5
+tar xvf ${DOWNLOADDIR}/harfbuzz-12.1.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/harfbuzz-12.1.0
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -3609,8 +3603,8 @@ popd
 　　这次编译是加入对Graphite的支持。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/harfbuzz-11.4.5.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/harfbuzz-11.4.5
+tar xvf ${DOWNLOADDIR}/harfbuzz-12.1.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/harfbuzz-12.1.0
     mkdir cross-build-2
     pushd cross-build-2
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -3640,8 +3634,8 @@ popd
 　　这次编译是加入对HarfBuzz的支持。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/freetype-2.13.3.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/freetype-2.13.3
+tar xvf ${DOWNLOADDIR}/freetype-2.14.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/freetype-2.14.1
     sed -ri "s:.*(AUX_MODULES.*valid):\1:" modules.cfg
     sed -r "s:.*(#.*SUBPIXEL_RENDERING) .*:\1:" \
            -i include/freetype/config/ftoption.h
@@ -3696,8 +3690,8 @@ popd
 
 #### Libunistring
 ```sh
-tar xvf ${DOWNLOADDIR}/libunistring-1.3.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libunistring-1.3
+tar xvf ${DOWNLOADDIR}/libunistring-1.4.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libunistring-1.4.1
     ./configure --prefix=/usr --libdir=/usr/lib64 \
                 --build=${CROSS_HOST} --host=${CROSS_TARGET}
     make ${JOBS}
@@ -3747,8 +3741,8 @@ popd
 
 #### P11-Kit
 ```sh
-tar xvf ${DOWNLOADDIR}/p11-kit-0.25.5.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/p11-kit-0.25.5
+tar xvf ${DOWNLOADDIR}/p11-kit-0.25.9.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/p11-kit-0.25.9
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -3803,8 +3797,8 @@ popd
 
 #### USBUtils
 ```sh
-tar xvf ${DOWNLOADDIR}/usbutils-018.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/usbutils-018
+tar xvf ${DOWNLOADDIR}/usbutils-019.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/usbutils-019
    ./configure --prefix=/usr --build=${CROSS_HOST} --host=${CROSS_TARGET} \
                 --datadir=/usr/share/hwdata
     make ${JOBS}
@@ -3816,8 +3810,8 @@ popd
 
 #### Json-Glib
 ```sh
-tar xvf ${DOWNLOADDIR}/json-glib-1.10.6.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/json-glib-1.10.6
+tar xvf ${DOWNLOADDIR}/json-glib-1.10.8.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/json-glib-1.10.8
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -3893,8 +3887,8 @@ EOF
 
 #### LLVM
 ```sh
-tar xvf ${DOWNLOADDIR}/llvm-project-21.1.0.src.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/llvm-project-21.1.0.src/llvm
+tar xvf ${DOWNLOADDIR}/llvm-project-21.1.4.src.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/llvm-project-21.1.4.src/llvm
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc -mcmodel=medium" CXX="${CROSS_TARGET}-g++ -mcmodel=medium" \
@@ -3930,8 +3924,8 @@ chmod +x ${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-llvm-config
 
 #### Compiler-RT
 ```sh
-tar xvf ${DOWNLOADDIR}/llvm-project-21.1.0.src.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/llvm-project-21.1.0.src/compiler-rt
+tar xvf ${DOWNLOADDIR}/llvm-project-21.1.4.src.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/llvm-project-21.1.4.src/compiler-rt
     mkdir cross-build
     pushd cross-build
             CC="clang" CXX="clang++" \
@@ -3957,8 +3951,8 @@ popd
 
 #### Rust
 ```sh
-tar xvf ${DOWNLOADDIR}/rustc-1.89.0-src.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/rustc-1.89.0-src
+tar xvf ${DOWNLOADDIR}/rustc-1.90.0-src.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/rustc-1.90.0-src
     PKG_CONFIG_SYSROOT_DIR="" \
     ./configure --host=${CROSS_TARGET} --target=${CROSS_TARGET} \
                 --prefix=/usr --libdir=/usr/lib64 --sysconfdir=/etc \
@@ -3998,8 +3992,8 @@ popd
 
 #### HWData
 ```sh
-tar xvf ${DOWNLOADDIR}/hwdata-0.399.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/hwdata-0.399
+tar xvf ${DOWNLOADDIR}/hwdata-0.400.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/hwdata-0.400
     ./configure --prefix=/usr --libdir=/usr/lib64 \
                 --build=${CROSS_HOST} --host=${CROSS_TARGET}
     make ${JOBS}
@@ -4042,8 +4036,8 @@ popd
 
 #### Libedit
 ```sh
-tar xvf ${DOWNLOADDIR}/libedit-20250104-3.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libedit-20250104-3.1
+tar xvf ${DOWNLOADDIR}/libedit-20251016-3.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libedit-20251016-3.1
     ./configure --prefix=/usr --libdir=/usr/lib64 \
                 --build=${CROSS_HOST} --host=${CROSS_TARGET}
     make ${JOBS}
@@ -4212,7 +4206,7 @@ libXext-1.3.6.tar.xz
 libFS-1.0.10.tar.xz
 libICE-1.1.2.tar.xz
 libSM-1.2.6.tar.xz
-libXScrnSaver-1.2.4.tar.xz
+libXScrnSaver-1.2.5.tar.xz
 libXt-1.3.1.tar.xz
 libXmu-1.2.1.tar.xz
 libXpm-3.5.17.tar.xz
@@ -4228,7 +4222,7 @@ libXft-2.3.9.tar.xz
 libXi-1.8.2.tar.xz
 libXinerama-1.1.5.tar.xz
 libXrandr-1.5.4.tar.xz
-libXres-1.2.2.tar.xz
+libXres-1.2.3.tar.xz
 libXtst-1.2.5.tar.xz
 libXv-1.0.13.tar.xz
 libXvMC-1.0.14.tar.xz
@@ -4350,11 +4344,11 @@ popd
 ```
 
 #### LibDRM
-https://dri.freedesktop.org/libdrm/libdrm-2.4.125.tar.xz
+https://dri.freedesktop.org/libdrm/libdrm-2.4.127.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libdrm-2.4.125.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libdrm-2.4.125
+tar xvf ${DOWNLOADDIR}/libdrm-2.4.127.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libdrm-2.4.127
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -4466,11 +4460,11 @@ popd
 ```
 
 #### Libarchive
-https://github.com/libarchive/libarchive/releases/download/v3.8.1/libarchive-3.8.1.tar.xz
+https://github.com/libarchive/libarchive/releases/download/v3.8.2/libarchive-3.8.2.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libarchive-3.8.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libarchive-3.8.1
+tar xvf ${DOWNLOADDIR}/libarchive-3.8.2.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libarchive-3.8.2
     sed -i "/linux\/fs.h/d" libarchive/archive_read_disk_posix.c
     ./configure $COMMON_CONFIG
     make ${JOBS}
@@ -4648,10 +4642,10 @@ popd
 ```
 
 #### LibMediainfo
-http://mediaarea.net/download/source/libmediainfo/25.07.1/libmediainfo_25.07.1.tar.xz
+http://mediaarea.net/download/source/libmediainfo/25.09/libmediainfo_25.09.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libmediainfo_25.07.1.tar.xz -C ${BUILDDIR}
+tar xvf ${DOWNLOADDIR}/libmediainfo_25.09.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/MediaInfoLib/Project/GNU/Library
     autoreconf -ifv
     ./configure $COMMON_CONFIG --enable-shared \
@@ -4781,11 +4775,11 @@ Device Drivers  --->
 ```
 
 #### PyYAML
-https://files.pythonhosted.org/packages/source/p/pyyaml/pyyaml-6.0.2.tar.gz
+https://files.pythonhosted.org/packages/source/p/pyyaml/pyyaml-6.0.3.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/pyyaml-6.0.2.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/pyyaml-6.0.2
+tar xvf ${DOWNLOADDIR}/pyyaml-6.0.3.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/pyyaml-6.0.3
 	CC=${CROSS_TARGET}-gcc CXX=${CROSS_TARGET}-g++ _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
 	${SYSDIR}/cross-tools/bin/pip3 wheel -w dist --no-build-isolation --no-deps ${PWD}
 	CC=${CROSS_TARGET}-gcc CXX=${CROSS_TARGET}-g++ _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
@@ -4796,8 +4790,8 @@ popd
 #### Glslang
 
 ```sh
-tar xvf ${DOWNLOADDIR}/glslang-15.4.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/glslang-15.4.0
+tar xvf ${DOWNLOADDIR}/glslang-16.0.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/glslang-16.0.0
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -4812,11 +4806,11 @@ popd
 ```
 
 #### Mesa
-https://archive.mesa3d.org/mesa-25.2.1.tar.xz
+https://archive.mesa3d.org/mesa-25.2.5.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/mesa-25.2.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/mesa-25.2.1
+tar xvf ${DOWNLOADDIR}/mesa-25.2.5.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/mesa-25.2.5
     sed -i -e "/dep_wl_scanner/s@, native: true@@g" \
            -e "/prog_wl_scanner/s@find_program\(.*\)\$@'wayland-scanner'@g" meson.build
     mkdir cross-build
@@ -5071,11 +5065,11 @@ popd
 ```
 
 #### Xkeyboard-Config
-https://www.x.org/archive/individual/data/xkeyboard-config/xkeyboard-config-2.45.tar.xz
+https://www.x.org/archive/individual/data/xkeyboard-config/xkeyboard-config-2.46.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/xkeyboard-config-2.45.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/xkeyboard-config-2.45
+tar xvf ${DOWNLOADDIR}/xkeyboard-config-2.46.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/xkeyboard-config-2.46
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -5208,11 +5202,11 @@ popd
 ```
 
 #### Libevdev
-https://www.freedesktop.org/software/libevdev/libevdev-1.13.4.tar.xz
+https://www.freedesktop.org/software/libevdev/libevdev-1.13.5.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libevdev-1.13.4.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libevdev-1.13.4
+tar xvf ${DOWNLOADDIR}/libevdev-1.13.5.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libevdev-1.13.5
     PYTHON=python3 ./configure $COMMON_CONFIG
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
@@ -5250,11 +5244,11 @@ popd
 ```
 
 #### Libinput
-https://gitlab.freedesktop.org/libinput/libinput/-/archive/1.29.0/libinput-1.29.0.tar.gz
+https://gitlab.freedesktop.org/libinput/libinput/-/archive/1.29.2/libinput-1.29.2.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libinput-1.29.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libinput-1.29.0
+tar xvf ${DOWNLOADDIR}/libinput-1.29.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libinput-1.29.2
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -5353,11 +5347,11 @@ popd
 ```
 
 #### XTerm
-https://invisible-mirror.net/archives/xterm/xterm-401.tgz
+https://invisible-mirror.net/archives/xterm/xterm-403.tgz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/xterm-401.tgz -C ${BUILDDIR}
-pushd ${BUILDDIR}/xterm-401
+tar xvf ${DOWNLOADDIR}/xterm-403.tgz -C ${BUILDDIR}
+pushd ${BUILDDIR}/xterm-403
     sed -i '/v0/{n;s/new:/new:kb=^?:/}' termcap
     printf '\tkbs=\\177,\n' >> terminfo
     TERMINFO=/usr/share/terminfo \
@@ -5519,11 +5513,11 @@ popd
 ```
 
 #### Libxkbcommon
-https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-1.11.0/libxkbcommon-xkbcommon-1.11.0.tar.gz
+https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-1.12.2/libxkbcommon-xkbcommon-1.12.2.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libxkbcommon-xkbcommon-1.11.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libxkbcommon-xkbcommon-1.11.0
+tar xvf ${DOWNLOADDIR}/libxkbcommon-xkbcommon-1.12.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libxkbcommon-xkbcommon-1.12.2
     sed -i -e "/wayland_scanner_dep =/s@, native: true@@g" \
            -e "/wayland_scanner =/s@find_program\(.*\)\$@find_program('wayland-scanner')@g" \
            meson.build
@@ -5580,11 +5574,11 @@ EOF
 ```
 
 #### CUPS
-https://github.com/OpenPrinting/cups/releases/download/v2.4.12/cups-2.4.12-source.tar.gz
+https://github.com/OpenPrinting/cups/releases/download/v2.4.14/cups-2.4.14-source.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/cups-2.4.12-source.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/cups-2.4.12
+tar xvf ${DOWNLOADDIR}/cups-2.4.14-source.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/cups-2.4.14
     sed -i 's#@CUPS_HTMLVIEW@#firefox#' desktop/cups.desktop.in
     ./configure $COMMON_CONFIG --with-rcdir=/tmp/cupsinit   \
             --with-system-groups=lpadmin
@@ -5629,11 +5623,11 @@ popd
 ```
 
 #### At-Spi2-Core
-https://download.gnome.org/sources/at-spi2-core/2.57/at-spi2-core-2.57.2.tar.xz
+https://download.gnome.org/sources/at-spi2-core/2.58/at-spi2-core-2.58.1.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/at-spi2-core-2.57.2.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/at-spi2-core-2.57.2
+tar xvf ${DOWNLOADDIR}/at-spi2-core-2.58.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/at-spi2-core-2.58.1
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -5665,11 +5659,11 @@ popd
 ```
 
 #### Adwaita-Icon-Theme
-https://download.gnome.org/sources/adwaita-icon-theme/48/adwaita-icon-theme-48.1.tar.xz
+https://download.gnome.org/sources/adwaita-icon-theme/49/adwaita-icon-theme-49.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/adwaita-icon-theme-48.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/adwaita-icon-theme-48.1
+tar xvf ${DOWNLOADDIR}/adwaita-icon-theme-49.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/adwaita-icon-theme-49.0
     ./configure $COMMON_CONFIG
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
@@ -5782,11 +5776,11 @@ EOF
 ```
 
 #### GStreamer
-https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.27.1.tar.xz
+https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.27.2.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/gstreamer-1.27.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/gstreamer-1.27.1
+tar xvf ${DOWNLOADDIR}/gstreamer-1.27.2.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gstreamer-1.27.2
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -5799,11 +5793,11 @@ popd
 ```
 
 #### gst-plugins-base
-https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.27.1.tar.xz
+https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.27.2.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/gst-plugins-base-1.27.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/gst-plugins-base-1.27.1
+tar xvf ${DOWNLOADDIR}/gst-plugins-base-1.27.2.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gst-plugins-base-1.27.2
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -5841,11 +5835,11 @@ popd
 ```
 
 #### Librsvg
-https://download.gnome.org/sources/librsvg/2.61/librsvg-2.61.0.tar.xz
+https://download.gnome.org/sources/librsvg/2.61/librsvg-2.61.2.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/librsvg-2.61.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/librsvg-2.61.0
+tar xvf ${DOWNLOADDIR}/librsvg-2.61.2.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/librsvg-2.61.2
     mkdir cross-prebuild
     pushd cross-prebuild
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -5901,11 +5895,11 @@ popd
 ```
 
 #### Libnotify
-https://download.gnome.org/sources/libnotify/0.8/libnotify-0.8.6.tar.xz
+https://download.gnome.org/sources/libnotify/0.8/libnotify-0.8.7.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libnotify-0.8.6.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libnotify-0.8.6
+tar xvf ${DOWNLOADDIR}/libnotify-0.8.7.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libnotify-0.8.7
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -6062,11 +6056,11 @@ popd
 ```
 
 #### GTK4
-https://download.gnome.org/sources/gtk/4.19/gtk-4.19.4.tar.xz
+https://download.gnome.org/sources/gtk/4.21/gtk-4.21.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/gtk-4.19.4.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/gtk-4.19.4
+tar xvf ${DOWNLOADDIR}/gtk-4.21.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gtk-4.21.0
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -6381,11 +6375,11 @@ EOF
 ```
 
 #### Mozjs-115
-https://archive.mozilla.org/pub/firefox/releases/115.27.0esr/source/firefox-115.27.0esr.source.tar.xz
+https://archive.mozilla.org/pub/firefox/releases/115.29.0esr/source/firefox-115.29.0esr.source.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/firefox-115.27.0esr.source.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/firefox-115.27.0
+tar xvf ${DOWNLOADDIR}/firefox-115.29.0esr.source.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/firefox-115.29.0
     mkdir cross-build
     pushd cross-build
         export RUSTFLAGS="$RUSTFLAGS -Ccode-model=large"
@@ -6537,11 +6531,11 @@ popd
 ```
 
 #### Protobuf
-https://github.com/protocolbuffers/protobuf/releases/download/v32.0/protobuf-32.0.tar.gz
+https://github.com/protocolbuffers/protobuf/releases/download/v33.0/protobuf-33.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/protobuf-32.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/protobuf-32.0
+tar xvf ${DOWNLOADDIR}/protobuf-33.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/protobuf-33.0
         mkdir cross-build
         pushd cross-build
                 CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -6622,8 +6616,8 @@ popd
 #### SCons
 
 ```sh
-tar xvf ${DOWNLOADDIR}/SCons-4.9.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/SCons-4.9.1
+tar xvf ${DOWNLOADDIR}/SCons-4.10.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/SCons-4.10.0
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     ${SYSDIR}/cross-tools/bin/python3 setup.py install \
              --optimize=1 --root=${SYSDIR}/sysroot --prefix=/usr \
@@ -7078,11 +7072,11 @@ popd
 ```
 
 #### Fish-Shell
-https://github.com/fish-shell/fish-shell/archive/4.0.2/fish-shell-4.0.2.tar.gz
+https://github.com/fish-shell/fish-shell/archive/4.1.2/fish-shell-4.1.2.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/fish-shell-4.0.2.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/fish-shell-4.0.2
+tar xvf ${DOWNLOADDIR}/fish-shell-4.1.2.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/fish-shell-4.1.2
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" RUSTFLAGS="$RUSTFLAGS -C linker=${CROSS_TARGET}-gcc -Ccode-model=large" \
@@ -7183,11 +7177,11 @@ popd
 ```
 
 #### Pipewire
-https://github.com/PipeWire/pipewire/archive/1.4.7/pipewire-1.4.7.tar.gz
+https://github.com/PipeWire/pipewire/archive/1.5.81/pipewire-1.5.81.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/pipewire-1.4.7.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/pipewire-1.4.7
+tar xvf ${DOWNLOADDIR}/pipewire-1.5.81.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/pipewire-1.5.81
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -7274,11 +7268,11 @@ popd
 ```
 
 #### Fmt
-https://github.com/fmtlib/fmt/archive/11.2.0/fmt-11.2.0.tar.gz
+https://github.com/fmtlib/fmt/archive/12.0.0/fmt-12.0.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/fmt-11.2.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/fmt-11.2.0
+tar xvf ${DOWNLOADDIR}/fmt-12.0.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/fmt-12.0.0
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -7292,11 +7286,11 @@ popd
 ```
 
 #### Extra-cmake-modules
-https://download.kde.org/stable/frameworks/6.17/extra-cmake-modules-6.17.0.tar.xz
+https://download.kde.org/stable/frameworks/6.19/extra-cmake-modules-6.19.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/extra-cmake-modules-6.17.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/extra-cmake-modules-6.17.0
+tar xvf ${DOWNLOADDIR}/extra-cmake-modules-6.19.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/extra-cmake-modules-6.19.0
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -7355,11 +7349,11 @@ popd
 ```
 
 #### DConf
-https://download.gnome.org/sources/dconf/0.40/dconf-0.40.0.tar.xz
+https://download.gnome.org/sources/dconf/0.49/dconf-0.49.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/dconf-0.40.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/dconf-0.40.0
+tar xvf ${DOWNLOADDIR}/dconf-0.49.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/dconf-0.49.0
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -7390,11 +7384,11 @@ popd
 ```
 
 #### DConf-Editor
-https://download.gnome.org/sources/dconf-editor/45/dconf-editor-45.0.1.tar.xz
+https://download.gnome.org/sources/dconf-editor/49/dconf-editor-49.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/dconf-editor-45.0.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/dconf-editor-45.0.1
+tar xvf ${DOWNLOADDIR}/dconf-editor-49.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/dconf-editor-49.0
     sed -e '/  desktop,/d' \
         -e '/  appdata,/d' \
         -i editor/meson.build
@@ -7431,11 +7425,11 @@ popd
 ```
 
 #### PyGobject
-https://download.gnome.org/sources/pygobject/3.53/pygobject-3.53.0.tar.gz
+https://download.gnome.org/sources/pygobject/3.54/pygobject-3.54.5.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/pygobject-3.53.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/pygobject-3.53.0
+tar xvf ${DOWNLOADDIR}/pygobject-3.54.5.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/pygobject-3.54.5
     mkdir cross-build
     pushd cross-build
         PYTHON=${SYSDIR}/cross-tools/bin/python3 \
@@ -7482,11 +7476,8 @@ popd
 
 #### Systemd (再次编译)
 ```sh
-tar xvf ${DOWNLOADDIR}/systemd-257.8.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/systemd-257.8
-	pushd src/basic
-        python3 missing_syscalls.py missing_syscall_def.h $(ls syscalls-*.txt)
-	popd
+tar xvf ${DOWNLOADDIR}/systemd-258.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/systemd-258.1
 	sed -i -e 's/GROUP="render"/GROUP="video"/' \
            -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
 	mkdir -p cross-build
@@ -7734,11 +7725,11 @@ popd
 ```
 
 #### RipGrep
-https://github.com/BurntSushi/ripgrep/archive/14.1.1/ripgrep-14.1.1.tar.gz
+https://github.com/BurntSushi/ripgrep/archive/15.1.0/ripgrep-15.1.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/ripgrep-14.1.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/ripgrep-14.1.1
+tar xvf ${DOWNLOADDIR}/ripgrep-15.1.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/ripgrep-15.1.0
     RUSTFLAGS="$RUSTFLAGS -C linker=${CROSS_TARGET}-gcc" \
     cargo build --release --target ${CROSS_TARGET}
     install -Dm755 target/${CROSS_TARGET}/release/rg ${SYSDIR}/sysroot/usr/bin/
@@ -7939,11 +7930,11 @@ popd
 ```
 
 #### Libqalculate
-https://github.com/Qalculate/libqalculate/releases/download/v5.7.0/libqalculate-5.7.0.tar.gz
+https://github.com/Qalculate/libqalculate/releases/download/v5.8.0/libqalculate-5.8.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libqalculate-5.7.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libqalculate-5.7.0
+tar xvf ${DOWNLOADDIR}/libqalculate-5.8.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libqalculate-5.8.0
     ./configure $COMMON_CONFIG
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
@@ -8036,11 +8027,11 @@ popd
 ```
 
 #### Docutils
-https://sourceforge.net/projects/docutils/files/docutils/0.22/docutils-0.22.tar.gz
+https://sourceforge.net/projects/docutils/files/docutils/0.22.1/docutils-0.22.1.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/docutils-0.22.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/docutils-0.22
+tar xvf ${DOWNLOADDIR}/docutils-0.22.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/docutils-0.22.1
     _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
     ${SYSDIR}/cross-tools/bin/python3 setup.py build
     _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
@@ -8681,11 +8672,11 @@ popd
 ```
 
 #### Highlight
-http://www.andre-simon.de/zip/highlight-4.16.tar.bz2
+http://www.andre-simon.de/zip/highlight-4.17.tar.bz2
 
 ```sh
-tar xvf ${DOWNLOADDIR}/highlight-4.16.tar.bz2 -C ${BUILDDIR}
-pushd ${BUILDDIR}/highlight-4.16
+tar xvf ${DOWNLOADDIR}/highlight-4.17.tar.bz2 -C ${BUILDDIR}
+pushd ${BUILDDIR}/highlight-4.17
     make CXX="${CROSS_TARGET}-g++" AR="${CROSS_TARGET}-ar" ${JOBS}
     make CXX="${CROSS_TARGET}-g++" AR="${CROSS_TARGET}-ar" gui ${JOBS}
     make CXX="${CROSS_TARGET}-g++" AR="${CROSS_TARGET}-ar" DESTDIR=${SYSDIR}/sysroot install
@@ -8694,11 +8685,11 @@ popd
 ```
 
 #### Frei0r
-https://github.com/dyne/frei0r/archive/v2.3.3/frei0r-2.3.3.tar.gz
+https://github.com/dyne/frei0r/archive/v2.5.0/frei0r-2.5.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/frei0r-2.3.3.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/frei0r-2.3.3
+tar xvf ${DOWNLOADDIR}/frei0r-2.5.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/frei0r-2.5.0
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -8716,11 +8707,11 @@ popd
 ```
 
 #### gsettings-desktop-schemas
-https://download.gnome.org/sources/gsettings-desktop-schemas/48/gsettings-desktop-schemas-48.0.tar.xz
+https://download.gnome.org/sources/gsettings-desktop-schemas/49/gsettings-desktop-schemas-49.1.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/gsettings-desktop-schemas-48.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/gsettings-desktop-schemas-48.0
+tar xvf ${DOWNLOADDIR}/gsettings-desktop-schemas-49.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gsettings-desktop-schemas-49.1
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -8734,11 +8725,11 @@ popd
 ```
 
 #### Nghttp2
-https://github.com/nghttp2/nghttp2/releases/download/v1.66.0/nghttp2-1.66.0.tar.xz
+https://github.com/nghttp2/nghttp2/releases/download/v1.67.1/nghttp2-1.67.1.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/nghttp2-1.66.0.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/nghttp2-1.66.0
+tar xvf ${DOWNLOADDIR}/nghttp2-1.67.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/nghttp2-1.67.1
     ./configure $COMMON_CONFIG
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
@@ -8782,11 +8773,11 @@ popd
 ```
 
 #### Libproxy
-https://github.com/libproxy/libproxy/archive/0.5.10/libproxy-0.5.10.tar.gz
+https://github.com/libproxy/libproxy/archive/0.5.11/libproxy-0.5.11.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/libproxy-0.5.10.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libproxy-0.5.10
+tar xvf ${DOWNLOADDIR}/libproxy-0.5.11.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libproxy-0.5.11
     mkdir cross-build
     pushd cross-build
 	meson --prefix=/usr --libdir=/usr/lib64 \
@@ -8835,8 +8826,8 @@ popd
 #### Ruby
 
 ```sh
-tar xvf ${DOWNLOADDIR}/ruby-3.4.5.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/ruby-3.4.5
+tar xvf ${DOWNLOADDIR}/ruby-3.4.7.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/ruby-3.4.7
     ./configure $COMMON_CONFIG --enable-shared --with-rubylibprefix=/usr/lib64/ruby
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
@@ -8844,18 +8835,18 @@ popd
 ```
 
 #### Markdown
-https://files.pythonhosted.org/packages/source/m/markdown/markdown-3.8.2.tar.gz
+https://files.pythonhosted.org/packages/source/m/markdown/markdown-3.9.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/markdown-3.8.2.tar.gz -C ${BUILDDIR}
-cp -a ${BUILDDIR}/markdown-3.8.2{,.native}
-pushd ${BUILDDIR}/markdown-3.8.2.native
+tar xvf ${DOWNLOADDIR}/markdown-3.9.tar.gz -C ${BUILDDIR}
+cp -a ${BUILDDIR}/markdown-3.9{,.native}
+pushd ${BUILDDIR}/markdown-3.9.native
     PKG_CONFIG="" PKG_CONFIG_PATH="" \
     LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" ${SYSDIR}/cross-tools/bin/pip3 wheel -w dist --no-build-isolation --no-deps $PWD
     PKG_CONFIG="" PKG_CONFIG_PATH="" \
     LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" ${SYSDIR}/cross-tools/bin/pip3 install --no-index --find-links dist --no-cache-dir --force-reinstall --no-user Markdown
 popd
-pushd ${BUILDDIR}/markdown-3.8.2
+pushd ${BUILDDIR}/markdown-3.9
     CC=${CROSS_TARGET}-gcc CXX=${CROSS_TARGET}-g++ _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
     ${SYSDIR}/cross-tools/bin/pip3 wheel -w dist --no-build-isolation --no-deps $PWD
     CC=${CROSS_TARGET}-gcc CXX=${CROSS_TARGET}-g++ _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
@@ -8917,11 +8908,11 @@ popd
 ```
 
 #### Gi-Docgen
-https://gitlab.gnome.org/GNOME/gi-docgen/-/archive/2025.4/gi-docgen-2025.4.tar.gz
+https://gitlab.gnome.org/GNOME/gi-docgen/-/archive/2025.5/gi-docgen-2025.5.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/gi-docgen-2025.4.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/gi-docgen-2025.4
+tar xvf ${DOWNLOADDIR}/gi-docgen-2025.5.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/gi-docgen-2025.5
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 \
@@ -8985,11 +8976,11 @@ popd
 ```
 
 #### WebKitGTK
-https://webkitgtk.org/releases/webkitgtk-2.49.4.tar.xz
+https://webkitgtk.org/releases/webkitgtk-2.50.1.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/webkitgtk-2.49.4.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/webkitgtk-2.49.4
+tar xvf ${DOWNLOADDIR}/webkitgtk-2.50.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/webkitgtk-2.50.1
     mkdir cross-prebuild
     pushd cross-prebuild
 	WK_USE_CCACHE=NO CC="${CROSS_TARGET}-gcc -fpermissive -mlasx -flax-vector-conversions" CXX="${CROSS_TARGET}-g++ -fpermissive -mlasx -flax-vector-conversions" \
@@ -9170,11 +9161,11 @@ popd
 ```
 
 #### V4l-Utils
-https://www.linuxtv.org/downloads/v4l-utils/v4l-utils-1.30.1.tar.xz
+https://www.linuxtv.org/downloads/v4l-utils/v4l-utils-1.32.0.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/v4l-utils-1.30.1.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/v4l-utils-1.30.1
+tar xvf ${DOWNLOADDIR}/v4l-utils-1.32.0.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/v4l-utils-1.32.0
     ./configure ${COMMON_CONFIG}
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
@@ -9210,11 +9201,11 @@ popd
 
 
 #### CCache
-https://github.com/ccache/ccache/releases/download/v4.11.3/ccache-4.11.3.tar.xz
+https://github.com/ccache/ccache/releases/download/v4.12.1/ccache-4.12.1.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/ccache-4.11.3.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/ccache-4.11.3
+tar xvf ${DOWNLOADDIR}/ccache-4.12.1.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/ccache-4.12.1
     mkdir cross-build
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
@@ -9232,11 +9223,11 @@ popd
 ```
 
 #### Nodejs
-https://github.com/nodejs/node/archive/v24.7.0/node-24.7.0.tar.gz
+https://github.com/nodejs/node/archive/v25.0.0/node-25.0.0.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/node-24.7.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/node-24.7.0
+tar xvf ${DOWNLOADDIR}/node-25.0.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/node-25.0.0
     sed -i "s@registry.npmjs.org@registry.loongnix.cn:5873@g" deps/npm/lib/utils/config/definitions.js
     mkdir -pv out/Release
     for i in bytecode_builtins_list_generator gen-regexp-special-case torque mksnapshot node_js2c node_mksnapshot
@@ -9260,7 +9251,7 @@ popd
 ```
 
 #### FireFox
-https://archive.mozilla.org/pub/firefox/releases/140.2.0esr/source/firefox-140.2.0esr.source.tar.xz
+https://archive.mozilla.org/pub/firefox/releases/140.4.0esr/source/firefox-140.4.0esr.source.tar.xz
 https://hg.mozilla.org/l10n-central/zh-CN/archive/tip.zip
 
 下载中文语言包：
@@ -9273,8 +9264,8 @@ mv -iv tip.zip ${DOWNLOADDIR}/firefox-140-l10.zip
 编译步骤：
 
 ```sh
-tar xvf ${DOWNLOADDIR}/firefox-140.2.0esr.source.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/firefox-140.2.0
+tar xvf ${DOWNLOADDIR}/firefox-140.4.0esr.source.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/firefox-140.4.0
     mkdir -pv mozbuild/l10n-central
     pushd mozbuild/l10n-central
         unzip ${DOWNLOADDIR}/firefox-140-l10.zip
@@ -9413,7 +9404,7 @@ popd
 ```
 
 #### Golang
-https://go.dev/dl/go1.25.0.src.tar.gz
+https://go.dev/dl/go1.25.3.src.tar.gz
 
 * 下载Bootstrap Golang
 编译Golang必须系统中有一个Golang，这个时候需要下载一个与当前架构兼容的Golang，若当前使用的是X86_64，下载地址：  
@@ -9431,7 +9422,7 @@ tar xvf ${DOWNLOADDIR}/go1.23.1.linux-amd64.tar.gz -C ${SYSDIR}/cross-tools/
 　　按以下步骤制作Golang并进行安装。
 
 ```sh
-tar xvf ${DOWNLOADDIR}/go1.25.0.src.tar.gz -C ${BUILDDIR}
+tar xvf ${DOWNLOADDIR}/go1.25.3.src.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/go
     pushd src
         GOROOT_BOOTSTRAP=${SYSDIR}/cross-tools/go \
@@ -9449,11 +9440,11 @@ pushd ${BUILDDIR}/go
     do
         TAR_EXCLUDE="${TAR_EXCLUDE} --exclude=$i"
     done
-    tar -czf /tmp/golang-1.25.0-loongarch64.tar.gz ${TAR_EXCLUDE} --exclude=.git* ./
+    tar -czf /tmp/golang-1.25.3-loongarch64.tar.gz ${TAR_EXCLUDE} --exclude=.git* ./
     unset TAR_EXCLUDE
     
-    mkdir -pv ${SYSDIR}/sysroot/opt/golang-1.25.0
-    tar xf /tmp/golang-1.25.0-loongarch64.tar.gz -C ${SYSDIR}/sysroot/opt/golang-1.25.0
+    mkdir -pv ${SYSDIR}/sysroot/opt/golang-1.25.3
+    tar xf /tmp/golang-1.25.3-loongarch64.tar.gz -C ${SYSDIR}/sysroot/opt/golang-1.25.3
 popd
 ```
 
@@ -9514,8 +9505,8 @@ https://github.com/sunhaiyong1978/univt3/blob/main/patches/linux/6.16/font-data/
 * 制作步骤
 
 ```sh
-tar xvf ${DOWNLOADDIR}/linux-6.16.3.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-6.16.3
+tar xvf ${DOWNLOADDIR}/linux-6.17.3.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-6.17.3
 	patch -Np1 -i ${DOWNLOADDIR}/0001-double-tty-VT-screenbuf-for-univt.patch
 	patch -Np1 -i ${DOWNLOADDIR}/0002-Add-several-function-for-Univt.patch
 	patch -Np1 -i ${DOWNLOADDIR}/0003-UniVT-Fix-charcount-size-to-65536.patch
@@ -9572,8 +9563,8 @@ Device Drivers  --->
 
 #### Linux-Firmware
 ```sh
-tar xvf ${DOWNLOADDIR}/linux-firmware-20250808.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/linux-firmware-20250808
+tar xvf ${DOWNLOADDIR}/linux-firmware-20251021.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/linux-firmware-20251021
 	make DESTDIR=${PWD}/dest install
 	cp -a dest/lib/firmware ${SYSDIR}/sysroot/lib/
 popd
