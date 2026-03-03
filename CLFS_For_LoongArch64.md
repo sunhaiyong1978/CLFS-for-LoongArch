@@ -382,6 +382,7 @@ pushd ${SYSDIR}/downloads
 　　**PyCairo:** https://github.com/pygobject/pycairo/archive/v1.29.0/pycairo-1.29.0.tar.gz  
 　　**PyGobject:** https://download.gnome.org/sources/pygobject/3.55/pygobject-3.55.3.tar.gz  
 　　**Python3:** https://www.python.org/ftp/python/3.14.3/Python-3.14.3.tar.xz  
+　　**Python3_13:** https://www.python.org/ftp/python/3.13.7/Python-3.13.7.tar.xz  
 　　**Python-Pip:** https://github.com/pypa/pip/archive/26.0.1/pip-26.0.1.tar.gz  
 　　**Python-Setuptools:** https://files.pythonhosted.org/packages/source/s/setuptools/setuptools-80.10.2.tar.gz  
 　　**QEMU:** https://download.qemu.org/qemu-10.2.0.tar.xz  
@@ -391,6 +392,7 @@ pushd ${SYSDIR}/downloads
 　　**SCons:** https://sourceforge.net/projects/scons/files/scons/4.10.1/SCons-4.10.1.tar.gz  
 　　**Sed:** https://ftp.gnu.org/gnu/sed/sed-4.9.tar.xz  
 　　**Shadow:** https://github.com/shadow-maint/shadow/archive/4.19.3/shadow-4.19.3.tar.gz  
+　　**SPIRV-LLVM-Translator:** https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/v21.1.3/SPIRV-LLVM-Translator-21.1.3.tar.gz  
 　　**SQLite3:** https://github.com/sqlite/sqlite/archive/version-3.51.2/sqlite-3.51.2.tar.gz  
 　　**Systemd:** https://github.com/systemd/systemd/archive/v259/systemd-259.tar.gz  
 　　**Sudo:** https://www.sudo.ws/dist/sudo-1.9.17p2.tar.gz  
@@ -831,8 +833,8 @@ popd
 ### 3.25 MarkupSafe
 
 ```sh
-tar xvf ${DOWNLOADDIR}/markupsafe-3.0.3.tar.gz -C ${BUILD_DIRECTORY}
-pushd ${BUILD_DIRECTORY}/markupsafe-3.0.3
+tar xvf ${DOWNLOADDIR}/markupsafe-3.0.3.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/markupsafe-3.0.3
 	${SYSDIR}/cross-tools/bin/pip3 wheel -w dist --no-build-isolation --no-deps ${PWD}
 	${SYSDIR}/cross-tools/bin/pip3 install --no-index --find-links dist --no-cache-dir --no-deps --force-reinstall --no-user MarkupSafe
 popd
@@ -976,20 +978,20 @@ pushd ${BUILDDIR}/llvm-project-21.1.8.src/llvm
     pushd native-build
         LDFLAGS="${LDFLAGS} -lutil" PKG_CONFIG_SYSROOT_DIR="" \
         cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX:PATH=${SYSDIR}/cross-tools \
-                 -DCMAKE_CXX_COMPILER="g++" -DCMAKE_C_COMPILER="gcc" \
-                 -DBUILD_SHARED_LIBS:BOOL=OFF   -DCMAKE_BUILD_TYPE=Release  \
-                 -DLLVM_LIBDIR_SUFFIX=64 \
-                 -DCMAKE_C_FLAGS="-DNDEBUG" -DCMAKE_CXX_FLAGS="-DNDEBUG" \
-                 -DLLVM_ENABLE_LIBCXX:BOOL=OFF \
+		 -DCMAKE_CXX_COMPILER="g++" -DCMAKE_C_COMPILER="gcc" \
+		 -DBUILD_SHARED_LIBS:BOOL=OFF   -DCMAKE_BUILD_TYPE=Release  \
+		 -DLLVM_LIBDIR_SUFFIX=64 \
+		 -DCMAKE_C_FLAGS="-DNDEBUG" -DCMAKE_CXX_FLAGS="-DNDEBUG" \
+		 -DLLVM_ENABLE_LIBCXX:BOOL=OFF \
 		 -DLLVM_ENABLE_TERMINFO:BOOL=OFF \
-                 -DLLVM_ENABLE_RTTI:BOOL=ON -DLLVM_BUILD_LLVM_DYLIB:BOOL=ON  \
-                 -DLLVM_LINK_LLVM_DYLIB:BOOL=ON  \
-                 -DCMAKE_INSTALL_RPATH="${SYSDIR}/cross-tools/lib64;\\\${ORIGIN}/../lib64" \
-                 -DLLVM_BUILD_EXTERNAL_COMPILER_RT:BOOL=ON   \
-                 -DLLVM_INSTALL_TOOLCHAIN_ONLY:BOOL=OFF \
-                 -DLLVM_ENABLE_PROJECTS='llvm;clang;lld;lldb' \
+		 -DLLVM_ENABLE_RTTI:BOOL=ON -DLLVM_BUILD_LLVM_DYLIB:BOOL=ON  \
+		 -DLLVM_LINK_LLVM_DYLIB:BOOL=ON  \
+		 -DCMAKE_INSTALL_RPATH="${SYSDIR}/cross-tools/lib64;\\\${ORIGIN}/../lib64" \
+		 -DLLVM_BUILD_EXTERNAL_COMPILER_RT:BOOL=ON   \
+		 -DLLVM_INSTALL_TOOLCHAIN_ONLY:BOOL=OFF \
 		 -DDEFAULT_SYSROOT:PATH="${SYSDIR}/sysroot" \
-                 -DLLVM_DEFAULT_TARGET_TRIPLE=${CROSS_TARGET}
+		 -DLLVM_DEFAULT_TARGET_TRIPLE=${CROSS_TARGET} \
+		 -DLLVM_ENABLE_PROJECTS='llvm;clang;lld;lldb'
         ninja
         ninja install
     popd
@@ -1122,23 +1124,25 @@ pushd ${BUILDDIR}/glslang-16.2.0
     popd
 ```
 
-### 3.42 Cargo-C
+### 3.42 OpenSSL
+```sh
+tar xvf ${DOWNLOADDIR}/openssl-3.6.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/openssl-3.6.1
+	./Configure --prefix=${SYSDIR}/cross-tools \
+		    --libdir=lib64 shared zlib linux-generic64
+        make ${JOBS}
+        make install
+popd
+```
+
+### 3.43 Cargo-C
 
 ```sh
 tar xvf ${DOWNLOADDIR}/cargo-c-0.10.20.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/cargo-c-0.10.20
+    RUSTFLAGS="-C link-args=-Wl,-rpath=${SYSDIR}/cross-tools/lib:${SYSDIR}/cross-tools/lib64:/usr/lib:/usr/lib64" \
     cargo build --release
     install -Dm755 target/release/cargo-{capi,cbuild,cinstall,ctest} ${SYSDIR}/cross-tools/bin/
-popd
-```
-
-### 3.43 SCons
-
-```sh
-tar xvf ${DOWNLOADDIR}/SCons-4.10.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/SCons-4.10.1
-    ${SYSDIR}/cross-tools/bin/python3 setup.py build
-    ${SYSDIR}/cross-tools/bin/python3 setup.py install --optimize=1
 popd
 ```
 
@@ -1221,7 +1225,6 @@ pushd ${BUILDDIR}/hatchling-1.28.0
 popd
 ```
 
-
 ### 3.51 Unifdef
 https://dotat.at/prog/unifdef/unifdef-2.12.tar.xz
 ```sh
@@ -1233,7 +1236,108 @@ pushd ${BUILDDIR}/unifdef-2.12
 popd
 ```
 
-### 3.52 GDB
+### 3.52 SCons
+
+```sh
+tar xvf ${DOWNLOADDIR}/SCons-4.10.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/SCons-4.10.1
+    ${SYSDIR}/cross-tools/bin/python3 setup.py build
+    ${SYSDIR}/cross-tools/bin/python3 setup.py install --optimize=1
+popd
+```
+
+### 3.53 Autoconf-Archive
+```sh
+tar xvf ${DOWNLOADDIR}/autoconf-archive-2024.10.16.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/autoconf-archive-2024.10.16
+        ./configure --prefix=${SYSDIR}/cross-tools
+        make ${JOBS}
+        make install
+popd
+```
+
+### 3.54 SPIRV-LLVM-Translator
+
+```sh
+tar xvf ${DOWNLOADDIR}/SPIRV-LLVM-Translator-21.1.3.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/SPIRV-LLVM-Translator-21.1.3
+	git clone https://github.com/KhronosGroup/SPIRV-Headers.git --depth 1
+        mkdir -p build
+        pushd build
+                cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release  -DCMAKE_INSTALL_PREFIX:PATH=${SYSDIR}/cross-tools \
+                      -DCMAKE_INSTALL_RPATH="${SYSDIR}/cross-tools/lib${LIB_SUFF};\\\${ORIGIN}/../lib${LIB_SUFF}" \
+                      -DBUILD_SHARED_LIBS=OFF -DCCACHE_ALLOWED=OFF -DBASE_LLVM_VERSION="21.1.8" \
+                      -DLLVM_DIR:PATH=${SYSDIR}/cross-tools/lib${LIB_SUFF}/cmake/llvm \
+                      -DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${PWD}/../SPIRV-Headers -Wno-dev ..
+		make ${JOBS}
+		make install
+        popd
+popd
+```
+
+### 3.55 Libclc
+
+```sh
+tar xvf ${DOWNLOADDIR}/llvm-project-21.1.8.src.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/llvm-project-21.1.8.src/libclc
+	mkdir -p native-build
+	pushd native-build
+		LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" \
+		cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX:PATH=${SYSDIR}/cross-tools \
+			-DCMAKE_CXX_COMPILER="clang++" -DCMAKE_C_COMPILER="clang" \
+			-DCMAKE_C_FLAGS="-DNDEBUG --target=${CROSS_HOST} --sysroot=/" -DCMAKE_CXX_FLAGS="-DNDEBUG --target=${CROSS_HOST} --sysroot=/" \
+			-DLLVM_CLANG="${SYSDIR}/cross-tools/bin/clang" \
+			-DLLVM_AS="${SYSDIR}/cross-tools/bin/llvm-as" \
+			-DLLVM_LINK="${SYSDIR}/cross-tools/bin/llvm-link" \
+			-DLLVM_OPT="${SYSDIR}/cross-tools/bin/opt" \
+			-DLLVM_SPIRV="${SYSDIR}/cross-tools/bin/llvm-spirv" \
+			-DCMAKE_AR="${SYSDIR}/cross-tools/bin/llvm-ar" \
+			-DCMAKE_RANLIB="${SYSDIR}/cross-tools/bin/llvm-ranlib" \
+			-DBUILD_SHARED_LIBS:BOOL=OFF \
+			-DCMAKE_BUILD_TYPE=Release \
+			-DCMAKE_INSTALL_RPATH="${SYSDIR}/cross-tools/lib64;\\\${ORIGIN}/../lib64" \
+			-DLLVM_LIBDIR_SUFFIX=64  \
+			-DLLVM_INSTALL_TOOLCHAIN_ONLY:BOOL=OFF \
+			-DLLVM_HOST_TRIPLE=${CROSS_HOST} \
+			-DDEFAULT_SYSROOT:PATH="${SYSDIR}/sysroot"
+		ninja
+		ninja install
+	popd
+popd
+```
+
+### 3.56 Python3_13
+
+```sh
+tar xvf ${DOWNLOADDIR}/Python-3.13.7.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/Python-3.13.7
+	CFLAGS="${CFLAGS} -fPIC" LDFLAGS="${LDFLAGS} -lutil"
+	./configure --prefix=${SYSDIR}/cross-tools/python3_13 --with-platlibdir=lib${TARGET_LIB_SUFF} \
+		    --disable-shared --with-system-expat --with-system-ffi \
+		    --with-ensurepip=yes --enable-optimizations \
+		    ac_cv_broken_sem_getvalue=yes
+	make ${JOBS}
+	make install
+popd
+```
+
+### 3.57 doxygen
+
+```sh
+tar xvf ${DOWNLOADDIR}/doxygen-1.16.1.src.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/doxygen-1.16.1
+	mkdir -p native-build
+	pushd native-build
+		CC="gcc" CXX="g++" \
+		cmake -DCMAKE_INSTALL_PREFIX=${SYSDIR}/cross-tools  \
+		      -DCMAKE_BUILD_TYPE=Release ..
+		make ${JOBS}
+		make install
+	popd
+popd
+```
+
+### 3.58 GDB
 
 ```sh
 tar xvf ${DOWNLOADDIR}/gdb-17.1.tar.xz -C ${BUILDDIR}
@@ -1249,7 +1353,7 @@ pushd ${BUILDDIR}/gdb-17.1
 popd
 ```
 
-### 3.53 Grub2
+### 3.59 Grub2
 　　为了在交叉编译的环境下可以制作生成LoongArch机器上使用的EFI启动文件，我们在交叉工具链目录中存放一个可以生成目标机器EFI的Grub软件包。
 
 ```sh
@@ -1353,6 +1457,7 @@ echo "cups-config = '${CROSS_TARGET}-cups-config'" >> meson-cross.txt
 echo "llvm-config = '${CROSS_TARGET}-llvm-config'" >> meson-cross.txt
 echo "vala = '${CROSS_TARGET}-valac'" >> meson-cross.txt
 echo "exe_wrapper = 'qemu-loongarch64'" >> meson-cross.txt
+echo "wayland-scanner = '${CROSS_TARGET}-wayland-scanner'" >> meson-cross.txt
 echo "[properties]" >> meson-cross.txt
 echo "sys_root = '${SYSDIR}/sysroot'" >> meson-cross.txt
 echo "pkg_config_libdir = '${SYSDIR}/sysroot/usr/lib32/pkgconfig:${SYSDIR}/sysroot/usr/share/pkgconfig'" >> meson-cross.txt
@@ -2007,7 +2112,7 @@ pushd ${BUILDDIR}/libffi-3.5.2
 	            --host=${CROSS_TARGET} --disable-static --with-gcc-arch=native
 	make ${JOBS}
 	make DESTDIR=${SYSDIR}/sysroot install
-	cp -a ${CROSS_TARGET}/.libs/libffi_convenience.a ${SYSROOT_DIR}/usr/lib64/libffi_pic.a
+	cp -a ${CROSS_TARGET}/.libs/libffi_convenience.a ${SYSDIR}/sysroot/usr/lib64/libffi_pic.a
 popd
 ```
 
@@ -2768,7 +2873,7 @@ pushd ${BUILDDIR}/sudo-1.9.17p2
                 --with-secure-path --with-all-insults --with-env-editor \
                 --with-passprompt="[sudo] password for %p: "
     sed -i "/^install_uid/s@= 0@= $(id -u)@g" Makefile
-    sed -i "/^install_gid/s@= 0@= $(id -u)@g" Makefile
+    sed -i "/^install_gid/s@= 0@= $(id -g)@g" Makefile
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
 popd
@@ -2955,7 +3060,7 @@ pushd ${BUILDDIR}/libxml2-2.15.1
     pushd native-build
         PKG_CONFIG_PATH=${SYSDIR}/cross-tools/lib/pkgconfig:${SYSDIR}/cross-tools/lib64/pkgconfig \
         ../configure --prefix=${SYSDIR}/cross-tools --with-history --with-icu \
-                     --with-python=${SYSDIR}/cross-tools/bin/python3
+                     --with-python=yes
         make ${JOBS}
         make install
     popd
@@ -2963,9 +3068,9 @@ pushd ${BUILDDIR}/libxml2-2.15.1
     pushd cross-build
         ../configure --prefix=/usr --libdir=/usr/lib64 --build=${CROSS_HOST} \
                 --host=${CROSS_TARGET} --with-history --with-icu \
-                --with-python=${SYSDIR}/cross-tools/bin/python3 \
+		--with-http --with-python=yes \
                 --with-python_install_dir=/usr/lib64/python3.13/site-packages \
-		PYTHON=python3
+		PYTHON=${CROSS_TARGET}-python3
         make ${JOBS}
         make DESTDIR=${SYSDIR}/sysroot install
         rm ${SYSDIR}/sysroot/usr/lib64/libxml2.la
@@ -3391,7 +3496,7 @@ tar xvf ${DOWNLOADDIR}/boost_1_90_0.tar.bz2 -C ${BUILDDIR}
 pushd ${BUILDDIR}/boost_1_90_0
     ./bootstrap.sh ICU_ROOT=${SYSDIR}/sysroot/usr --prefix=/usr --libdir=/usr/lib64 --with-python=python3
     sed -i "/using gcc/s@using gcc@& : loongarch64 : ${CROSS_TARGET}-gcc@g" project-config.jam
-    sed -i "/using python/s@${CROSSTOOLS_DIR}@${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3@g" project-config.jam
+    sed -i "/using python/s@${SYSDIR}/cross-tools@${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-python3@g" project-config.jam
     sed -i "s@mips @mips1 @g" libs/log/build/log-arch-config.jam
     ./b2 stage threading=multi link=shared address-model=64 toolset=gcc-loongarch64  linkflags="-lstdc++"
     rm -rf ${SYSDIR}/sysroot/usr/lib/cmake/[Bb]oost*
@@ -3932,7 +4037,7 @@ pushd ${BUILDDIR}/llvm-project-21.1.8.src/llvm
               -DLLVM_TARGET_ARCH=LoongArch -DLLVM_DEFAULT_TARGET_TRIPLE=${CROSS_TARGET}
         ninja
         DESTDIR=${SYSDIR}/sysroot ninja install
-        for program_name in clang-ast-dump lldb-tblgen mlir-tblgen clang-tidy-confusable-chars-gen clang-pseudo-gen mlir-linalg-ods-yaml-gen mlir-pdll mlir-src-sharder
+        for program_name in clang-ast-dump lldb-tblgen mlir-tblgen clang-tidy-confusable-chars-gen clang-pseudo-gen mlir-linalg-ods-yaml-gen mlir-pdll mlir-src-sharder mlir-irdl-to-cpp
         do
                 sed -i "s@${PWD}/bin/${program_name}@qemu-loongarch64 ${PWD}/bin/${program_name}@g" build.ninja
         done
@@ -3962,7 +4067,7 @@ pushd ${BUILDDIR}/llvm-project-21.1.8.src/compiler-rt
 		  -DPython3_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-python3 \
                   -DLLVM_ENABLE_TERMINFO:BOOL=OFF \
                   -DLLVM_USE_SANITIZER:BOOL=ON \
-                  -DCMAKE_SYSROOT=${SYSROOT_DIR} \
+                  -DCMAKE_SYSROOT=${SYSDIR}/sysroot \
                   -DCMAKE_FIND_ROOT_PATH=${SYSDIR}/sysroot/usr \
                   -DLLVM_LINK_LLVM_DYLIB:BOOL=ON \
                   -DLLVM_HOST_TRIPLE=${CROSS_TARGET}
@@ -4073,7 +4178,7 @@ popd
 tar xvf ${DOWNLOADDIR}/jansson-2.13.1.tar.bz2 -C ${BUILDDIR}
 pushd ${BUILDDIR}/jansson-2.13.1
     cp ${SYSDIR}/sysroot/usr/share/automake-*/config.* ./
-    ./configure $COMMON_CONFIG
+    ./configure --prefix=/usr --libdir=/usr/lib64
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
     rm -v ${SYSDIR}/sysroot/usr/lib64/libjansson.la
@@ -4085,7 +4190,7 @@ popd
 tar xvf ${DOWNLOADDIR}/libnfnetlink-1.0.2.tar.bz2 -C ${BUILDDIR}
 pushd ${BUILDDIR}/libnfnetlink-1.0.2
     cp ${SYSDIR}/sysroot/usr/share/automake-*/config.* ./
-    ./configure $COMMON_CONFIG
+    ./configure --prefix=/usr --libdir=/usr/lib64
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
     rm -v ${SYSDIR}/sysroot/usr/lib64/libnfnetlink.la
@@ -4097,7 +4202,7 @@ popd
 tar xvf ${DOWNLOADDIR}/libnetfilter_conntrack-1.1.0.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/libnetfilter_conntrack-1.1.0
     cp ${SYSDIR}/sysroot/usr/share/automake-*/config.* ./
-    ./configure $COMMON_CONFIG
+    ./configure --prefix=/usr --libdir=/usr/lib64
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
     rm -v ${SYSDIR}/sysroot/usr/lib64/libnetfilter_conntrack.la
@@ -4109,7 +4214,7 @@ popd
 tar xvf ${DOWNLOADDIR}/iptables-1.8.11.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/iptables-1.8.11
     cp ${SYSDIR}/sysroot/usr/share/automake-*/config.* ./
-    ./configure $COMMON_CONFIG --enable-libipq --disable-nftables
+    ./configure --prefix=/usr --libdir=/usr/lib64 --enable-libipq --disable-nftables
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
 popd
@@ -4140,7 +4245,7 @@ pushd ${BUILDDIR}/dbus-python-1.4.0
     mkdir python3
     pushd python3
         PYTHON=${SYSDIR}/cross-tools/bin/python3 \
-        ../configure $COMMON_CONFIG --docdir=/usr/share/doc/dbus-python
+        ../configure --prefix=/usr --libdir=/usr/lib64 --docdir=/usr/share/doc/dbus-python
         make ${JOBS}
         make DESTDIR=${SYSDIR}/sysroot install
     popd
@@ -4168,7 +4273,7 @@ popd
 ```sh
 tar xvf ${DOWNLOADDIR}/cairo-1.18.4.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/cairo-1.18.4
-    ./configure $COMMON_CONFIG --enable-tee --enable-gl --enable-xlib-xcb --disable-trace
+    ./configure --prefix=/usr --libdir=/usr/lib64 --enable-tee --enable-gl --enable-xlib-xcb --disable-trace
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
     rm -v ${SYSDIR}/sysroot/usr/lib64/libcairo*.la
@@ -4966,6 +5071,122 @@ pushd ${BUILDDIR}/glslang-16.2.0
 popd
 ```
 
+#### SPIRV-Headers
+https://github.com/KhronosGroup/SPIRV-Headers.git
+
+```sh
+pushd ${BUILDDIR}/SPIRV-Headers
+        mkdir cross-build
+        pushd cross-build
+                CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
+                cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${BUILDDIR}/cmake-cross.cmake \
+                      -DCMAKE_INSTALL_LIBDIR=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_INSTALL_LIBEXECDIR=/usr/libexec \
+                      -DCMAKE_INSTALL_PREFIX=/usr \
+                      -DBUILD_SHARED_LIBS=ON \
+                      -Wno-dev ..
+		make ${JOBS}
+		make DESTDIR=${SYSDIR}/sysroot install
+        popd
+popd
+```
+
+#### SPIRV-Tools
+https://github.com/KhronosGroup/SPIRV-Tools.git
+
+```sh
+pushd ${BUILDDIR}/SPIRV-Tools
+        mkdir cross-build
+        pushd cross-build
+                CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" CXXFLAGS="-Wno-error=switch" \
+                cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${BUILDDIR}/cmake-cross.cmake \
+                      -DCMAKE_INSTALL_LIBDIR=/usr/lib64 -DLIB_SUFFIX=64 \
+                      -DCMAKE_INSTALL_PREFIX=/usr \
+                      -DBUILD_SHARED_LIBS=ON \
+                      -DSPIRV-Headers_SOURCE_DIR=${BUILDDIR}/SPIRV-Headers -Wno-dev ..
+		make ${JOBS}
+		make DESTDIR=${SYSDIR}/sysroot install
+        popd
+popd
+echo "#!/bin/bash -e
+qemu-${ARCH_NAME} ${SYSDIR}/sysroot/usr/bin/spirv-opt \"\$@\"" > ${SYSDIR}/cross-tools/bin/spirv-opt
+chmod +x ${SYSDIR}/cross-tools/bin/spirv-opt
+```
+
+#### SPIRV-LLVM-Translator
+
+```sh
+tar xvf ${DOWNLOADDIR}/SPIRV-LLVM-Translator-21.1.3.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/SPIRV-LLVM-Translator-21.1.3
+        mkdir cross-build
+        pushd cross-build
+                CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
+                cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_CROSSCOMPILING_EMULATOR=qemu-loongarch64 \
+                      -DPKG_CONFIG_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-pkg-config \
+                      -DCMAKE_SYSROOT=${SYSDIR}/sysroot \
+                      -DCMAKE_FIND_ROOT_PATH=${SYSDIR}/sysroot/usr \
+                      -DGETTEXT_MSGFMT_EXECUTABLE=/bin/msgfmt \
+                      -DGETTEXT_MSGMERGE_EXECUTABLE=/bin/msgmerge \
+                      -DPython_EXECUTABLE=${SYSDIR}/cross-tools/bin/python3 \
+                      -DPYTHON_EXECUTABLE=${SYSDIR}/cross-tools/bin/python3 \
+                      -DPYTHON3_EXECUTABLE=${SYSDIR}/cross-tools/bin/python3 \
+                      -DPERL_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-perl \
+                      -DRuby_EXECUTABLE=${SYSDIR}/cross-tools/bin/ruby \
+                      -DDOXYGEN_EXECUTABLE=${SYSDIR}/cross-tools/bin//doxygen \
+                      -DGPERF_EXECUTABLE=/bin/gperf \
+                      -DCMAKE_INSTALL_LIBDIR=/usr/lib64 -DLIB_SUFFIX=64 \
+                      -DCMAKE_INSTALL_PREFIX=/usr \
+                      -DBUILD_SHARED_LIBS=OFF -DCCACHE_ALLOWED=OFF -DBASE_LLVM_VERSION="21.1.8" \
+                      -DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${BUILDDIR}/SPIRV-Headers \
+                      -Wno-dev ..
+		make ${JOBS}
+	        make DESTDIR=${SYSDIR}/sysroot install
+        popd
+popd
+```
+
+#### Libclc
+
+```sh
+tar xvf ${DOWNLOADDIR}/llvm-project-21.1.8.src.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/llvm-project-21.1.8.src
+    pushd libclc
+	sed -i "s@COMMAND \${prepare_builtins_exe}@COMMAND qemu-loongarch64 \${prepare_builtins_exe}@g" cmake/modules/AddLibclc.cmake
+	mkdir cross-build
+	pushd cross-build
+            CC="clang" CXX="clang++" \
+            cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release \
+			-DCMAKE_SYSROOT=${SYSDIR}/sysroot \
+			-DCMAKE_FIND_ROOT_PATH=${SYSDIR}/sysroot/usr \
+			-DLLVM_CONFIG=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-llvm-config \
+			-DLLVM_LIBDIR_SUFFIX=64 \
+			-DLLVM_TOOL_clang="${SYSDIR}/cross-tools/bin/clang" \
+			-DLLVM_TOOL_llvm-as="${SYSDIR}/cross-tools/bin/llvm-as" \
+			-DLLVM_TOOL_llvm-link="${SYSDIR}/cross-tools/bin/llvm-link" \
+			-DLLVM_TOOL_opt="${SYSDIR}/cross-tools/bin/opt" \
+			-DLLVM_SPIRV="${SYSDIR}/cross-tools/bin/llvm-spirv" \
+			-DCMAKE_C_COMPILER_CLANG_SCAN_DEPS="${SYSDIR}/cross-tools/bin/clang-scan-deps" \
+			-DCMAKE_AR="${SYSDIR}/cross-tools/bin/llvm-ar" \
+			-DCMAKE_RANLIB="${SYSDIR}/cross-tools/bin/llvm-ranlib" \
+			-DCMAKE_C_COMPILER_AR="${SYSDIR}/cross-tools/bin/llvm-ar" \
+			-DCMAKE_C_COMPILER_RANLIB="${SYSDIR}/cross-tools/bin/llvm-ranlib" \
+			-DLLVM_DIR:PATH=${SYSDIR}/sysroot/usr/lib${LIB_SUFF}/cmake/llvm \
+			-DPython3_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-python3 \
+			-DCMAKE_C_FLAGS="-DNDEBUG --target=${CROSS_TARGET}" -DCMAKE_CXX_FLAGS="-DNDEBUG --target=${CROSS_TARGET}" \
+			-DLLVM_ENABLE_RTTI:BOOL=ON \
+			-DLLVM_ENABLE_ZLIB:BOOL=ON \
+			-DCMAKE_MAKE_PROGRAM:PATH=${SYSDIR}/cross-tools/bin/ninja \
+			-DLLVM_ENABLE_TERMINFO:BOOL=OFF \
+			-DLLVM_USE_SANITIZER:BOOL=ON \
+			-DLLVM_LINK_LLVM_DYLIB:BOOL=ON \
+			-DCMAKE_INSTALL_LIBDIR=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_INSTALL_LIBEXECDIR=/usr/libexec -DCMAKE_INSTALL_DATADIR=lib64 \
+			-DLLVM_HOST_TRIPLE=${CROSS_TARGET}
+            make ${JOBS}
+	    make DESTDIR=${SYSDIR}/sysroot install
+	popd
+    popd
+popd
+```
+
 #### Mesa
 https://archive.mesa3d.org/mesa-25.3.4.tar.xz
 
@@ -4977,13 +5198,13 @@ pushd ${BUILDDIR}/mesa-25.3.4
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 --buildtype=release \
-              -Dgallium-drivers="radeonsi,r300,r600,nouveau,swrast,v3d,vc4,tegra,svga,virgl,panfrost,lima,zink,d3d12,llvmpipe" \
+              -Dgallium-drivers="radeonsi,r300,r600,nouveau,v3d,vc4,tegra,svga,virgl,panfrost,lima,zink,d3d12,llvmpipe" \
 	      -Dplatforms=x11,wayland \
-              -Dglx=dri -Dopengl=true -Degl=enabled -Dglvnd=enabled -Dosmesa=true -Dllvm-orcjit=true \
-              -Dshared-glapi=enabled -Dgles2=enabled -Dgallium-vdpau=enabled -Dgallium-opencl=disabled \
+              -Dglx=dri -Dopengl=true -Degl=enabled -Dglvnd=enabled -Dllvm-orcjit=true \
+              -Dgles2=enabled \
               -Dlibunwind=disabled -Dvulkan-drivers="amd,swrast,virtio" \
 	      -Dvideo-codecs="vc1dec,h264dec,h264enc,h265dec,h265enc,av1dec,av1enc,vp9dec" \
-	      -Dgallium-nine=true -Dllvm=enabled -Dshared-llvm=enabled -Ddraw-use-llvm=true -Dgallium-d3d12-video=auto -Dshader-cache-max-size=8G -Dglx-direct=true -Dvulkan-layers=overlay \
+	      -Dllvm=enabled -Dshared-llvm=enabled -Ddraw-use-llvm=true -Dgallium-d3d12-video=auto -Dshader-cache-max-size=8G -Dglx-direct=true -Dvulkan-layers=overlay \
               --cross-file=${BUILDDIR}/meson-cross.txt ..
         ninja
         DESTDIR=${SYSDIR}/sysroot ninja install
@@ -5677,14 +5898,19 @@ popd
 ```
 
 #### xdg-user-dirs
-https://user-dirs.freedesktop.org/releases/xdg-user-dirs-0.18.tar.gz
+https://user-dirs.freedesktop.org/releases/xdg-user-dirs-0.19.tar.xz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/xdg-user-dirs-0.18.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/xdg-user-dirs-0.18
-    ./configure $COMMON_CONFIG 
-    make ${JOBS}
-    make DESTDIR=${SYSDIR}/sysroot install
+tar xvf ${DOWNLOADDIR}/xdg-user-dirs-0.19.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/xdg-user-dirs-0.19
+    mkdir cross-build
+    pushd cross-build
+        meson --prefix=/usr --libdir=/usr/lib64 \
+              --buildtype=release \
+              --cross-file=${BUILDDIR}/meson-cross.txt ..
+        ninja
+        DESTDIR=${SYSDIR}/sysroot ninja install
+    popd
 popd
 ```
 
@@ -5724,14 +5950,19 @@ sed -i "s@/opt/mylaos/sysroot@@g" /opt/mylaos/sysroot/usr/bin/cups-config
 ```
 
 #### ISO-Codes
-http://ftp.debian.org/debian/pool/main/i/iso-codes/iso-codes_4.20.1.orig.tar.xz
+https://ftp.debian.org/debian/pool/main/i/iso-codes/iso-codes_4.20.1.orig.tar.xz
 
 ```sh
 tar xvf ${DOWNLOADDIR}/iso-codes_4.20.1.orig.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/iso-codes_4.20.1
-    ./configure $COMMON_CONFIG
-    make ${JOBS}
-    make DESTDIR=${SYSDIR}/sysroot install
+    mkdir cross-build
+    pushd cross-build
+        meson --prefix=/usr --libdir=/usr/lib64 \
+              --buildtype=release \
+              --cross-file=${BUILDDIR}/meson-cross.txt ..
+        ninja
+        DESTDIR=${SYSDIR}/sysroot ninja install
+    popd
 popd
 ```
 
@@ -5824,6 +6055,17 @@ pushd ${BUILDDIR}/sassc-3.6.2
     ./configure $COMMON_CONFIG
     make ${JOBS}
     make DESTDIR=${SYSDIR}/sysroot install
+popd
+```
+
+#### Cairo
+```sh
+tar xvf ${DOWNLOADDIR}/cairo-1.18.4.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/cairo-1.18.4
+    ./configure $COMMON_CONFIG --enable-tee --enable-gl --enable-xlib-xcb --disable-trace
+    make ${JOBS}
+    make DESTDIR=${SYSDIR}/sysroot install
+    rm -v ${SYSDIR}/sysroot/usr/lib64/libcairo*.la
 popd
 ```
 
@@ -6025,24 +6267,6 @@ pushd ${BUILDDIR}/imlib2-1.12.6
 popd
 ```
 
-#### Libnotify
-https://download.gnome.org/sources/libnotify/0.8/libnotify-0.8.8.tar.xz
-
-```sh
-tar xvf ${DOWNLOADDIR}/libnotify-0.8.8.tar.xz -C ${BUILDDIR}
-pushd ${BUILDDIR}/libnotify-0.8.8
-    mkdir cross-build
-    pushd cross-build
-        meson --prefix=/usr --libdir=/usr/lib64 \
-              --buildtype=release -Dgtk_doc=false -Dman=false \
-              --cross-file=${BUILDDIR}/meson-cross.txt ..
-        sed -i -e "s@\(${SYSDIR}/\)sysroot/usr\(.*\)\(g-ir-compiler\|g-ir-scanner\)@\1cross-tools\2${CROSS_TARGET}-\3@g" build.ninja
-        CC=${CROSS_TARGET}-gcc ninja
-        DESTDIR=${SYSDIR}/sysroot ninja install
-    popd
-popd
-```
-
 #### Snappy
 https://github.com/google/snappy/archive/1.2.2/snappy-1.2.2.tar.gz
 
@@ -6148,7 +6372,8 @@ pushd ${BUILDDIR}/x265-20240812
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
         cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${BUILDDIR}/cmake-cross.cmake \
               -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib64 \
-              -DGIT_ARCHETYPE=1 ../source
+	      -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+              -DGIT_ARCHETYPE=1 -Wno-dev ../source
         make ${JOBS}
         make DESTDIR=${SYSDIR}/sysroot install
     popd
@@ -6200,6 +6425,24 @@ pushd ${BUILDDIR}/gtk-4.21.5
               --cross-file=${BUILDDIR}/meson-cross.txt ..
         sed -i -e "s@\(${SYSDIR}/\)sysroot/usr\(.*\)\(g-ir-compiler\|g-ir-scanner\)@\1cross-tools\2${CROSS_TARGET}-\3@g" build.ninja
         CC="${CROSS_TARGET}-gcc" ninja
+        DESTDIR=${SYSDIR}/sysroot ninja install
+    popd
+popd
+```
+
+#### Libnotify
+https://download.gnome.org/sources/libnotify/0.8/libnotify-0.8.8.tar.xz
+
+```sh
+tar xvf ${DOWNLOADDIR}/libnotify-0.8.8.tar.xz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libnotify-0.8.8
+    mkdir cross-build
+    pushd cross-build
+        meson --prefix=/usr --libdir=/usr/lib64 \
+              --buildtype=release -Dgtk_doc=false -Dman=false \
+              --cross-file=${BUILDDIR}/meson-cross.txt ..
+        sed -i -e "s@\(${SYSDIR}/\)sysroot/usr\(.*\)\(g-ir-compiler\|g-ir-scanner\)@\1cross-tools\2${CROSS_TARGET}-\3@g" build.ninja
+        CC=${CROSS_TARGET}-gcc ninja
         DESTDIR=${SYSDIR}/sysroot ninja install
     popd
 popd
@@ -6513,6 +6756,8 @@ tar xvf ${DOWNLOADDIR}/firefox-115.32.0esr.source.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/firefox-115.32.0
     mkdir cross-build
     pushd cross-build
+	OLD_PATH=${PATH}
+	PATH=${SYSDIR}/cross-tools/python3_13/bin:${PATH}
         export RUSTFLAGS="$RUSTFLAGS -Ccode-model=large"
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
         LDFLAGS="${LDFLAGS} -Wl,--copy-dt-needed-entries" \
@@ -6523,6 +6768,7 @@ pushd ${BUILDDIR}/firefox-115.32.0
         make ${JOBS}
         make DESTDIR=${SYSDIR}/sysroot install
 	unset RUSTFLAGS
+	PATH=${OLD_PATH}
         rm -v ${SYSDIR}/sysroot/usr/lib64/libjs_static.ajs
 	sed -i '/@NSPR_CFLAGS@/d' ${SYSDIR}/sysroot/usr/bin/js115-config
     popd
@@ -7051,17 +7297,40 @@ tar xvf ${DOWNLOADDIR}/libmbim-1.34.0.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/libmbim-1.34.0
     mkdir cross-prebuild
     pushd cross-prebuild
-        ../configure $COMMON_CONFIG --disable-introspection
-	    make ${JOBS}
-        make DESTDIR=${SYSDIR}/sysroot install-exec
+        meson --prefix=/usr --libdir=/usr/lib64 \
+              --buildtype=release -Dman=false \
+              -Dintrospection=disabled \
+              --cross-file=${BUILDDIR}/meson-cross.txt ..
+        ninja
+        DESTDIR=${SYSDIR}/sysroot ninja install
     popd
     mkdir cross-build
     pushd cross-build
-        ../configure $COMMON_CONFIG --enable-introspection
-        make INTROSPECTION_SCANNER=${CROSS_TARGET}-g-ir-scanner \
-             INTROSPECTION_COMPILER=${CROSS_TARGET}-g-ir-compiler ${JOBS}
-        make DESTDIR=${SYSDIR}/sysroot install
-        rm -v ${SYSDIR}/sysroot/usr/lib64/libmbim*.la
+        meson --prefix=/usr --libdir=/usr/lib64 \
+              --buildtype=release -Dman=false \
+              --cross-file=${BUILDDIR}/meson-cross.txt ..
+        sed -i -e "s@\(${SYSDIR}/\)sysroot/usr\(.*\)\(g-ir-compiler\|g-ir-scanner\)@\1cross-tools\2${CROSS_TARGET}-\3@g" build.ninja
+        CC="${CROSS_TARGET}-gcc" ninja
+        DESTDIR=${SYSDIR}/sysroot ninja install
+    popd
+    rm -v ${SYSDIR}/sysroot/usr/lib64/libmbim*.la
+popd
+```
+
+#### Libqrtr-glib
+https://github.com/linux-mobile-broadband/libqrtr-glib/archive/1.4.0/libqrtr-glib-1.4.0.tar.gz
+
+```sh
+tar xvf ${DOWNLOADDIR}/libqrtr-glib-1.4.0.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/libqrtr-glib-1.4.0
+    mkdir cross-build
+    pushd cross-build
+        meson --prefix=/usr --libdir=/usr/lib64 \
+              --buildtype=release \
+              --cross-file=${BUILDDIR}/meson-cross.txt ..
+        sed -i -e "s@\(${SYSDIR}/\)sysroot/usr\(.*\)\(g-ir-compiler\|g-ir-scanner\)@\1cross-tools\2${CROSS_TARGET}-\3@g" build.ninja
+        CC="${CROSS_TARGET}-gcc" ninja
+        DESTDIR=${SYSDIR}/sysroot ninja install
     popd
 popd
 ```
@@ -7074,18 +7343,23 @@ tar xvf ${DOWNLOADDIR}/libqmi-1.30.8.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/libqmi-1.30.8
     mkdir cross-prebuild
     pushd cross-prebuild
-        ../configure $COMMON_CONFIG --disable-introspection
-	    make ${JOBS}
-        make DESTDIR=${SYSDIR}/sysroot install-exec
+        meson --prefix=/usr --libdir=/usr/lib64 \
+              --buildtype=release -Dman=false \
+              -Dintrospection=disabled \
+              --cross-file=${BUILDDIR}/meson-cross.txt ..
+        ninja
+        DESTDIR=${SYSDIR}/sysroot ninja install
     popd
     mkdir cross-build
     pushd cross-build
-        ../configure $COMMON_CONFIG --enable-introspection
-        make INTROSPECTION_SCANNER=${CROSS_TARGET}-g-ir-scanner \
-             INTROSPECTION_COMPILER=${CROSS_TARGET}-g-ir-compiler ${JOBS}
-        make DESTDIR=${SYSDIR}/sysroot install
-        rm -v ${SYSDIR}/sysroot/usr/lib64/libqmi*.la
+        meson --prefix=/usr --libdir=/usr/lib64 \
+              --buildtype=release -Dman=false \
+              --cross-file=${BUILDDIR}/meson-cross.txt ..
+        sed -i -e "s@\(${SYSDIR}/\)sysroot/usr\(.*\)\(g-ir-compiler\|g-ir-scanner\)@\1cross-tools\2${CROSS_TARGET}-\3@g" build.ninja
+        CC="${CROSS_TARGET}-gcc" ninja
+        DESTDIR=${SYSDIR}/sysroot ninja install
     popd
+    rm -v ${SYSDIR}/sysroot/usr/lib64/libqmi*.la
 popd
 ```
 
@@ -7097,21 +7371,23 @@ tar xvf ${DOWNLOADDIR}/ModemManager-1.24.2.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/ModemManager-1.24.2
     mkdir cross-prebuild
     pushd cross-prebuild
-        ../configure $COMMON_CONFIG --with-systemd-journal=no     \
-                     --with-systemd-suspend-resume  --disable-introspection
-        make ${JOBS}
-        make DESTDIR=${SYSDIR}/sysroot install-exec
+        meson --prefix=/usr --libdir=/usr/lib64 \
+              --buildtype=release -Dudevdir=/usr/lib/udev -Dsystemdsystemunitdir=/usr/lib/systemd/system \
+              -Dintrospection=disabled \
+              --cross-file=${BUILDDIR}/meson-cross.txt ..
+        ninja
+        DESTDIR=${SYSDIR}/sysroot ninja install
     popd
     mkdir cross-build
     pushd cross-build
-        ../configure $COMMON_CONFIG --with-systemd-journal=no     \
-                     --with-systemd-suspend-resume  --enable-introspection
-        make INTROSPECTION_SCANNER=${CROSS_TARGET}-g-ir-scanner \
-             INTROSPECTION_COMPILER=${CROSS_TARGET}-g-ir-compiler \
-             VAPIGEN=${CROSS_TARGET}-vapigen ${JOBS}
-        make DESTDIR=${SYSDIR}/sysroot install
-        rm -v ${SYSDIR}/sysroot/usr/lib64/libmm-*.la
+        meson --prefix=/usr --libdir=/usr/lib64 \
+              --buildtype=release -Dudevdir=/usr/lib/udev -Dsystemdsystemunitdir=/usr/lib/systemd/system \
+              --cross-file=${BUILDDIR}/meson-cross.txt ..
+        sed -i -e "s@\(${SYSDIR}/\)sysroot/usr\(.*\)\(g-ir-compiler\|g-ir-scanner\)@\1cross-tools\2${CROSS_TARGET}-\3@g" build.ninja
+        CC="${CROSS_TARGET}-gcc" ninja
+        DESTDIR=${SYSDIR}/sysroot ninja install
     popd
+    rm -v ${SYSDIR}/sysroot/usr/lib64/libmm-*.la
 popd
 ```
 
@@ -7189,28 +7465,6 @@ pushd ${BUILDDIR}/zsh-5.9
 popd
 ```
 
-#### Fish-Shell
-https://github.com/fish-shell/fish-shell/archive/4.4.0/fish-shell-4.4.0.tar.gz
-
-```sh
-tar xvf ${DOWNLOADDIR}/fish-shell-4.4.0.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/fish-shell-4.4.0
-    mkdir cross-build
-    pushd cross-build
-        CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" RUSTFLAGS="$RUSTFLAGS -C linker=${CROSS_TARGET}-gcc -Ccode-model=large" \
-        cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${BUILDDIR}/cmake-cross.cmake \
-              -DCURSES_LIBRARY="-lncursesw" -DCURSES_TINFO="" \
-	      -DBUILD_DOCS=OFF -DCMAKE_INSTALL_SYSCONFDIR=/etc \
-              -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib64 \
-	      -DCURSES_LIBRARY="-lncursesw" -DCURSES_TINFO="" -DBUILD_DOCS=OFF -DCMAKE_INSTALL_SYSCONFDIR=/etc \
-	      -DRust_CARGO_TARGET=${CROSS_TARGET} \
-	      -Wno-dev ..
-        TARGET_CC="${CROSS_TARGET}-gcc" make ${JOBS}
-        TARGET_CC="${CROSS_TARGET}-gcc" make DESTDIR=${SYSDIR}/sysroot install
-    popd
-popd
-```
-
 #### Screen
 https://ftp.gnu.org/gnu/screen/screen-5.0.1.tar.gz
 
@@ -7259,9 +7513,10 @@ https://www.jwz.org/xscreensaver/xscreensaver-6.14.tar.gz
 tar xvf ${DOWNLOADDIR}/xscreensaver-6.14.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/xscreensaver-6.14
     cp ${SYSDIR}/sysroot/usr/share/automake-*/config.* ./
-    ./configure $COMMON_CONFIG
-    make ${JOBS}
-    make install_prefix=${SYSDIR}/sysroot install
+    sed -i "s@\/usr\/bin\/perl@${SYSDIR}/cross-tools/bin/perl@g" hacks/glx/xshadertoy-compile.pl
+    ./configure $COMMON_CONFIG --includedir=${SYSDIR}/sysroot/usr/include
+    make ${JOBS} GTK_DATADIR=/usr/share GLIB_COMPILE_RESOURCES=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-glib-compile-resources
+    make DESTDIR=${SYSDIR}/sysroot GTK_DATADIR=/usr/share install
 popd
 cat > ${SYSDIR}/sysroot/etc/pam.d/xscreensaver << "EOF"
 # Begin /etc/pam.d/xscreensaver
@@ -7342,7 +7597,7 @@ pushd ${BUILDDIR}/weston-14.0.95
     mkdir cross-build
     pushd cross-build
         meson --prefix=/usr --libdir=/usr/lib64 --buildtype=release \
-              -Ddoc=false -Dbackend-rdp=false \
+              -Ddoc=false -Dbackend-rdp=false -Dbackend-vnc=false -Drenderer-vulkan=false \
               --cross-file=${BUILDDIR}/meson-cross.txt ..
         ninja
         DESTDIR=${SYSDIR}/sysroot ninja install
@@ -7446,7 +7701,7 @@ pushd ${BUILDDIR}/json-c-0.18-20240915
     pushd cross-build
         CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
         cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${BUILDDIR}/cmake-cross.cmake \
-              -DCMAKE_INSTALL_PREFIX=/usr ..
+              -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ..
         make ${JOBS}
         make DESTDIR=${SYSDIR}/sysroot install
     popd
@@ -7454,11 +7709,11 @@ popd
 ```
 
 #### Enchant
-https://github.com/rrthomas/enchant/releases/download/v2.8.12/enchant-2.8.12.tar.gz
+https://github.com/rrthomas/enchant/releases/download/v2.8.14/enchant-2.8.14.tar.gz
 
 ```sh
-tar xvf ${DOWNLOADDIR}/enchant-2.8.12.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/enchant-2.8.12
+tar xvf ${DOWNLOADDIR}/enchant-2.8.14.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/enchant-2.8.14
     cp ${SYSDIR}/cross-tools/share/automake-1.18/config.* build-aux/
     ./configure $COMMON_CONFIG --enable-relocatable
     make ${JOBS}
@@ -7560,8 +7815,8 @@ pushd ${BUILDDIR}/systemd-259
 	popd
 popd
 
-rm -f ${SYSROOT_DIR}/usr/lib/systemd/system/systemd-networkd-wait-online.service
-rm -f ${SYSROOT_DIR}/usr/lib/systemd/system/nm-cloud-setup.{service,timer}
+rm -f ${SYSDIR}/sysroot/usr/lib/systemd/system/systemd-networkd-wait-online.service
+rm -f ${SYSDIR}/sysroot/usr/lib/systemd/system/nm-cloud-setup.{service,timer}
 
 cat >> ${SYSDIR}/sysroot/etc/pam.d/system-session << "EOF"
 session  required    pam_loginuid.so
@@ -7654,83 +7909,16 @@ pushd ${BUILDDIR}/libdbusmenu-16.04.0
 		make DESTDIR=${SYSDIR}/sysroot install
         popd
 
-#        sed -i "/INTROSPECTION_/s@\$PKG_CONFIG_SYSROOT_DIR\`\$PKG_CONFIG@\`\$PKG_CONFIG@g" configure
-#        mkdir cross-build
-#        pushd cross-build
-#                CFLAGS="${CFLAGS} -Wno-error" ../configure --build=${CROSS_HOST} --host=${CROSS_TARGET} \
-#                     --prefix=/usr --libdir=/usr/lib64 --enable-introspection=yes
-#                make ${JOBS} INTROSPECTION_SCANNER=${CROSS_TARGET}-g-ir-scanner \
-#                     INTROSPECTION_COMPILER=${CROSS_TARGET}-g-ir-compiler \
-#                     VALA_API_GEN=${CROSS_TARGET}-vapigen
-#                make VALA_API_GEN=${CROSS_TARGET}-vapigen DESTDIR=${SYSDIR}/sysroot install
-#        popd
+        sed -i "/INTROSPECTION_/s@\$PKG_CONFIG_SYSROOT_DIR\`\$PKG_CONFIG@\`\$PKG_CONFIG@g" configure
+        mkdir cross-build
+        pushd cross-build
+                CFLAGS="${CFLAGS} -Wno-error" ../configure ${COMMON_CONFIG} --enable-introspection=yes
+                make -j${JOBS} INTROSPECTION_SCANNER=${CROSS_TARGET}-g-ir-scanner \
+                     INTROSPECTION_COMPILER=${CROSS_TARGET}-g-ir-compiler \
+                     VALA_API_GEN=${CROSS_TARGET}-vapigen
+                make VALA_API_GEN=${CROSS_TARGET}-vapigen DESTDIR=${SYSDIR}/sysroot install
+        popd
 popd
-```
-
-#### IBus
-https://github.com/ibus/ibus/archive/1.5.33/ibus-1.5.33.tar.gz
-
-https://www.unicode.org/Public/zipped/15.0.0/UCD.zip
-
-https://www.unicode.org/Public/UCD/latest/ucd/emoji/emoji-data.txt
-
-https://www.unicode.org/Public/UCD/latest/ucd/emoji/emoji-variation-sequences.txt
-
-https://www.unicode.org/Public/emoji/latest/emoji-sequences.txt
-
-https://www.unicode.org/Public/emoji/latest/emoji-zwj-sequences.txt
-
-https://www.unicode.org/Public/emoji/latest/emoji-test.txt
-
-```sh
-tar xvf ${DOWNLOADDIR}/ibus-1.5.33.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/ibus-1.5.33
-    mkdir -pv ${SYSDIR}/sysroot/usr/share/unicode/ucd
-    unzip -uo ${DOWNLOADDIR}/UCD.zip -d ${SYSDIR}/sysroot/usr/share/unicode/ucd
-    mkdir -pv ${SYSDIR}/sysroot/usr/share/unicode/emoji
-    cp -av ${DOWNLOADDIR}/emoji-*.txt ${SYSDIR}/sysroot/usr/share/unicode/emoji
-    sed -i 's@/desktop/ibus@/org/freedesktop/ibus@g' \
-           data/dconf/org.freedesktop.ibus.gschema.xml
-    patch -Np1 -i ${DOWNLOADDIR}/0001-ibus-1.5.28-change-for-cross-compiler.patch
-    autoreconf -ifv
-    cp ${SYSDIR}/cross-tools/share/automake-1.18/config.* ./
-    mkdir cross-prebuild
-    pushd cross-prebuild
-        ../configure --build=${CROSS_HOST} --host=${CROSS_TARGET} \
-                     --prefix=/usr --libdir=/usr/lib64 --sysconfdir=/etc \
-                     --disable-emoji-dict --disable-unicode-dict --enable-introspection=no
-        make ${JOBS}
-        make DESTDIR=${SYSDIR}/sysroot install-exec
-    popd
-    mkdir cross-build
-    pushd cross-build
-        ../configure --build=${CROSS_HOST} --host=${CROSS_TARGET} \
-                     --prefix=/usr --libdir=/usr/lib64 --sysconfdir=/etc \
-                     --enable-emoji-dict --enable-unicode-dict \
-                     --with-ucd-dir=${SYSDIR}/sysroot/usr/share/unicode/ucd \
-                     --with-unicode-emoji-dir=${SYSDIR}/sysroot/usr/share/unicode/emoji \
-                     --with-emoji-annotation-dir=${SYSDIR}/sysroot/usr/share/unicode/cldr/common/annotations \
-                     --enable-xim --enable-gtk4 --enable-wayland \
-                     --disable-python2 --with-python=${SYSDIR}/cross-tools/bin/python3
-        sed -i "/pyoverridesdir/s@${SYSDIR}/cross-tools@/usr@g" bindings/pygobject/Makefile
-        make INTROSPECTION_SCANNER=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-g-ir-scanner \
-             INTROSPECTION_COMPILER=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-g-ir-compiler \
-             VAPIGEN=${CROSS_TARGET}-vapigen ${JOBS}
-        make VAPIGEN=${CROSS_TARGET}-vapigen DESTDIR=${SYSDIR}/sysroot install
-    popd
-popd
-rm -v ${SYSDIR}/sysroot/usr/lib64/libibus*.la
-
-cat > ${SYSDIR}/sysroot/etc/xdg/autostart/ibus.desktoop << "EOF"
-[Desktop Entry]
-Exec=/usr/bin/ibus-daemon --xim
-Type=Application
-Terminal=false
-X-KDE-autostart-after=panel
-X-KDE-StartupNotify=false
-X-DBUS-StartupType=Unique
-Name=IBus
-EOF
 ```
 
 #### Pyzy
@@ -7837,7 +8025,7 @@ pushd ${BUILDDIR}/libqrencode-4.1.1
         cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${BUILDDIR}/cmake-cross.cmake \
               -DPKG_CONFIG_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-pkg-config \
               -DCMAKE_INSTALL_PREFIX=/usr \
-              -DBUILD_TESTING=OFF -Wno-dev ..
+              -DBUILD_TESTING=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -Wno-dev ..
         make ${JOBS}
         make DESTDIR=${SYSDIR}/sysroot install
     popd
@@ -7927,6 +8115,68 @@ pushd ${BUILDDIR}/lit-18.1.8
 popd
 ```
 
+#### Frei0r
+https://github.com/dyne/frei0r/archive/v2.5.1/frei0r-2.5.1.tar.gz
+
+```sh
+tar xvf ${DOWNLOADDIR}/frei0r-2.5.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/frei0r-2.5.1
+    mkdir cross-build
+    pushd cross-build
+        CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
+        cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${BUILDDIR}/cmake-cross.cmake \
+              -DPKG_CONFIG_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-pkg-config \
+              -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=/usr/lib64 \
+              -DGETTEXT_MSGFMT_EXECUTABLE=/bin/msgfmt \
+              -DGETTEXT_MSGMERGE_EXECUTABLE=/bin/msgmerge \
+              -DDOXYGEN_EXECUTABLE=/bin/doxygen \
+              ..
+	make ${JOBS}
+	make DESTDIR=${SYSDIR}/sysroot install
+    popd
+popd
+```
+
+#### Eigen3
+https://gitlab.com/libeigen/eigen/-/archive/3.4.1/eigen-3.4.1.tar.gz
+
+```sh
+tar xvf ${DOWNLOADDIR}/eigen3-3.4.1.tar.gz -C ${BUILDDIR}
+pushd ${BUILDDIR}/eigen-3.4.1
+	mkdir cross-build
+	pushd cross-build
+		CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++"  \
+		cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${BUILDDIR}/cmake-cross.cmake \
+			-DPKG_CONFIG_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-pkg-config \
+			-DGETTEXT_MSGFMT_EXECUTABLE=/bin/msgfmt \
+			-DGETTEXT_MSGMERGE_EXECUTABLE=/bin/msgmerge \
+			-DPython_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-python3 \
+			-DPython3_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-python3 \
+			-DPYTHON_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-python3 \
+			-DPYTHON3_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-python3 \
+			-DPERL_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-perl \
+			-DRuby_EXECUTABLE=${SYSDIR}/cross-tools/bin/ruby \
+			-DGPERF_EXECUTABLE=/bin/gperf -DGperf_EXECUTABLE=/bin/gperf \
+			-DDOXYGEN_EXECUTABLE=${SYSDIR}/cross-tools/bin/doxygen \
+			-DWaylandScanner_EXECUTABLE=${SYSDIR}/cross-tools/bin/wayland-scanner \
+			-DQtWaylandScanner_EXECUTABLE=${SYSDIR}/cross-tools/bin/qtwaylandscanner \
+			-DLIBXML2_XMLLINT_EXECUTABLE=${SYSDIR}/cross-tools/bin/xmllint \
+			-DINTROSPECTION_SCANNER=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-g-ir-scanner \
+			-DINTROSPECTION_COMPILER=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-g-ir-compiler \
+			-DUPDATE_MIME_DATABASE_EXECUTABLE=${SYSDIR}/cross-tools/bin/update-mime-database \
+			-DFLEX_EXECUTABLE=/bin/flex \
+			-DBISON_EXECUTABLE=/bin/bison \
+			-Dgzip_EXECUTABLE=/bin/gzip \
+			-DCMAKE_INSTALL_LIBDIR=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_INSTALL_LIBEXECDIR=/usr/libexec \
+			-DCMAKE_INSTALL_PREFIX=/usr \
+			-DBUILD_SHARED_LIBS=ON \
+			-DCMAKE_Fortran_COMPILER=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-gfortran -Wno-dev ..
+		make ${JOBS}
+		make DESTDIR=${SYSDIR}/sysroot install
+	popd
+popd
+```
+
 #### Mlt
 https://github.com/mltframework/mlt/releases/download/v7.36.1/mlt-7.36.1.tar.gz
 
@@ -7939,7 +8189,9 @@ pushd ${BUILDDIR}/mlt-7.36.1
         cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${BUILDDIR}/cmake-cross.cmake \
               -DPKG_CONFIG_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-pkg-config \
               -DCMAKE_INSTALL_PREFIX=/usr \
-              -DBUILD_TESTING=OFF -Wno-dev ..
+	      -DMOD_QT6=OFF \
+	      -DBUILD_TESTING=OFF -DMOD_GLAXNIMATE=ON -DMOD_MOVIT=OFF -DMOD_RUBBERBAND=OFF -DMOD_SOX=OFF -DMOD_VIDSTAB=OFF -DMOD_PLUS=OFF -DMOD_JACKRACK=OFF \
+              -Wno-dev ..
         make ${JOBS}
         make DESTDIR=${SYSDIR}/sysroot install
     popd
@@ -8086,7 +8338,7 @@ pushd ${BUILDDIR}/sphinx-9.1.0
     CC=${CROSS_TARGET}-gcc CXX=${CROSS_TARGET}-g++ _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
     ${SYSDIR}/cross-tools/bin/pip3 wheel -w dist --no-build-isolation --no-deps ${PWD}
     CC=${CROSS_TARGET}-gcc CXX=${CROSS_TARGET}-g++ _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
-    ${SYSDIR}/cross-tools/bin/pip3 install --no-index --find-links dist --no-cache-dir --no-deps --ignore-installed --no-user sphinx --root=${SYSROOT_DIR} --prefix=/usr
+    ${SYSDIR}/cross-tools/bin/pip3 install --no-index --find-links dist --no-cache-dir --no-deps --ignore-installed --no-user sphinx --root=${SYSDIR}/sysroot --prefix=/usr
 popd
 ```
 
@@ -8748,28 +9000,6 @@ pushd ${BUILDDIR}/highlight-4.18
 popd
 ```
 
-#### Frei0r
-https://github.com/dyne/frei0r/archive/v2.5.1/frei0r-2.5.1.tar.gz
-
-```sh
-tar xvf ${DOWNLOADDIR}/frei0r-2.5.1.tar.gz -C ${BUILDDIR}
-pushd ${BUILDDIR}/frei0r-2.5.1
-    mkdir cross-build
-    pushd cross-build
-        CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
-        cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${BUILDDIR}/cmake-cross.cmake \
-              -DPKG_CONFIG_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-pkg-config \
-              -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=/usr/lib64 \
-              -DGETTEXT_MSGFMT_EXECUTABLE=/bin/msgfmt \
-              -DGETTEXT_MSGMERGE_EXECUTABLE=/bin/msgmerge \
-              -DDOXYGEN_EXECUTABLE=/bin/doxygen \
-              ..
-        make ${JOBS}
-        make DESTDIR=${SYSDIR}/sysroot install
-    popd
-popd
-```
-
 #### gsettings-desktop-schemas
 https://download.gnome.org/sources/gsettings-desktop-schemas/49/gsettings-desktop-schemas-49.1.tar.xz
 
@@ -8982,7 +9212,7 @@ pushd ${BUILDDIR}/gi-docgen-2026.1
         meson --prefix=/usr --libdir=/usr/lib64 \
               --buildtype=release \
               --cross-file=${BUILDDIR}/meson-cross.txt ..
-        sed -i -e "s@\(${SYSROOT_DIR}/\)usr\(.*\)/\(g-ir-compiler\|g-ir-scanner\)@${SYSDIR}/cross-tools/\2${CROSS_TARGET}-\3@g" build.ninja
+        sed -i -e "s@\(${SYSDIR}/sysroot/\)usr\(.*\)/\(g-ir-compiler\|g-ir-scanner\)@${SYSDIR}/cross-tools/\2${CROSS_TARGET}-\3@g" build.ninja
         CC=${CROSS_TARGET}-gcc ninja
         DESTDIR=${SYSDIR}/sysroot ninja install
     popd
@@ -8999,10 +9229,10 @@ https://dotat.at/prog/unifdef/unifdef-2.12.tar.xz
 ```sh
 tar xvf ${DOWNLOADDIR}/unifdef-2.12.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/unifdef-2.12
-    make prefix="/usr" CC=${CROSS_TARGET}-gcc
-    make prefix="/usr" CC=${CROSS_TARGET}-gcc DESTDIR=${PWD}/dest install
-    cp -av dest/usr/bin/* ${SYSROOT_DIR}/usr/bin/
-    cp -av dest/usr/share/man/man* ${SYSROOT_DIR}/usr/share/man/
+    make prefix="/usr" CC=${CROSS_TARGET}-gcc CFLAGS="${CFLAGS} -std=gnu17"
+    make prefix="/usr" CC=${CROSS_TARGET}-gcc CFLAGS="${CFLAGS} -std=gnu17" DESTDIR=${PWD}/dest install
+    cp -av dest/usr/bin/* ${SYSDIR}/sysroot/usr/bin/
+    cp -av dest/usr/share/man/man* ${SYSDIR}/sysroot/usr/share/man/
 popd
 echo '#!/bin/bash -e
 qemu-loongarch64 ${SYSDIR}/sysroot/usr/bin/unifdef "$@"' > ${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-unifdef
@@ -9066,6 +9296,7 @@ pushd ${BUILDDIR}/webkitgtk-2.51.4
               -DUSE_WPE_RENDERER=ON \
               -DENABLE_BUBBLEWRAP_SANDBOX=OFF \
               -DENABLE_INTROSPECTION=OFF \
+	      -DUSE_LIBBACKTRACE=OFF -DENABLE_SPEECH_SYNTHESIS=OFF -DENABLE_DOCUMENTATION=OFF -DUSE_JPEGXL=OFF -DUSE_LIBHYPHEN=OFF -DUSE_WOFF2=OFF -DUSE_AVIF=OFF \
               -Wno-dev -G Ninja ..
         sed -i "s@${SYSDIR}/sysroot/usr/bin/wayland-scanner@${SYSDIR}/cross-tools/bin/wayland-scanner@g" build.ninja
         sed -i "s@glib-compile-resources@${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-glib-compile-resources@g" build.ninja
@@ -9092,6 +9323,7 @@ pushd ${BUILDDIR}/webkitgtk-2.51.4
               -DUSE_WPE_RENDERER=ON \
               -DENABLE_BUBBLEWRAP_SANDBOX=OFF \
               -DENABLE_INTROSPECTION=ON \
+	      -DUSE_LIBBACKTRACE=OFF -DENABLE_SPEECH_SYNTHESIS=OFF -DENABLE_DOCUMENTATION=OFF -DUSE_JPEGXL=OFF -DUSE_LIBHYPHEN=OFF -DUSE_WOFF2=OFF -DUSE_AVIF=OFF \
               -Wno-dev -G Ninja ..
         sed -i "s@ /usr\(.*\)\(g-ir-compiler\|g-ir-scanner\)@ ${SYSDIR}/cross-tools\1${CROSS_TARGET}-\2@g" build.ninja
         sed -i "s@${SYSDIR}/sysroot/usr/bin/wayland-scanner@${SYSDIR}/cross-tools/bin/wayland-scanner@g" build.ninja
@@ -9187,11 +9419,7 @@ https://sourceforge.net/projects/squashfs/files/squashfs/Squashfs4.7.3/squashfs4
 ```sh
 tar xvf ${DOWNLOADDIR}/squashfs4.7.3.tar.gz -C ${BUILDDIR}
 pushd ${BUILDDIR}/squashfs-tools-4.7.3/squashfs-tools
-    for i in mksquashfs unsquashfs sqfstar sqfscat
-    do
-        sed -i.orig "s@^\$1@qemu-loongarch64 \$1@g" ../generate-manpages/$i-manpage.sh
-    done
-    make CC="${CROSS_TARGET}-gcc" ${JOBS}
+    XZ_SUPPORT=1 LZO_SUPPORT=1 LZMA_XZ_SUPPORT=1 LZ4_SUPPORT=1 ZSTD_SUPPORT=1 make CC="${CROSS_TARGET}-gcc"
     make CC="${CROSS_TARGET}-gcc" INSTALL_PREFIX=${SYSDIR}/sysroot/usr \
          INSTALL_MANPAGES_DIR=${SYSDIR}/sysroot/usr/share/man/man1 install
 popd
@@ -9649,9 +9877,10 @@ rm -rf ${SYSDIR}/sysroot/usr/lib/firmware.orig
 ```sh
 tar -xvf ${DOWNLOADDIR}/grub-2.14.tar.xz -C ${BUILDDIR}
 pushd ${BUILDDIR}/grub-2.14
-    autoreconf -ifv
 	mkdir cross-build
 	pushd cross-build
+		mkdir -p grub-core
+		touch grub-core/extra_deps.lst
 		../configure --prefix=/usr  --libdir=/usr/lib64  --build=${CROSS_HOST} \
 		             --host=${CROSS_TARGET} -with-platform=efi \
 		             --with-utils=host --disable-werror
