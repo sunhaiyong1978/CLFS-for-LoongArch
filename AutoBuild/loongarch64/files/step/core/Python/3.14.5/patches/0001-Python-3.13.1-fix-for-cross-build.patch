@@ -1,0 +1,25 @@
+From f844e904c53393ac28ea3b89530fe4ecbba5e764 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Tue, 14 Jan 2025 14:43:20 +0000
+Subject: [PATCH] Python 3.13.1 fix for cross build.
+
+---
+ Makefile.pre.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.pre.in b/Makefile.pre.in
+index 03ca4cb..50757d6 100644
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -752,7 +752,7 @@ profile-run-stamp:
+ 	$(MAKE) profile-gen-stamp
+ 	# Next, run the profile task to generate the profile information.
+ 	@ # FIXME: can't run for a cross build
+-	$(LLVM_PROF_FILE) $(RUNSHARED) ./$(BUILDPYTHON) $(PROFILE_TASK)
++	$(LLVM_PROF_FILE) $(RUNSHARED) $(PYTHON_FOR_REGEN) $(PROFILE_TASK)
+ 	$(LLVM_PROF_MERGER)
+ 	# Remove profile generation binary since we are done with it.
+ 	$(MAKE) clean-retain-profile
+-- 
+2.31.1
+

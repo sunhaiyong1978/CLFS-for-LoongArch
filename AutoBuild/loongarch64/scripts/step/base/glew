@@ -1,0 +1,22 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=glew
+export PACKAGE_VERSION=2.3.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/glew/2.3.1/
+rm -rf ${BUILD_DIRECTORY}/glew-2.3.1
+tar xvf ${DOWNLOADDIR}/glew-2.3.1.tgz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/glew-2.3.1
+    for config_i in $(find -name "config.sub")
+    do
+            cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+    done
+
+    sed -i "s@ -s @ @g" Makefile
+    make -j${JOBS} CC="${CROSS_TARGET}-gcc" LD="${CROSS_TARGET}-gcc" \
+         STRIP="${CROSS_TARGET}-strip" \
+         CFLAGS.EXTRA="-Wl,-rpath-link=${SYSROOT_DIR}/usr/lib64"
+    make PKGDIR=/usr/lib64/pkgconfig DESTDIR=${SYSROOT_DIR} install
+popd 
+rm -rf ${BUILD_DIRECTORY}/glew-2.3.1

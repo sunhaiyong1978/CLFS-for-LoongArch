@@ -1,0 +1,24 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=rpcsvc-proto
+export PACKAGE_VERSION=1.4.4
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/rpcsvc-proto/1.4.4/
+rm -rf ${BUILD_DIRECTORY}/rpcsvc-proto-1.4.4
+tar xvf ${DOWNLOADDIR}/rpcsvc-proto-1.4.4.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/rpcsvc-proto-1.4.4
+    for config_i in $(find -name "config.sub")
+    do
+            cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+    done
+
+    ./configure --sysconfdir=/etc
+    make -j${JOBS}
+    make -C rpcsvc DESTDIR=${SYSROOT_DIR} install
+    make distclean
+    ./configure ${COMMON_CONFIG}
+    make -j${JOBS} -C rpcgen
+    make -C rpcgen DESTDIR=${SYSROOT_DIR} install
+popd 
+rm -rf ${BUILD_DIRECTORY}/rpcsvc-proto-1.4.4

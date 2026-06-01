@@ -1,0 +1,21 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=apr-util
+export PACKAGE_VERSION=1.6.3
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/apr-util/1.6.3/
+rm -rf ${BUILD_DIRECTORY}/apr-util-1.6.3
+tar xvf ${DOWNLOADDIR}/apr-util-1.6.3.tar.bz2 -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/apr-util-1.6.3
+    ./configure ${COMMON_CONFIG} \
+            --with-apr=${CROSSTOOLS_DIR} \
+            --with-gdbm=${SYSROOT_DIR}/usr \
+            --with-openssl=${SYSROOT_DIR}/usr \
+            --with-crypto
+    cp -v $(apr-1-config --installbuilddir)/apr_rules.mk build/rules.mk
+    sed -i "/^apr_build/s@=\/usr@=${SYSROOT_DIR}/usr@g" build/rules.mk
+    eval ${MAKE_AND_INSTALL}
+    cp -v ${SYSROOT_DIR}/usr/bin/apu-1-config ${CROSSTOOLS_DIR}/bin/
+popd 
+rm -rf ${BUILD_DIRECTORY}/apr-util-1.6.3

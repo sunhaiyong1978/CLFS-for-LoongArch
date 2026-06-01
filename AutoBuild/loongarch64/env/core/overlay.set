@@ -1,0 +1,3 @@
+overlay_dir=sysroot
+parent_dirs=
+requires=host-tools

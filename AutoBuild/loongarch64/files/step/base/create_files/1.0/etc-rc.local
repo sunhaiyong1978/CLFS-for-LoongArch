@@ -1,0 +1,27 @@
+#!/bin/bash
+if [[ $(find /etc/first-run.d/ -maxdepth 1 -name "*.sh") ]]; then
+    for i in $(ls /etc/first-run.d/*.sh | sort -n ) ; do
+        if [ -f "$i" ]; then
+            chmod +x $i
+            $i
+            if [ "$?" == "0" ]; then
+                if [ -f "$i" ]; then
+                    rm $i
+                fi
+            fi
+        fi
+    done
+fi
+
+if [[ $(find /etc/start-run.d/ -maxdepth 1 -name "*.sh") ]]; then
+    for i in $(ls /etc/start-run.d/*.sh | sort -n ) ; do
+        if [ -f "$i" ]; then
+            chmod +x $i
+            $i
+        fi
+    done
+fi
+
+if [ -x /usr/bin/run-startx.sh ]; then
+    /usr/bin/run-startx.sh &
+fi

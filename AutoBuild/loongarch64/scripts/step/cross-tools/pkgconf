@@ -1,0 +1,17 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=pkgconf
+export PACKAGE_VERSION=2.5.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/pkgconf/2.5.1/
+rm -rf ${BUILD_DIRECTORY}/pkgconf-2.5.1
+tar xvf ${DOWNLOADDIR}/pkgconf-2.5.1.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/pkgconf-2.5.1
+        
+        ./configure --prefix=${PREFIX} --build=${CROSS_HOST} \
+                --host=${CROSS_HOST} --target=${CROSS_TARGET}
+        eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/pkgconf-2.5.1
+ln -sf ${HOST_TOOLS_DIR}/bin/pkgconf ${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-pkg-config

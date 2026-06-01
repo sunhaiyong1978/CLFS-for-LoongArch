@@ -1,0 +1,29 @@
+From e3c6c3dc41471677d19b343a69ebb73ff8d50980 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Fri, 19 Jan 2024 03:18:55 +0000
+Subject: [PATCH] polkit 124 fix systemd dir for cross build.
+
+---
+ meson.build | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 2f81c90..2965c52 100644
+--- a/meson.build
++++ b/meson.build
+@@ -216,10 +216,10 @@ if enable_logind
+   if systemd_systemdsystemunitdir == '' and session_tracking == 'libsystemd-login'
+     systemd_dep = dependency('systemd', not_found_message: 'systemd required but not found, please provide a valid systemd user unit dir or disable it')
+     # FIXME: systemd.pc file does not use variables with relative paths, so `define_variable` cannot be used
+-    systemd_systemdsystemunitdir = systemd_dep.get_pkgconfig_variable('systemdsystemunitdir')
++    systemd_systemdsystemunitdir = systemd_dep.get_pkgconfig_variable('systemdsystemunitdir', define_variable: ['systemd_system_unit_dir', '/usr/lib/systemd/system'])
+   endif
+ 
+-  systemd_sysusers_dir = systemd_dep.get_pkgconfig_variable('sysusers_dir', default: '/usr/lib/sysusers.d')
++  systemd_sysusers_dir = systemd_dep.get_pkgconfig_variable('sysusers_dir', default: '/usr/lib/sysusers.d', define_variable: ['prefix', '/usr'])
+ endif
+ config_h.set('HAVE_LIBSYSTEMD', enable_logind)
+ 
+-- 
+2.31.1
+

@@ -1,0 +1,17 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=emacs
+export PACKAGE_VERSION=30.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/emacs/30.2/
+rm -rf ${BUILD_DIRECTORY}/emacs-30.2
+tar xvf ${DOWNLOADDIR}/emacs-30.2.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/emacs-30.2
+	sed -i "s@)\$(libsrc)/make-docfile@) qemu-${ARCH_NAME} \$\(libsrc\)/make-docfile@g" src/Makefile.in
+	sed -i "/^emacs/s@= '\$(EMACS)'@= qemu-${ARCH_NAME} '\$(EMACS)'@g" lisp/Makefile.in
+	./configure ${COMMON_CONFIG} --with-dumping=none
+	make -j${JOBS} actual-all
+	make DESTDIR=${SYSROOT_DIR} install
+popd 
+rm -rf ${BUILD_DIRECTORY}/emacs-30.2

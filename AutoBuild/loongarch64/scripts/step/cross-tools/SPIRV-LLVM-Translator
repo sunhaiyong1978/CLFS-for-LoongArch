@@ -1,0 +1,23 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=SPIRV-LLVM-Translator
+export PACKAGE_VERSION=22.1.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/SPIRV-LLVM-Translator/22.1.2/
+rm -rf ${BUILD_DIRECTORY}/SPIRV-LLVM-Translator-22.1.2
+tar xvf ${DOWNLOADDIR}/SPIRV-LLVM-Translator-22.1.2.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/SPIRV-LLVM-Translator-22.1.2
+        
+	tar xvf ${RESOURCEDIR}/files/SPIRV-LLVM-Translator-headers_git.tar.gz
+        mkdir -p build
+        pushd build
+                cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release  -DCMAKE_INSTALL_PREFIX:PATH=${CROSSTOOLS_DIR} \
+		      -DCMAKE_INSTALL_RPATH="${CROSSTOOLS_DIR}/lib${LIB_SUFF};\\\${ORIGIN}/../lib${LIB_SUFF}" \
+                      -DBUILD_SHARED_LIBS=OFF -DCCACHE_ALLOWED=OFF -DBASE_LLVM_VERSION="$(get_package_version cross-tools_llvm-project)" \
+		      -DLLVM_DIR:PATH=${CROSSTOOLS_DIR}/lib${LIB_SUFF}/cmake/llvm \
+		      -DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${PWD}/../SPIRV-LLVM-Translator-headers_git -Wno-dev ..
+                eval ${MAKE_AND_INSTALL}
+        popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/SPIRV-LLVM-Translator-22.1.2

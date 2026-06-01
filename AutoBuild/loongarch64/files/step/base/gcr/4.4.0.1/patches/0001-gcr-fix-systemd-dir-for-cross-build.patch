@@ -1,0 +1,25 @@
+From d360971e42a9726099617014a85eb73436abbede Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Wed, 27 Sep 2023 01:32:32 +0000
+Subject: [PATCH] gcr fix systemd dir for cross build.
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index ea01dcd..2b58c20 100644
+--- a/meson.build
++++ b/meson.build
+@@ -68,7 +68,7 @@ libsystemd_deps = []
+ libsystemd = dependency('libsystemd', required: get_option('systemd'))
+ systemd = dependency('systemd', required: get_option('systemd'))
+ if libsystemd.found() and systemd.found()
+-  systemduserunitdir = systemd.get_variable('systemduserunitdir',
++  systemduserunitdir = systemd.get_variable('systemd_user_unit_dir',
+     pkgconfig_define: [ 'prefix', get_option('prefix') ],
+     default_value: 'lib' / 'systemd' / 'user',
+   )
+-- 
+2.31.1
+

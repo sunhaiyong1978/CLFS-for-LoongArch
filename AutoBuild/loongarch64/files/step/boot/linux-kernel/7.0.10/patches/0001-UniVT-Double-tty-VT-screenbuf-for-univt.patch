@@ -1,0 +1,47 @@
+From 41ba25216d5e24f1282191ebc5554529bd8d58d3 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Mon, 16 Mar 2026 09:44:05 +0000
+Subject: [PATCH 1/9] UniVT: Double tty VT screenbuf for univt.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+当创建一个tty时，将screenbuf的空间翻倍，增加的空间用于存储utf8的编码信息。
+---
+ drivers/tty/vt/vt.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+index c1f152d8b..4ac7614fc 100644
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -1084,7 +1084,7 @@ int vc_allocate(unsigned int currcons)	/* return 0 on success */
+ 	    vc->vc_screenbuf_size > KMALLOC_MAX_SIZE || !vc->vc_screenbuf_size)
+ 		goto err_free;
+ 	err = -ENOMEM;
+-	vc->vc_screenbuf = kzalloc(vc->vc_screenbuf_size, GFP_KERNEL);
++	vc->vc_screenbuf = kzalloc(vc->vc_screenbuf_size * 2, GFP_KERNEL);
+ 	if (!vc->vc_screenbuf)
+ 		goto err_free;
+ 
+@@ -1174,7 +1174,7 @@ static int vc_do_resize(struct tty_struct *tty, struct vc_data *vc,
+ 
+ 	if (new_screen_size > KMALLOC_MAX_SIZE || !new_screen_size)
+ 		return -EINVAL;
+-	newscreen = kzalloc(new_screen_size, GFP_USER);
++	newscreen = kzalloc(new_screen_size * 2, GFP_USER);
+ 	if (!newscreen)
+ 		return -ENOMEM;
+ 
+@@ -3783,7 +3783,7 @@ static int __init con_init(void)
+ 		tty_port_init(&vc->port);
+ 		visual_init(vc, currcons, true);
+ 		/* Assuming vc->vc_{cols,rows,screenbuf_size} are sane here. */
+-		vc->vc_screenbuf = kzalloc(vc->vc_screenbuf_size, GFP_NOWAIT);
++		vc->vc_screenbuf = kzalloc(vc->vc_screenbuf_size * 2, GFP_NOWAIT);
+ 		vc_init(vc, currcons || !vc->vc_sw->con_save_screen);
+ 	}
+ 	currcons = fg_console = 0;
+-- 
+2.31.1
+

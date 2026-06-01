@@ -1,0 +1,26 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=psmisc
+export PACKAGE_VERSION=23.7
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/psmisc/23.7/
+rm -rf ${BUILD_DIRECTORY}/psmisc-23.7
+tar xvf ${DOWNLOADDIR}/psmisc-23.7.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/psmisc-23.7
+	
+	for config_i in $(find -name "config.sub")
+	do
+		chmod 0644 $(dirname ${config_i})/config.{sub,guess}
+		cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+	done
+	if [ ! -f configure ]; then
+		autoreconf -ifv
+	fi
+	 ./configure ${COMMON_CONFIG} ac_cv_func_malloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes --enable-malloc0returnsnull
+	CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" make -j${JOBS}
+	run_step_package_check check
+        make DESTDIR=${SYSROOT_DIR} install
+	rm -f ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/psmisc-23.7

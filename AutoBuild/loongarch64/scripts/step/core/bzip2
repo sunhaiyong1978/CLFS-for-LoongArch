@@ -1,0 +1,25 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=bzip2
+export PACKAGE_VERSION=1.0.8
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/bzip2/1.0.8/
+rm -rf ${BUILD_DIRECTORY}/bzip2-1.0.8
+tar xvf ${DOWNLOADDIR}/bzip2-1.0.8.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/bzip2-1.0.8
+	sed -i.orig -e "/^all:/s/ test//" Makefile
+	sed -i -e 's:ln -s -f $(PREFIX)/bin/:ln -s -f :' Makefile
+	sed -i "s@(PREFIX)/man@(PREFIX)/share/man@g" Makefile
+	make -j${JOBS} CC=${CROSS_TARGET}-gcc -f Makefile-libbz2_so
+	make clean
+	make -j${JOBS} CC=${CROSS_TARGET}-gcc
+	make PREFIX=${SYSROOT_DIR}/usr install
+	cp -v bzip2-shared ${SYSROOT_DIR}/bin/bzip2
+	cp -av libbz2.so* ${SYSROOT_DIR}/lib${LIB_SUFF}
+	mv ${SYSROOT_DIR}/usr/lib/libbz2.a ${SYSROOT_DIR}/lib${LIB_SUFF}/
+	ln -sfv ../../lib${LIB_SUFF}/libbz2.so.1.0 ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/libbz2.so
+	ln -sfv bzip2 ${SYSROOT_DIR}/bin/bunzip2
+	ln -sfv bzip2 ${SYSROOT_DIR}/bin/bzcat
+popd 
+rm -rf ${BUILD_DIRECTORY}/bzip2-1.0.8

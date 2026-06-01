@@ -1,0 +1,27 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=docbook-3.1
+export PACKAGE_VERSION=docbk31
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/docbook-3.1/docbk31/
+rm -rf ${BUILD_DIRECTORY}/docbook-3.1
+mkdir -pv ${BUILD_DIRECTORY}/docbook-3.1
+pushd ${BUILD_DIRECTORY}/docbook-3.1
+    unzip ${DOWNLOADDIR}/docbk31.zip
+    sed -i -e '/ISO 8879/d' \
+           -e 's|DTDDECL "-//OASIS//DTD DocBook V3.1//EN"|SGMLDECL|g' \
+           docbook.cat
+    install -v -d -m755 ${SYSROOT_DIR}/usr/share/sgml/docbook/sgml-dtd-3.1
+    install -v docbook.cat ${SYSROOT_DIR}/usr/share/sgml/docbook/sgml-dtd-3.1/catalog
+    cp -v -af *.dtd *.mod *.dcl ${SYSROOT_DIR}/usr/share/sgml/docbook/sgml-dtd-3.1
+
+    install-catalog --add ${SYSROOT_DIR}/etc/sgml/sgml-docbook-dtd-3.1.cat \
+        ${SYSROOT_DIR}/usr/share/sgml/docbook/sgml-dtd-3.1/catalog
+    install-catalog --add ${SYSROOT_DIR}/etc/sgml/sgml-docbook-dtd-3.1.cat \
+        ${SYSROOT_DIR}/etc/sgml/sgml-docbook.cat
+    
+cat >> ${SYSROOT_DIR}/usr/share/sgml/docbook/sgml-dtd-3.1/catalog << "EOF"
+PUBLIC "-//Davenport//DTD DocBook V3.0//EN" "docbook.dtd"
+EOF
+rm -rf ${BUILD_DIRECTORY}/docbook-3.1

@@ -1,0 +1,18 @@
+source env/host-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=host-tools
+export STEP_PACKAGENAME=Python3_13
+export PACKAGE_VERSION=3.13.7
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/host-tools/Python3_13/3.13.7/
+rm -rf ${BUILD_DIRECTORY}/Python-3.13.7
+tar xvf ${DOWNLOADDIR}/Python-3.13.7.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/Python-3.13.7
+	CFLAGS="${CFLAGS} -fPIC" LDFLAGS="${LDFLAGS} -lutil"
+	./configure --prefix=${PREFIX}/python3_13 --with-platlibdir=lib${TARGET_LIB_SUFF} \
+	            --disable-shared --with-system-expat --with-system-ffi \
+	            --with-ensurepip=yes --enable-optimizations \
+	            ac_cv_broken_sem_getvalue=yes
+	eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/Python-3.13.7

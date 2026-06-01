@@ -1,0 +1,24 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=kmod
+export PACKAGE_VERSION=34.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/kmod/34.2/
+rm -rf ${BUILD_DIRECTORY}/kmod-34.2
+tar xvf ${DOWNLOADDIR}/kmod-34.2.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/kmod-34.2
+	rm m4/l*.m4
+	./autogen.sh
+	./configure --prefix=/usr --libdir=/usr/lib${LIB_SUFF} --bindir=/bin \
+	            --sysconfdir=/etc --build=${CROSS_HOST} --host=${CROSS_TARGET} \
+	            --with-xz --with-zstd --with-zlib --disable-manpages \
+		    --with-bashcompletiondir=/usr/share/bash-completion/completions as_ln_s="ln -sf"
+	eval ${MAKE_AND_INSTALL}
+	
+	for target in depmod insmod lsmod modinfo modprobe rmmod; do
+		ln -sfv ../bin/kmod ${SYSROOT_DIR}/sbin/$target
+	done
+	ln -sfv kmod ${SYSROOT_DIR}/bin/lsmod
+popd 
+rm -rf ${BUILD_DIRECTORY}/kmod-34.2

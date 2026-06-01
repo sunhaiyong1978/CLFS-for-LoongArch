@@ -1,0 +1,26 @@
+export SYSDIR=${NEW_TARGET_SYSDIR}
+export BUILD_DIRECTORY="${SYSDIR}/build"
+export DOWNLOADDIR="${SYSDIR}/downloads/files"
+export COMMON_DIR="${SYSDIR}/common_files"
+export SYSROOT_DIR="${SYSDIR}/sysroot"
+export DIST_DIRECTORY="${SYSDIR}/dist"
+export TEMP_DIRECTORY="${SYSDIR}/temp"
+export TOOLCHAIN_DIRECTORY="${SYSDIR}/toolchains"
+export CROSS_HOST="$(echo $MACHTYPE | sed "s/$(echo $MACHTYPE | cut -d- -f2)/cross/")"
+export HOST_ARCH_NAME="$(echo $MACHTYPE | cut -d- -f1)"
+export CROSSTOOLS_DIR="${SYSDIR}/cross-tools"
+export JOBS=$[ ( $(LC_ALL=C free -g | grep "^Mem:" | awk -F' ' '{ print $2 }') / 4 ) + 1 ]
+export PATH=${CROSSTOOLS_DIR}/build-tools/bin:${CROSSTOOLS_DIR}/bin:/usr/bin:/bin
+export CROSS_TARGET="loongarch64-unknown-linux-gnu"
+export MABI="lp64d"
+export LIB_SUFF="64"
+export ARCH_BIT=64
+export CFLAGS="-O3"
+export CXXFLAGS="-O3"
+export RUN_TARGET_ARCH=${HOST_ARCH_NAME}
+export PREFIX=${CROSSTOOLS_DIR}
+export COMMON_CONFIG="--prefix=${PREFIX} --libdir=${PREFIX}/lib64"
+export PKG_CONFIG_PATH="${CROSSTOOLS_DIR}/lib/pkgconfig:${CROSSTOOLS_DIR}/lib64/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig"
+export LDFLAGS="-Wl,-rpath-link=${CROSSTOOLS_DIR}/lib:${CROSSTOOLS_DIR}/lib64:${CROSSTOOLS_DIR}/build-tools/lib:${CROSSTOOLS_DIR}/build-tools/lib64:/usr/lib:/usr/lib64 -Wl,-rpath=${CROSSTOOLS_DIR}/lib:${CROSSTOOLS_DIR}/lib64:${CROSSTOOLS_DIR}/build-tools/lib:${CROSSTOOLS_DIR}/build-tools/lib64:/usr/lib:/usr/lib64"
+export MAKE_AND_INSTALL="make -j${JOBS} &&  make install"
+export PATH=${CROSSTOOLS_DIR}/host-tools/bin:${PATH}

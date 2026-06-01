@@ -1,0 +1,34 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=gtk3
+export PACKAGE_VERSION=3.24.43
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/gtk3/3.24.43/
+rm -rf ${BUILD_DIRECTORY}/gtk+-3.24.43
+tar xvf ${DOWNLOADDIR}/gtk+-3.24.43.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/gtk+-3.24.43
+        
+	export CFLAGS="${CFLAGS} -Wno-incompatible-pointer-types"
+        mkdir cross-build
+        pushd cross-build
+                meson ${MESON_CONFIG} -Dbroadway_backend=true \
+                      ..
+                eval ${NINJA_AND_INSTALL}
+        popd
+        rm -f ${SYSROOT_DIR}/usr/lib64/*.la
+cat >  ${SYSROOT_DIR}/etc/gtk-3.0/settings.ini << "EOF"
+[Settings]
+gtk-theme-name = Adwaita
+gtk-icon-theme-name = oxygen
+gtk-font-name = DejaVu Sans 12
+gtk-cursor-theme-size = 18
+gtk-toolbar-style = GTK_TOOLBAR_BOTH_HORIZ
+gtk-xft-antialias = 1
+gtk-xft-hinting = 1
+gtk-xft-hintstyle = hintslight
+gtk-xft-rgba = rgb
+gtk-cursor-theme-name = Adwaita
+EOF
+popd 
+rm -rf ${BUILD_DIRECTORY}/gtk+-3.24.43

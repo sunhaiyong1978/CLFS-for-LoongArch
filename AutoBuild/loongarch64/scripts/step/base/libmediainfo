@@ -1,0 +1,18 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=libmediainfo
+export PACKAGE_VERSION=26.05
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/libmediainfo/26.05/
+rm -rf ${BUILD_DIRECTORY}/MediaInfoLib
+tar xvf ${DOWNLOADDIR}/libmediainfo_26.05.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/MediaInfoLib
+    pushd Project/GNU/Library
+	    autoreconf -ifv
+	    ./configure $COMMON_CONFIG --enable-shared \
+        	        --enable-visibility --with-libcurl --with-libmms
+	    eval ${MAKE_AND_INSTALL}
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/MediaInfoLib

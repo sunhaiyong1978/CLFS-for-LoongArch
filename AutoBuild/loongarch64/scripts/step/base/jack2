@@ -1,0 +1,20 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=jack2
+export PACKAGE_VERSION=1.9.22
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/jack2/1.9.22/
+rm -rf ${BUILD_DIRECTORY}/jack2-1.9.22
+tar xvf ${DOWNLOADDIR}/jack2-1.9.22.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/jack2-1.9.22
+    patch -Np1 -i ${SYSDIR}/files/base/jack2/1.9.22/patches/0001-jack2-fix-for-python3.12.patch 
+	 
+    CXX=${CROSS_TARGET}-g++ CC=${CROSS_TARGET}-gcc \
+    PREFIX=/usr \
+    python3 ./waf configure --libdir=/usr/lib64 \
+           --doxygen --dbus --classic --alsa --clients 256 --ports-per-application=2048
+    CXX=${CROSS_TARGET}-g++ CC=${CROSS_TARGET}-gcc python3 ./waf build
+    CXX=${CROSS_TARGET}-g++ CC=${CROSS_TARGET}-gcc python3 ./waf --destdir=${SYSROOT_DIR} install
+popd 
+rm -rf ${BUILD_DIRECTORY}/jack2-1.9.22

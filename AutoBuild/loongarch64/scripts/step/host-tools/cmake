@@ -1,0 +1,21 @@
+source env/host-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=host-tools
+export STEP_PACKAGENAME=cmake
+export PACKAGE_VERSION=4.3.3
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/host-tools/cmake/4.3.3/
+rm -rf ${BUILD_DIRECTORY}/cmake-4.3.3
+tar xvf ${DOWNLOADDIR}/cmake-4.3.3.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/cmake-4.3.3
+    patch -Np1 -i ${SYSDIR}/files/host-tools/cmake/4.3.3/patches/cmake-3.22.3-add-loongarch64-to-checktypesize.patch 
+	 
+    mkdir -p native-build
+    pushd native-build
+	CC="gcc" CXX="g++" \
+        cmake -DCMAKE_INSTALL_PREFIX=${CROSSTOOLS_DIR} -DCMake_TEST_Qt6=0 \
+              -DCMAKE_BUILD_TYPE=Release ..
+	eval ${MAKE_AND_INSTALL}
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/cmake-4.3.3

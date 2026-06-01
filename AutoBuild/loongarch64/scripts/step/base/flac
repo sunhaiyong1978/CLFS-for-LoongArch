@@ -1,0 +1,16 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=flac
+export PACKAGE_VERSION=1.5.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/flac/1.5.0/
+rm -rf ${BUILD_DIRECTORY}/flac-1.5.0
+tar xvf ${DOWNLOADDIR}/flac-1.5.0.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/flac-1.5.0
+	
+	autoreconf -if
+	./configure ${COMMON_CONFIG} --with-ogg-includes=${SYSROOT_DIR}/usr/include
+	eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/flac-1.5.0

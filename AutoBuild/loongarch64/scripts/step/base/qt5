@@ -1,0 +1,45 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=qt5
+export PACKAGE_VERSION=5.15.19
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/qt5/5.15.19/
+rm -rf ${BUILD_DIRECTORY}/qt-everywhere-src-5.15.19
+tar xvf ${DOWNLOADDIR}/qt-everywhere-opensource-src-5.15.19.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/qt-everywhere-src-5.15.19
+    patch -Np1 -i ${SYSDIR}/files/base/qt5/5.15.19/patches/qt-everywhere-src-5.15.2-add-loongarch.patch 
+	patch -Np1 -i ${SYSDIR}/files/base/qt5/5.15.19/patches/0001-QT-5.15.8-add-loongarch64-support.patch 
+	patch -Np1 -i ${SYSDIR}/files/base/qt5/5.15.19/patches/0001-qt5-5.15-add-stdint-for-compiler-use-gcc-13.patch 
+	patch -Np1 -i ${SYSDIR}/files/base/qt5/5.15.19/patches/qtlocation-fix-rapidjson-build.patch -d qtlocation 
+	 
+    sed -i "s@defined(__aarch64__)@& || defined(__loongarch__)@g" qtbase/src/3rdparty/forkfd/forkfd_linux.c
+    mkdir cross-build
+    pushd cross-build
+       ../configure -external-hostbindir ${CROSSTOOLS_DIR}/qt5/bin \
+                -prefix /usr -sysconfdir /etc/xdg \
+                -libdir /usr/lib64 -archdatadir /usr/lib64/qt5 \
+                -bindir /usr/bin \
+                -plugindir /usr/lib64/qt5/plugins \
+                -importdir /usr/lib64/qt5/imports \
+                -headerdir /usr/include/qt5 \
+                -datadir /usr/share/qt5 \
+                -docdir /usr/share/doc/qt5 \
+                -translationdir /usr/share/qt5/translations \
+                -confirm-license -opensource \
+                -openssl-linked -system-harfbuzz -system-sqlite \
+                -nomake examples -no-rpath \
+                -dbus-linked -journald \
+                -skip qtwebengine \
+                -platform linux-${ARCH_NAME}-gnu-g++
+	make -j${JOBS}
+        make INSTALL_ROOT=${SYSROOT_DIR} install
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/qt-everywhere-src-5.15.19
+
+cat > ${SYSROOT_DIR}/etc/profile.d/qt5.sh << "EOF"
+export QT_PLUGIN_PATH=${QT_PLUGIN_PATH}:/usr/lib64/qt5/plugins
+export QT_IMPORTS_DIR=${QT_IMPORTS_PATH}:/usr/lib64/qt5/qml
+export QML2_IMPORT_PATH=${QML2_IMPORT_PATH}:/usr/lib64/qt5/qml
+EOF

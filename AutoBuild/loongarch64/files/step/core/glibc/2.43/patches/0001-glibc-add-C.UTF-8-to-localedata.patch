@@ -1,0 +1,25 @@
+From 274c14f5e78c5580d6b22981eac15679a45102c0 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Thu, 28 Mar 2024 03:21:55 +0000
+Subject: [PATCH] glibc add C.UTF-8 to localedata.
+
+---
+ localedata/SUPPORTED | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/localedata/SUPPORTED b/localedata/SUPPORTED
+index a2f3132..98ecfbb 100644
+--- a/localedata/SUPPORTED
++++ b/localedata/SUPPORTED
+@@ -1,6 +1,8 @@
+ # This file names the currently supported and somewhat tested locales.
+ # If you have any additions please file a glibc bug report.
+ SUPPORTED-LOCALES=\
++C.UTF-8/UTF-8 \
++C/ISO-8859-1 \
+ aa_DJ.UTF-8/UTF-8 \
+ aa_DJ/ISO-8859-1 \
+ aa_ER/UTF-8 \
+-- 
+2.31.1
+

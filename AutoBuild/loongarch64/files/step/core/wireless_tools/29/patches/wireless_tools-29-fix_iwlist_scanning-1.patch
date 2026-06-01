@@ -1,0 +1,32 @@
+Submitted By: Munir Contractor <munircontractor at gmail dot com>
+Date: 2016-09-03
+Initial Package Version: 29
+Upstream Status: From Upstream
+Origin: Arch Linux https://bugs.archlinux.org/task/15363
+Description: This patch fixes an issue where iwlist scan is not able to print the
+             wireless network names if there are too many networks due to buffer
+             allocation exceeding 65536.
+
+
+diff -Naur wireless_tools.29.orig/iwlist.c wireless_tools.29/iwlist.c
+--- wireless_tools.29.orig/iwlist.c	2007-06-30 01:11:09.000000000 +0000
++++ wireless_tools.29/iwlist.c	2016-09-03 17:51:56.703353035 +0000
+@@ -799,7 +799,7 @@
+ 	  if(iw_get_ext(skfd, ifname, SIOCGIWSCAN, &wrq) < 0)
+ 	    {
+ 	      /* Check if buffer was too small (WE-17 only) */
+-	      if((errno == E2BIG) && (range.we_version_compiled > 16))
++	      if((errno == E2BIG) && (range.we_version_compiled > 16) && (buflen < 65535))
+ 		{
+ 		  /* Some driver may return very large scan results, either
+ 		   * because there are many cells, or because they have many
+@@ -815,6 +815,9 @@
+ 		  else
+ 		    buflen *= 2;
+ 
++                  if(buflen > 65535)
++                    buflen = 65535;
++
+ 		  /* Try again */
+ 		  goto realloc;
+ 		}

@@ -1,0 +1,19 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=screen
+export PACKAGE_VERSION=5.0.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/screen/5.0.1/
+rm -rf ${BUILD_DIRECTORY}/screen-5.0.1
+tar xvf ${DOWNLOADDIR}/screen-5.0.1.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/screen-5.0.1
+    ./autogen.sh
+    CFLAGS="${CFLAGS} -Wno-implicit-function-declaration" \
+    ./configure ${COMMON_CONFIG} --with-socket-dir=/run/screen \
+            --with-pty-group=5 --with-sys-screenrc=/etc/screenrc
+    sed -i -e "s%/usr/local/etc/screenrc%/etc/screenrc%" {etc,doc}/*
+    eval ${MAKE_AND_INSTALL}
+    install -m 644 etc/etcscreenrc ${SYSROOT_DIR}/etc/screenrc
+popd 
+rm -rf ${BUILD_DIRECTORY}/screen-5.0.1

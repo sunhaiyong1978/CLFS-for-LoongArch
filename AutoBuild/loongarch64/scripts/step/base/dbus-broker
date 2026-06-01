@@ -1,0 +1,22 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=dbus-broker
+export PACKAGE_VERSION=37
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/dbus-broker/37/
+rm -rf ${BUILD_DIRECTORY}/dbus-broker-37
+tar xvf ${DOWNLOADDIR}/dbus-broker-37.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/dbus-broker-37
+	patch -Np1 -i ${SYSDIR}/files/base/dbus-broker/37/patches/0001-dbus-broker-fix-systemd-dir-for-cross-build.patch 
+	 
+	mkdir cross-build
+	pushd cross-build
+		 meson ${MESON_CONFIG}  \
+                      ..
+		sed -i "s@gi-docgen \(index\|generate\|gen-index\|gen-deps\|search\|check\|serve\) @& --add-include-path ${SYSROOT_DIR}/usr/share/gir-1.0/ @g" build.ninja
+		eval ${NINJA_AND_INSTALL}
+	popd
+	rm -f ${SYSROOT_DIR}/usr/lib${LIB_SUFF}*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/dbus-broker-37

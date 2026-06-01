@@ -1,0 +1,65 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=docbook-xsl-nons
+export PACKAGE_VERSION=1.79.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/docbook-xsl-nons/1.79.2/
+rm -rf ${BUILD_DIRECTORY}/docbook-xsl-nons-1.79.2
+tar xvf ${DOWNLOADDIR}/docbook-xsl-nons-1.79.2.tar.bz2 -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/docbook-xsl-nons-1.79.2
+    patch -Np1 -i ${SYSDIR}/files/base/docbook-xsl-nons/1.79.2/patches/docbook-xsl-nons-1.79.2-stack_fix-1.patch 
+	 
+    install -v -m755 -d ${SYSROOT_DIR}/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2
+    cp -v -R VERSION assembly common eclipse epub epub3 extensions fo \
+         highlighting html htmlhelp images javahelp lib manpages params \
+         profiling roundtrip slides template tests tools webhelp website \
+         xhtml xhtml-1_1 xhtml5 \
+         ${SYSROOT_DIR}/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2
+
+    ln -sf VERSION ${SYSROOT_DIR}/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2/VERSION.xsl
+    install -v -m644 -D README \
+                    ${SYSROOT_DIR}/usr/share/doc/docbook-xsl-nons-1.79.2/README.txt
+    install -v -m644    RELEASE-NOTES* NEWS* \
+                    ${SYSROOT_DIR}/usr/share/doc/docbook-xsl-nons-1.79.2
+
+
+    if [ ! -d ${SYSROOT_DIR}/etc/xml ]; then
+        install -v -m755 -d ${SYSROOT_DIR}/etc/xml;
+    fi
+    if [ ! -f ${SYSROOT_DIR}/etc/xml/catalog ]; then
+        xmlcatalog --noout --create ${SYSROOT_DIR}/etc/xml/catalog
+    fi
+
+    xmlcatalog --noout --add "rewriteSystem" \
+           "https://cdn.docbook.org/release/xsl-nons/1.79.2" \
+           "/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2" \
+    ${SYSROOT_DIR}/etc/xml/catalog
+
+    xmlcatalog --noout --add "rewriteURI" \
+           "https://cdn.docbook.org/release/xsl-nons/1.79.2" \
+           "/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2" \
+    ${SYSROOT_DIR}/etc/xml/catalog &&
+
+    xmlcatalog --noout --add "rewriteSystem" \
+           "https://cdn.docbook.org/release/xsl-nons/current" \
+           "/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2" \
+    ${SYSROOT_DIR}/etc/xml/catalog &&
+
+    xmlcatalog --noout --add "rewriteURI" \
+           "https://cdn.docbook.org/release/xsl-nons/current" \
+           "/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2" \
+    ${SYSROOT_DIR}/etc/xml/catalog &&
+
+    xmlcatalog --noout --add "rewriteSystem" \
+           "http://docbook.sourceforge.net/release/xsl/current" \
+           "/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2" \
+    ${SYSROOT_DIR}/etc/xml/catalog &&
+
+    xmlcatalog --noout --add "rewriteURI" \
+           "http://docbook.sourceforge.net/release/xsl/current" \
+           "/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2" \
+    ${SYSROOT_DIR}/etc/xml/catalog
+
+popd 
+rm -rf ${BUILD_DIRECTORY}/docbook-xsl-nons-1.79.2

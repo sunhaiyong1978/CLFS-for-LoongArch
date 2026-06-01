@@ -1,0 +1,25 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=xwayland
+export PACKAGE_VERSION=24.1.11
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/xwayland/24.1.11/
+rm -rf ${BUILD_DIRECTORY}/xwayland-24.1.11
+tar xvf ${DOWNLOADDIR}/xwayland-24.1.11.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/xwayland-24.1.11
+    
+    sed -i -e "/scanner_dep/s@, native: true@@g" \
+           -e "/scanner =/s@find_program\(.*\)\$@find_program('wayland-scanner')@g" \
+           hw/xwayland/meson.build 
+    mkdir cross-build
+    pushd cross-build
+        meson ${MESON_CONFIG} \
+              -Dxvfb=false -Dxkb_output_dir=/var/lib/xkb \
+	      -Dfontrootdir=/usr/share/fonts/X11 -Dxkb_dir=/usr/share/X11/xkb -Dxkb_bin_dir=/usr/bin \
+              ..
+	eval ${NINJA_AND_INSTALL}
+    popd
+    mkdir -pv ${SYSROOT_DIR}/etc/X11/xorg.conf.d
+popd 
+rm -rf ${BUILD_DIRECTORY}/xwayland-24.1.11

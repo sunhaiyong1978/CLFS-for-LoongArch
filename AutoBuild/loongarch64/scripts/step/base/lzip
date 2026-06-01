@@ -1,0 +1,14 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=lzip
+export PACKAGE_VERSION=1.26
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/lzip/1.26/
+rm -rf ${BUILD_DIRECTORY}/lzip-1.26
+tar xvf ${DOWNLOADDIR}/lzip-1.26.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/lzip-1.26
+	./configure CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" --prefix=/usr
+	eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/lzip-1.26

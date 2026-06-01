@@ -1,0 +1,21 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=boost
+export PACKAGE_VERSION=1_91_0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/boost/1_91_0/
+rm -rf ${BUILD_DIRECTORY}/boost_1_91_0
+tar xvf ${DOWNLOADDIR}/boost_1_91_0.tar.bz2 -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/boost_1_91_0
+    ./bootstrap.sh ICU_ROOT=${SYSROOT_DIR}/usr --prefix=/usr --libdir=/usr/lib64 --with-python=python3
+    sed -i "/using gcc/s@using gcc@& : ${ARCH_NAME} : ${CROSS_TARGET}-gcc@g" project-config.jam
+    sed -i "/using python/s@${CROSSTOOLS_DIR}@${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3@g" project-config.jam
+    sed -i "s@mips @mips1 @g" libs/log/build/log-arch-config.jam
+    sed -i '/#include.*phoenix.*tuple.hpp.*/d' boost/phoenix/stl.hpp
+    ./b2 stage threading=multi link=shared address-model=64 toolset=gcc-${ARCH_NAME} linkflags="-lstdc++"
+    rm -rf ${SYSROOT_DIR}/usr/lib/cmake/[Bb]oost*
+    ./b2 install --prefix=${SYSROOT_DIR}/usr --libdir=${SYSROOT_DIR}/usr/lib64 \
+             threading=multi link=shared address-model=64 toolset=gcc-${ARCH_NAME} linkflags="-lstdc++"
+popd 
+rm -rf ${BUILD_DIRECTORY}/boost_1_91_0

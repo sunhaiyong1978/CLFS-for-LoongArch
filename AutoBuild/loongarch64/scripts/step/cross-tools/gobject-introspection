@@ -1,0 +1,43 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=gobject-introspection
+export PACKAGE_VERSION=1.86.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/gobject-introspection/1.86.0/
+rm -rf ${BUILD_DIRECTORY}/gobject-introspection-1.86.0
+tar xvf ${DOWNLOADDIR}/gobject-introspection-1.86.0.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/gobject-introspection-1.86.0
+    
+    tar xvf ${RESOURCEDIR}/files/gobject-introspection-glib_git.tar.gz -C subprojects/
+    mv subprojects/gobject-introspection-glib_git subprojects/glib
+    tar xvf ${RESOURCEDIR}/files/gobject-introspection-gvdb_git.tar.gz -C subprojects/glib/subprojects/
+    rmdir subprojects/glib/subprojects/gvdb
+    mv subprojects/glib/subprojects/gobject-introspection-gvdb_git subprojects/glib/subprojects/gvdb
+    mkdir -p native-build
+    pushd native-build
+        meson --prefix=${CROSSTOOLS_DIR} --libdir=${CROSSTOOLS_DIR}/lib${LIB_SUFF} \
+              --buildtype=release ..
+        LD_LIBRARY_PATH=${CROSSTOOLS_DIR}/lib64/:${CROSSTOOLS_DIR}/lib ninja
+        ninja install
+    popd
+
+cat > ${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-g-ir-scanner << EOF
+#!/bin/bash -e
+LD_LIBRARY_PATH=${CROSSTOOLS_DIR}/lib64/:${CROSSTOOLS_DIR}/lib/ \
+${CROSSTOOLS_DIR}/bin/g-ir-scanner \
+      --add-include-path=${SYSROOT_DIR}/usr/share/gir-1.0 \
+      --use-binary-wrapper=${CROSSTOOLS_DIR}/bin/qemu-${YONGBAO_TARGET_ARCH} \
+      --use-ldd-wrapper=${CROSSTOOLS_DIR}/bin/qemu-${YONGBAO_TARGET_ARCH}-ldd "\$@"
+EOF
+chmod +x ${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-g-ir-scanner
+
+cat > ${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-g-ir-compiler << EOF
+#!/bin/bash -e
+LD_LIBRARY_PATH=${CROSSTOOLS_DIR}/lib64/:${CROSSTOOLS_DIR}/lib/ \
+${CROSSTOOLS_DIR}/bin/g-ir-compiler \
+          --includedir=/${SYSROOT_DIR}/usr/share/gir-1.0 "\$@"
+EOF
+chmod +x ${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-g-ir-compiler
+popd 
+rm -rf ${BUILD_DIRECTORY}/gobject-introspection-1.86.0

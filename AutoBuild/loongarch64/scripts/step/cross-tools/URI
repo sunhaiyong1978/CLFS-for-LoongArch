@@ -1,0 +1,15 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=URI
+export PACKAGE_VERSION=5.34
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/URI/5.34/
+rm -rf ${BUILD_DIRECTORY}/URI-5.34
+tar xvf ${DOWNLOADDIR}/URI-5.34.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/URI-5.34
+	
+	${CROSSTOOLS_DIR}/bin/perl Makefile.PL
+	eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/URI-5.34

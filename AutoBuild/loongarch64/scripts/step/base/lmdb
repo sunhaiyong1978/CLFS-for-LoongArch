@@ -1,0 +1,16 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=lmdb
+export PACKAGE_VERSION=LMDB_1.0.0-branch
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/lmdb/LMDB_1.0.0-branch/
+rm -rf ${BUILD_DIRECTORY}/lmdb-LMDB_1.0.0-branch
+tar xvf ${DOWNLOADDIR}/lmdb-LMDB_1.0.0-branch.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/lmdb-LMDB_1.0.0-branch
+    pushd libraries/liblmdb
+        make -j${JOBS} CC=${CROSS_TARGET}-gcc prefix=/usr libdir=/usr/lib64
+        make DESTDIR=${SYSROOT_DIR} prefix=/usr libdir=/usr/lib64 install
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/lmdb-LMDB_1.0.0-branch

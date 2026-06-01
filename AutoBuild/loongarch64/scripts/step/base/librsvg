@@ -1,0 +1,26 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=librsvg
+export PACKAGE_VERSION=2.62.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/librsvg/2.62.2/
+rm -rf ${BUILD_DIRECTORY}/librsvg-2.62.2
+tar xvf ${DOWNLOADDIR}/librsvg-2.62.2.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/librsvg-2.62.2
+    patch -Np1 -i ${SYSDIR}/files/base/librsvg/2.62.2/patches/0001-librsvg-2.59.91-fix-for-cross-build.patch 
+	 
+    mkdir cross-prebuild
+    pushd cross-prebuild
+	meson ${MESON_CONFIG} -Dtriplet=${CROSS_TARGET} -Dintrospection=disabled -Dpixbuf-loader=disabled ..
+	RUSTFLAGS="$RUSTFLAGS -C linker=${CROSS_TARGET}-gcc" ninja
+	DESTDIR=${SYSROOT_DIR} ninja install
+    popd
+    mkdir cross-build
+    pushd cross-build
+	meson ${MESON_CONFIG} -Dtriplet=${CROSS_TARGET} ..
+	RUSTFLAGS="$RUSTFLAGS -C linker=${CROSS_TARGET}-gcc" ninja
+	DESTDIR=${SYSROOT_DIR} ninja install
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/librsvg-2.62.2

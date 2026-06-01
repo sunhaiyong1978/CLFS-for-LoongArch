@@ -1,0 +1,25 @@
+From 86ed910c7a45e36f1b43c6ecfb402531b85f4c02 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Thu, 20 Mar 2025 07:06:04 +0000
+Subject: [PATCH] gnome keyring 48 fix systemd dir for cross build.
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 853ba95..7236abd 100644
+--- a/meson.build
++++ b/meson.build
+@@ -44,7 +44,7 @@ libselinux_dep = dependency('libselinux', required: get_option('selinux'))
+ libsystemd_dep = dependency('libsystemd', required: get_option('systemd'))
+ 
+ if libsystemd_dep.found()
+-  systemd_user_unit_dir = dependency('systemd').get_variable('systemduserunitdir', pkgconfig_define: ['prefix', gkr_prefix])
++  systemd_user_unit_dir = dependency('systemd').get_variable('systemd_user_unit_dir', pkgconfig_define: ['prefix', gkr_prefix])
+ endif
+ 
+ if get_option('ssh-agent')
+-- 
+2.31.1
+

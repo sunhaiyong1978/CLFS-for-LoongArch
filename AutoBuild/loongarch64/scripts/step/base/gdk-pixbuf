@@ -1,0 +1,24 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=gdk-pixbuf
+export PACKAGE_VERSION=2.44.6
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/gdk-pixbuf/2.44.6/
+rm -rf ${BUILD_DIRECTORY}/gdk-pixbuf-2.44.6
+tar xvf ${DOWNLOADDIR}/gdk-pixbuf-2.44.6.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/gdk-pixbuf-2.44.6
+    mkdir cross-build
+    pushd cross-build
+        meson ${MESON_CONFIG} --wrap-mode=nofallback -Dintrospection=enabled -Dman=false -Dglycin=disabled ..
+	eval ${NINJA_AND_INSTALL}
+    popd
+
+echo "qemu-${ARCH_NAME} ${SYSROOT_DIR}/usr/bin/gdk-pixbuf-csource \"\$@\"" \
+                > ${CROSSTOOLS_DIR}/bin/gdk-pixbuf-csource
+chmod +x ${CROSSTOOLS_DIR}/bin/gdk-pixbuf-csource
+echo "qemu-${ARCH_NAME} ${SYSROOT_DIR}/usr/bin/gdk-pixbuf-pixdata \"\$@\"" \
+                > ${CROSSTOOLS_DIR}/bin/gdk-pixbuf-pixdata
+chmod +x ${CROSSTOOLS_DIR}/bin/gdk-pixbuf-pixdata
+popd 
+rm -rf ${BUILD_DIRECTORY}/gdk-pixbuf-2.44.6

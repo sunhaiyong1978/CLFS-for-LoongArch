@@ -1,0 +1,17 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=zsh
+export PACKAGE_VERSION=5.9
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/zsh/5.9/
+rm -rf ${BUILD_DIRECTORY}/zsh-5.9
+tar xvf ${DOWNLOADDIR}/zsh-5.9.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/zsh-5.9
+    cp -a -f $(automake --print-libdir)/config.{sub,guess} ./
+    ./configure --build=${CROSS_HOST} --host=${CROSS_TARGET} \
+                --prefix=/usr --sysconfdir=/etc/zsh \
+                --enable-etcdir=/etc/zsh
+    eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/zsh-5.9

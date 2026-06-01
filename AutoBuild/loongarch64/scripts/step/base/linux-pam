@@ -1,0 +1,40 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=linux-pam
+export PACKAGE_VERSION=1.6.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/linux-pam/1.6.1/
+rm -rf ${BUILD_DIRECTORY}/Linux-PAM-1.6.1
+tar xvf ${DOWNLOADDIR}/Linux-PAM-1.6.1.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/Linux-PAM-1.6.1
+    ./configure ${COMMON_CONFIG} --enable-securedir=/usr/lib64/security --disable-doc \
+                ac_cv_func_yp_get_default_domain=no
+    eval ${MAKE_AND_INSTALL}
+    chmod -v 4755 ${SYSROOT_DIR}/usr/sbin/unix_chkpwd
+
+mkdir -pv ${SYSROOT_DIR}/etc/pam.d
+
+cat > ${SYSROOT_DIR}/etc/pam.d/system-account << "EOF"
+account   required    pam_unix.so
+EOF
+
+cat > ${SYSROOT_DIR}/etc/pam.d/system-auth << "EOF"
+auth      required    pam_unix.so
+EOF
+
+cat > ${SYSROOT_DIR}/etc/pam.d/system-session << "EOF"
+session   required    pam_unix.so
+EOF
+cat > ${SYSROOT_DIR}/etc/pam.d/system-password << "EOF"
+password  required    pam_unix.so       sha512 shadow try_first_pass
+EOF
+
+cat > ${SYSROOT_DIR}/etc/pam.d/other << EOF
+auth            required        pam_unix.so     nullok
+account         required        pam_unix.so
+session         required        pam_unix.so
+password        required        pam_unix.so     nullok
+EOF
+popd 
+rm -rf ${BUILD_DIRECTORY}/Linux-PAM-1.6.1

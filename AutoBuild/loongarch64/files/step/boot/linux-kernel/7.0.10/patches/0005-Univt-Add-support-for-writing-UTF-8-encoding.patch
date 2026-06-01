@@ -1,0 +1,275 @@
+From f28baff3b7421d82ba3646b2d56c0033f79330ba Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Mon, 16 Mar 2026 09:50:50 +0000
+Subject: [PATCH 5/9] Univt: Add support for writing UTF-8 encoding.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+增加支持写入UTF-8编码。
+---
+ drivers/tty/vt/selection.c       |  2 ++
+ drivers/tty/vt/vt.c              | 62 +++++++++++++++++++++++++++-----
+ drivers/video/fbdev/core/fbcon.c | 24 ++++++++-----
+ 3 files changed, 71 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/tty/vt/selection.c b/drivers/tty/vt/selection.c
+index 13f4e48b4..c9a8750e6 100644
+--- a/drivers/tty/vt/selection.c
++++ b/drivers/tty/vt/selection.c
+@@ -242,6 +242,8 @@ static int vc_selection_store_chars(struct vc_data *vc, bool unicode)
+ 			}
+ 			obp = bp;
+ 		}
++		if (c > 0x80)
++			i += 2;
+ 	}
+ 	vc_sel.buf_len = bp - vc_sel.buffer;
+ 
+diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+index 1056cb004..dea1d0e3e 100644
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -598,6 +598,11 @@ static void con_scroll(struct vc_data *vc, unsigned int top,
+ 	}
+ 	scr_memmovew(dst, src, (rows - nr) * vc->vc_size_row);
+ 	scr_memsetw(clear, vc->vc_video_erase_char, vc->vc_size_row * nr);
++
++	dst += (vc->vc_screenbuf_size >> 1);
++	src += (vc->vc_screenbuf_size >> 1);
++	scr_memmovew(dst, src, (rows - nr) * vc->vc_size_row);
++	scr_memsetw(clear, 0, vc->vc_size_row * nr);
+ }
+ 
+ static void do_update_region(struct vc_data *vc, unsigned long start, int count)
+@@ -757,14 +762,17 @@ void complement_pos(struct vc_data *vc, int offset)
+ 	static int old_offset = -1;
+ 	static unsigned short old;
+ 	static unsigned short oldx, oldy;
++	static unsigned short old_ext = 0;
++	int c_utf8 = 0;
+ 
+ 	WARN_CONSOLE_UNLOCKED();
+ 
+ 	if (old_offset != -1 && old_offset >= 0 &&
+ 	    old_offset < vc->vc_screenbuf_size) {
+ 		scr_writew(old, screenpos(vc, old_offset, true));
++		c_utf8=(old_ext << 16)|old;
+ 		if (con_should_update(vc))
+-			con_putc(vc, old, oldy, oldx);
++			vc->vc_sw->con_putcs(vc, (u16 *)&c_utf8, 1, oldy, oldx);
+ 		notify_update(vc);
+ 	}
+ 
+@@ -774,13 +782,17 @@ void complement_pos(struct vc_data *vc, int offset)
+ 	    offset < vc->vc_screenbuf_size) {
+ 		unsigned short new;
+ 		u16 *p = screenpos(vc, offset, true);
++		u16 *p_ext = screenpos_utf8(vc, offset, true);
+ 		old = scr_readw(p);
++		old_ext = scr_readw(p_ext);
+ 		new = old ^ vc->vc_complement_mask;
++		c_utf8=(old_ext << 16)|new;
+ 		scr_writew(new, p);
++		scr_writew(old_ext, p_ext);
+ 		if (con_should_update(vc)) {
+ 			oldx = (offset >> 1) % vc->vc_cols;
+ 			oldy = (offset >> 1) / vc->vc_cols;
+-			con_putc(vc, new, oldy, oldx);
++			vc->vc_sw->con_putcs(vc, (u16 *)&c_utf8, 1, oldy, oldx);
+ 		}
+ 		notify_update(vc);
+ 	}
+@@ -793,6 +805,8 @@ static void insert_char(struct vc_data *vc, unsigned int nr)
+ 	vc_uniscr_insert(vc, nr);
+ 	scr_memmovew(p + nr, p, (vc->vc_cols - vc->state.x - nr) * 2);
+ 	scr_memsetw(p, vc->vc_video_erase_char, nr * 2);
++	scr_memmovew(p + nr + (vc->vc_screenbuf_size >> 1), p + (vc->vc_screenbuf_size >> 1), (vc->vc_cols - vc->state.x - nr) * 2);
++	scr_memsetw(p + (vc->vc_screenbuf_size >> 1), 0, nr * 2);
+ 	vc->vc_need_wrap = 0;
+ 	if (con_should_update(vc))
+ 		do_update_region(vc, (unsigned long) p,
+@@ -807,6 +821,9 @@ static void delete_char(struct vc_data *vc, unsigned int nr)
+ 	scr_memmovew(p, p + nr, (vc->vc_cols - vc->state.x - nr) * 2);
+ 	scr_memsetw(p + vc->vc_cols - vc->state.x - nr, vc->vc_video_erase_char,
+ 			nr * 2);
++	scr_memmovew(p + (vc->vc_screenbuf_size >> 1), p + nr + (vc->vc_screenbuf_size >> 1), (vc->vc_cols - vc->state.x - nr) * 2);
++	scr_memsetw(p + vc->vc_cols - vc->state.x - nr + (vc->vc_screenbuf_size >> 1), 0,
++			nr * 2);
+ 	vc->vc_need_wrap = 0;
+ 	if (con_should_update(vc))
+ 		do_update_region(vc, (unsigned long) p,
+@@ -818,6 +835,7 @@ static int softcursor_original = -1;
+ static void add_softcursor(struct vc_data *vc)
+ {
+ 	int i = scr_readw((u16 *) vc->vc_pos);
++
+ 	u32 type = vc->vc_cursor_type;
+ 
+ 	if (!(type & CUR_SW))
+@@ -1247,15 +1265,23 @@ static int vc_do_resize(struct tty_struct *tty, struct vc_data *vc,
+ 	while (old_origin < end) {
+ 		scr_memcpyw((unsigned short *) new_origin,
+ 			    (unsigned short *) old_origin, rlth);
+-		if (rrem)
++ 		scr_memcpyw((unsigned short *) new_origin + (new_screen_size >> 1),
++ 			    (unsigned short *) old_origin + (old_screen_size >> 1), rlth);
++		if (rrem){
+ 			scr_memsetw((void *)(new_origin + rlth),
+ 				    vc->vc_video_erase_char, rrem);
++ 			scr_memsetw((void *)(new_origin + rlth + (new_screen_size)),
++				    0x00, rrem);
++		}
+ 		old_origin += old_row_size;
+ 		new_origin += new_row_size;
+ 	}
+-	if (new_scr_end > new_origin)
++	if (new_scr_end > new_origin){
+ 		scr_memsetw((void *)new_origin, vc->vc_video_erase_char,
+ 			    new_scr_end - new_origin);
++		scr_memsetw((void *)new_origin + (new_screen_size), 0x00,
++ 			    new_scr_end - new_origin);
++	}
+ 	oldscreen = vc->vc_screenbuf;
+ 	vc->vc_screenbuf = newscreen;
+ 	vc->vc_screenbuf_size = new_screen_size;
+@@ -3102,6 +3128,9 @@ static int vc_con_write_normal(struct vc_data *vc, int tc, int c,
+ 	u16 himask = vc->vc_hi_font_mask;
+ 	u8 width = 1;
+ 	bool inverse = false;
++	int is_utf8 = 0;
++	int tc_1 = 0xfe;
++	uint32_t utf8_c = c;
+ 
+ 	if (vc->vc_utf && !vc->vc_disp_ctrl) {
+ 		width = vc_process_ucs(vc, &c, &tc);
+@@ -3109,6 +3138,9 @@ static int vc_con_write_normal(struct vc_data *vc, int tc, int c,
+ 			goto out;
+ 	}
+ 
++	if (utf8_c > 0x7f)
++		is_utf8 = 1;
++
+ 	/* Now try to find out how to display it */
+ 	tc = vc_get_glyph(vc, tc);
+ 	if (tc == -1)
+@@ -3124,6 +3156,10 @@ static int vc_con_write_normal(struct vc_data *vc, int tc, int c,
+ 	}
+ 
+ 	next_c = c;
++	if (is_utf8 == 1){
++		tc = 0xff;
++		next_c = 0xff;
++	}
+ 	while (1) {
+ 		if (vc->vc_need_wrap || vc->vc_decim)
+ 			con_flush(vc, draw);
+@@ -3142,6 +3178,10 @@ static int vc_con_write_normal(struct vc_data *vc, int tc, int c,
+ 
+ 		scr_writew(tc, (u16 *)vc->vc_pos);
+ 
++		if (is_utf8 == 1) {
++			scr_writew(utf8_c, (u16 *) vc->vc_pos + (vc->vc_screenbuf_size >> 1));
++		}
++
+ 		if (con_should_update(vc) && draw->x < 0) {
+ 			draw->x = vc->state.x;
+ 			draw->from = vc->vc_pos;
+@@ -3158,14 +3198,14 @@ static int vc_con_write_normal(struct vc_data *vc, int tc, int c,
+ 			break;
+ 
+ 		/* A space is printed in the second column */
+-		tc = conv_uni_to_pc(vc, ' ');
++		tc = conv_uni_to_pc(vc, tc_1);
+ 		if (tc < 0)
+-			tc = ' ';
++			tc = tc_1;
+ 		/*
+ 		 * Store a zero-width space in the Unicode screen given that
+ 		 * the previous code point is semantically double width.
+ 		 */
+-		next_c = UCS_ZWS;
++		next_c = tc_1;
+ 	}
+ 
+ out:
+@@ -4958,9 +4998,15 @@ u16 screen_glyph(const struct vc_data *vc, int offset)
+ 	u16 w = scr_readw(screenpos(vc, offset, true));
+ 	u16 c = w & 0xff;
+ 
++	u16 c_utf8 = scr_readw(screenpos_utf8(vc, offset, true));
++
++	if ( (c == 0xff || c == 0xfe) && c_utf8 != 0){
++		return c_utf8;
++	}else{
+ 	if (w & vc->vc_hi_font_mask)
+ 		c |= 0x100;
+ 	return c;
++	}
+ }
+ EXPORT_SYMBOL_GPL(screen_glyph);
+ 
+@@ -4971,7 +5017,7 @@ u32 screen_glyph_unicode(const struct vc_data *vc, int n)
+ 	if (uni_lines)
+ 		return uni_lines[n / vc->vc_cols][n % vc->vc_cols];
+ 
+-	return inverse_translate(vc, screen_glyph(vc, n * 2), true);
++	return screen_glyph(vc, n * 2);
+ }
+ EXPORT_SYMBOL_GPL(screen_glyph_unicode);
+ 
+diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
+index 3b1f87aa5..e218981e2 100644
+--- a/drivers/video/fbdev/core/fbcon.c
++++ b/drivers/video/fbdev/core/fbcon.c
+@@ -1647,6 +1647,7 @@ static void fbcon_redraw_blit(struct vc_data *vc, struct fb_info *info,
+ 			}
+ 
+ 			scr_writew(c, d);
++			scr_writew(scr_readw(s + (vc->vc_screenbuf_size >> 1)), d + (vc->vc_screenbuf_size >> 1));
+ 			s++;
+ 			d++;
+ 		} while (s < le);
+@@ -1666,6 +1667,7 @@ static void fbcon_redraw_blit(struct vc_data *vc, struct fb_info *info,
+ 
+ static void fbcon_redraw(struct vc_data *vc, int line, int count, int offset)
+ {
++	u16 charmask = vc->vc_hi_font_mask ? 0x1ff : 0xff;
+ 	unsigned short *d = (unsigned short *)
+ 	    (vc->vc_origin + vc->vc_size_row * line);
+ 	unsigned short *s = d + offset;
+@@ -1688,18 +1690,22 @@ static void fbcon_redraw(struct vc_data *vc, int line, int count, int offset)
+ 					start = s;
+ 				}
+ 			}
+-			if (c == scr_readw(d)) {
+-				if (s > start) {
+-					fbcon_putcs(vc, start, s - start,
+-						     line, x);
+-					x += s - start + 1;
+-					start = s + 1;
+-				} else {
+-					x++;
+-					start++;
++			if( ((scr_readw(s) & charmask) == 0xff || (scr_readw(s) & charmask) == 0xfe) && scr_readw(s + (vc->vc_screenbuf_size >> 1)) != 0){
++			}else{
++				if (c == scr_readw(d)) {
++					if (s > start) {
++						fbcon_putcs(vc, start, s - start,
++							     line, x);
++						x += s - start + 1;
++						start = s + 1;
++					} else {
++						x++;
++						start++;
++					}
+ 				}
+ 			}
+ 			scr_writew(c, d);
++			scr_writew(scr_readw(s + (vc->vc_screenbuf_size >> 1)), d + (vc->vc_screenbuf_size >> 1));
+ 			s++;
+ 			d++;
+ 		} while (s < le);
+-- 
+2.31.1
+

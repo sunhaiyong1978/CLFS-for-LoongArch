@@ -1,0 +1,44 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=NetworkManager
+export PACKAGE_VERSION=1.51.4
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/NetworkManager/1.51.4/
+rm -rf ${BUILD_DIRECTORY}/NetworkManager-1.51.4
+tar xvf ${DOWNLOADDIR}/NetworkManager-1.51.4.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/NetworkManager-1.51.4
+    patch -Np1 -i ${SYSDIR}/files/base/NetworkManager/1.51.4/patches/0001-NetworkManager-1.47.4-fix-policydir-define-for-cross.patch 
+	 
+    sed -i -e 's/Qt/&5/' meson.build
+    sed -i -e 's/-qt4/-qt5/' -e 's/moc_location/host_bins/' examples/C/qt/meson.build 
+    mkdir cross-build
+    pushd cross-build
+        meson ${MESON_CONFIG} \
+              -Dqt=false \
+	      -Dlibaudit=no -Dselinux=false -Dppp=false \
+	      -Dsession_tracking=systemd \
+	      -Dpolkit=$((test -f ${CROSSTOOLS_DIR}/bin/rustc) && echo "true" || echo "false") \
+	      -Dsystemdsystemunitdir=/usr/lib/systemd/system \
+	      -Dmobile_broadband_provider_info_database=/usr/share/mobile-broadband-provider-info/serviceproviders.xml \
+	      -Dconfig_wifi_backend_default=wpa_supplicant \
+	      -Ddnsmasq=/sbin/dnsmasq \
+	      ..
+        CC=${CROSS_TARGET}-gcc ninja
+        DESTDIR=${SYSROOT_DIR} ninja install
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/NetworkManager-1.51.4
+
+cat > ${SYSROOT_DIR}/usr/share/polkit-1/rules.d/org.freedesktop.NetworkManager.rules << "EOF"
+polkit.addRule(function(action, subject) {
+    if (action.id.indexOf("org.freedesktop.NetworkManager.") == 0 && subject.isInGroup("netdev")) {
+        return polkit.Result.YES;
+    }
+});
+EOF
+
+cat > ${SYSROOT_DIR}/etc/NetworkManager/conf.d/polkit.conf << "EOF"
+[main]
+auth-polkit=false
+EOF

@@ -1,0 +1,27 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=mozjs-115
+export PACKAGE_VERSION=115.36.0esr
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/mozjs-115/115.36.0esr/
+rm -rf ${BUILD_DIRECTORY}/firefox-115.36.0
+tar xvf ${DOWNLOADDIR}/firefox-115.36.0esr.source.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/firefox-115.36.0
+    PATH=${CROSSTOOLS_DIR}/python3_13/bin:${PATH}
+    
+    mkdir cross-build
+    pushd cross-build
+	export RUSTFLAGS="$RUSTFLAGS -Ccode-model=large"
+        CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
+	LDFLAGS="${LDFLAGS} -Wl,--copy-dt-needed-entries" \
+        ../js/src/configure --prefix=/usr --libdir=/usr/lib64 \
+                    --target=${CROSS_TARGET} \
+                    --with-intl-api --with-system-zlib --with-system-icu \
+                    --disable-jemalloc --disable-debug-symbols --enable-readline
+	eval ${MAKE_AND_INSTALL}
+        rm -v ${SYSROOT_DIR}/usr/lib64/libjs_static.ajs
+        sed -i '/@NSPR_CFLAGS@/d' ${SYSROOT_DIR}/usr/bin/js115-config
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/firefox-115.36.0

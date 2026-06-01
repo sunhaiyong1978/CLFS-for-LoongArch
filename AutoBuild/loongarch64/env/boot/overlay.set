@@ -1,0 +1,2 @@
+overlay_dir=boot
+parent_dirs=sysroot

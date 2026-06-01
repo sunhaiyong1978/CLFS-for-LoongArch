@@ -1,0 +1,24 @@
+root::0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/dev/null:/bin/false
+daemon:x:6:6:Daemon User:/dev/null:/bin/false
+messagebus:x:18:18:D-Bus Message Daemon User:/var/run/dbus:/bin/false
+lp:x:9:9:Print Service User:/var/spool/cups:/bin/false
+polkitd:x:27:27:PolicyKit Daemon Owner:/etc/polkit-1:/bin/false
+rsyncd:x:46:46:rsyncd Daemon:/home/rsync:/bin/false
+sshd:x:50:50:sshd PrivSep:/var/lib/sshd:/bin/false
+lightdm:x:65:65:Lightdm Daemon:/var/lib/lightdm:/bin/false
+sddm:x:66:66:Simple Desktop Display Manager:/var/lib/sddm:/sbin/nologin
+colord:x:71:71:Color Daemon Owner:/var/lib/colord:/bin/false
+systemd-bus-proxy:x:72:72:systemd Bus Proxy:/:/bin/false
+systemd-journal-gateway:x:73:73:systemd Journal Gateway:/:/bin/false
+systemd-journal-remote:x:74:74:systemd Journal Remote:/:/bin/false
+systemd-journal-upload:x:75:75:systemd Journal Upload:/:/bin/false
+systemd-network:x:76:76:systemd Network Management:/:/bin/false
+systemd-resolve:x:77:77:systemd Resolver:/:/bin/false
+systemd-timesync:x:78:78:systemd Time Synchronization:/:/bin/false
+systemd-coredump:x:79:79:systemd Core Dumper:/:/bin/false
+uuidd:x:80:80:UUID Generation Daemon User:/dev/null:/usr/bin/false
+systemd-oom:x:81:81:systemd Userspace OOM Killer:/:/bin/false
+avahi:x:85:85:Avahi Daemon Owner:/run/avahi-daemon:/bin/false
+qemu:x:90:90:Qemu user:/:/bin/false
+nobody:x:99:99:Unprivileged User:/dev/null:/bin/false

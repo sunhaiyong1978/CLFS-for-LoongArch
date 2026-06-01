@@ -1,0 +1,23 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=x265
+export PACKAGE_VERSION=20240812
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/x265/20240812/
+rm -rf ${BUILD_DIRECTORY}/x265-20240812
+tar xvf ${DOWNLOADDIR}/x265-20240812.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/x265-20240812
+    patch -Np1 -i ${SYSDIR}/files/base/x265/20240812/patches/0001-x265-20240812-fix-for-cmake-4.0.0.patch 
+	 
+    mkdir cross-build
+    pushd cross-build
+        CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
+        cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib64 -DENABLE_ASSEMBLY=OFF \
+	      -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+              -DGIT_ARCHETYPE=1 ../source
+	eval ${MAKE_AND_INSTALL}
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/x265-20240812

@@ -1,0 +1,24 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=Python3
+export PACKAGE_VERSION=3.14.5
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/Python3/3.14.5/
+rm -rf ${BUILD_DIRECTORY}/Python-3.14.5
+tar xvf ${DOWNLOADDIR}/Python-3.14.5.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/Python-3.14.5
+	CFLAGS="${CFLAGS} -fPIC"
+	./configure --prefix=${CROSSTOOLS_DIR} --with-platlibdir=lib64 \
+	            --disable-shared --with-system-expat --with-system-ffi \
+	            --with-ensurepip=yes --enable-optimizations \
+	            ac_cv_broken_sem_getvalue=yes LIBSQLITE3_LIBS="-L${CROSSTOOLS_DIR}/lib${LIB_SUFF} -Wl,-rpath=${CROSSTOOLS_DIR}/lib${LIB_SUFF} -lsqlite3"
+	eval ${MAKE_AND_INSTALL}
+
+	save_package_version Python3 "${PACKAGE_VERSION%\.*}"
+	PYTHON_VERSION="$(get_package_version Python3)"
+
+	sed -i "s@-lutil @@g" ${CROSSTOOLS_DIR}/bin/python$(get_package_version Python3)-config
+
+popd 
+rm -rf ${BUILD_DIRECTORY}/Python-3.14.5

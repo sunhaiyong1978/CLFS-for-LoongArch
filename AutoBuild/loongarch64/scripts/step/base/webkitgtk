@@ -1,0 +1,48 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=webkitgtk
+export PACKAGE_VERSION=2.53.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/webkitgtk/2.53.1/
+rm -rf ${BUILD_DIRECTORY}/webkitgtk-2.53.1
+tar xvf ${DOWNLOADDIR}/webkitgtk-2.53.1.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/webkitgtk-2.53.1
+    
+
+    mkdir cross-build-6.0
+    pushd cross-build-6.0
+	WK_USE_CCACHE=NO CC="${CROSS_TARGET}-gcc -fpermissive -mlasx -flax-vector-conversions" CXX="${CROSS_TARGET}-g++ -fpermissive -mlasx -flax-vector-conversions" \
+        cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${COMMON_DIR}/cmake-cross.cmake \
+              -DPKG_CONFIG_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-pkg-config \
+              -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=/usr/lib64 \
+              -DGETTEXT_MSGFMT_EXECUTABLE=/bin/msgfmt \
+              -DGETTEXT_MSGMERGE_EXECUTABLE=/bin/msgmerge \
+              -DCMAKE_MAKE_PROGRAM=${CROSSTOOLS_DIR}/bin/ninja \
+              -DPERL_EXECUTABLE=${CROSSTOOLS_DIR}/bin/perl \
+              -DRuby_EXECUTABLE=${CROSSTOOLS_DIR}/bin/ruby \
+              -DUNIFDEF_EXECUTABLE=${CROSSTOOLS_DIR}/bin/unifdef \
+              -DGPERF_EXECUTABLE=/bin/gperf \
+	      -DTOUCH_EXECUTABLE=/bin/touch \
+              -DCMAKE_SKIP_RPATH=ON \
+              -DPORT=GTK \
+              -DUSE_GTK4=ON \
+              -DLIB_INSTALL_DIR=/usr/lib64 \
+              -DENABLE_MINIBROWSER=OFF \
+              -DUSE_WPE_RENDERER=ON \
+              -DENABLE_BUBBLEWRAP_SANDBOX=OFF \
+              -DENABLE_INTROSPECTION=ON \
+	      -DUSE_SYSTEM_MALLOC=ON \
+	      -DUSE_LIBBACKTRACE=OFF -DENABLE_SPEECH_SYNTHESIS=OFF -DUSE_SYSTEM_SYSPROF_CAPTURE=OFF -DENABLE_DOCUMENTATION=OFF -DUSE_JPEGXL=OFF -DUSE_LIBHYPHEN=OFF -DUSE_WOFF2=OFF -DUSE_AVIF=OFF \
+              -Wno-dev -G Ninja ..
+        sed -i "s@ /usr\(.*\)\(g-ir-compiler\|g-ir-scanner\)@ ${CROSSTOOLS_DIR}\1${CROSS_TARGET}-\2@g" build.ninja
+        sed -i "s@${SYSROOT_DIR}/usr/bin/wayland-scanner@${CROSSTOOLS_DIR}/bin/wayland-scanner@g" build.ninja
+	sed -i "s@${SYSROOT_DIR}/usr/bin/gi-docgen \(index\|generate\|gen-index\|gen-deps\|search\|check\|serve\) @& --add-include-path ${SYSROOT_DIR}/usr/share/gir-1.0/ @g" build.ninja
+        sed -i "s@${SYSROOT_DIR}/usr/bin/glib-compile-resources@${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-glib-compile-resources@g" build.ninja
+        sed -i -e "s@\(${SYSROOT_DIR}/\)usr\(.*\)/\(g-ir-compiler\|g-ir-scanner\|vapigen\)@${CROSSTOOLS_DIR}/\2/${CROSS_TARGET}-\3@g" build.ninja                                                         
+        sed -i -e "s@\(${CROSSTOOLS_DIR}/\)\(.*\)/\(g-ir-compiler\|g-ir-scanner\|vapigen\)@${CROSSTOOLS_DIR}/\2/${CROSS_TARGET}-\3@g" build.ninja                                                         
+
+	eval ${NINJA_AND_INSTALL}
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/webkitgtk-2.53.1

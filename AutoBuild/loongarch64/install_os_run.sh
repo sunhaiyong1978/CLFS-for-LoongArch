@@ -1,0 +1,1 @@
+../gongju/bin/install_os_run.sh

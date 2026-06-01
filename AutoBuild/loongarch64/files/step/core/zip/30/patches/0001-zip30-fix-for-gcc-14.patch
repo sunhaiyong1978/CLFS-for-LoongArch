@@ -1,0 +1,51 @@
+From c13f70ae5e36367a8951fcc8f4d4dca32be72151 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Sat, 9 Dec 2023 04:27:05 +0000
+Subject: [PATCH] zip30 fix for gcc14.
+
+---
+ timezone.c     | 1 +
+ unix/configure | 2 +-
+ unix/unix.c    | 1 -
+ 3 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/timezone.c b/timezone.c
+index 485ec02..18aecbd 100644
+--- a/timezone.c
++++ b/timezone.c
+@@ -41,6 +41,7 @@
+ #include "timezone.h"
+ #include <ctype.h>
+ #include <errno.h>
++#include <time.h>
+ 
+ #ifdef IZTZ_DEFINESTDGLOBALS
+ long timezone = 0;
+diff --git a/unix/configure b/unix/configure
+index 73ba803..49d1fc3 100644
+--- a/unix/configure
++++ b/unix/configure
+@@ -521,7 +521,7 @@ done
+ echo Check for memset
+ echo "int main(){ char k; memset(&k,0,0); return 0; }" > conftest.c
+ $CC -o conftest conftest.c >/dev/null 2>/dev/null
+-[ $? -ne 0 ] && CFLAGS="${CFLAGS} -DZMEM"
++[ $? -ne 0 ] && CFLAGS="${CFLAGS}"
+ 
+ 
+ echo Check for memmove
+diff --git a/unix/unix.c b/unix/unix.c
+index f4d655d..5d5fba6 100644
+--- a/unix/unix.c
++++ b/unix/unix.c
+@@ -67,7 +67,6 @@ local char *readd OF((DIR *));
+ #ifndef dirent
+ #  define dirent direct
+ #endif
+-typedef FILE DIR;
+ /*
+ **  Apparently originally by Rich Salz.
+ **  Cleaned up and modified by James W. Birdsall.
+-- 
+2.31.1
+

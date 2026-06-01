@@ -1,0 +1,15 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=openjpeg
+export PACKAGE_VERSION=
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/openjpeg//
+touch ${TEMP_DIRECTORY}/strip-foo
+
+for cmake_file in $(grep -rl "\.so\." $(find ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/cmake/ -name "*-release.cmake") ${TEMP_DIRECTORY}/strip-foo) ${TEMP_DIRECTORY}/strip-foo
+do
+        if [ -f ${cmake_file} ]; then
+                sed -i.orig "s@\"/usr@\"${SYSROOT_DIR}/usr@g" ${cmake_file}
+        fi
+done

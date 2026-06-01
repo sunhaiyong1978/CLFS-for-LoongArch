@@ -1,0 +1,29 @@
+From 38e765ee207372e03cec2bc416f56184b870305e Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Tue, 26 Sep 2023 14:12:46 +0000
+Subject: [PATCH] dbus broker fix systemd dir for cross build.
+
+---
+ meson.build | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index b9dd846..bae9cb9 100644
+--- a/meson.build
++++ b/meson.build
+@@ -77,9 +77,9 @@ if use_launcher
+         dep_systemd = dependency('systemd', version: '>=230')
+ 
+         add_project_arguments('-DSYSTEMUIDMAX=' + dep_systemd.get_variable('systemuidmax'), language: 'c')
+-        conf.set('systemunitdir', dep_systemd.get_variable('systemdsystemunitdir'))
+-        conf.set('userunitdir', dep_systemd.get_variable('systemduserunitdir'))
+-        conf.set('catalogdir', dep_systemd.get_variable('catalogdir'))
++        conf.set('systemunitdir', '/usr/lib/systemd/system')
++        conf.set('userunitdir', '/usr/lib/systemd/user')
++        conf.set('catalogdir', '/usr/lib/systemd/catalog')
+ endif
+ 
+ #
+-- 
+2.31.1
+

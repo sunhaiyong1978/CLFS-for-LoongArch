@@ -1,0 +1,14 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=xxHash
+export PACKAGE_VERSION=0.8.3
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/xxHash/0.8.3/
+rm -rf ${BUILD_DIRECTORY}/xxHash-0.8.3
+tar xvf ${DOWNLOADDIR}/xxHash-0.8.3.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/xxHash-0.8.3
+    make -j${JOBS} CC=${CROSS_TARGET}-gcc PREFIX=/usr LIBDIR=/usr/lib64
+    make CC=${CROSS_TARGET}-gcc PREFIX=/usr LIBDIR=/usr/lib64 DESTDIR=${SYSROOT_DIR} install
+popd 
+rm -rf ${BUILD_DIRECTORY}/xxHash-0.8.3

@@ -1,0 +1,37 @@
+From 9d297f0a3e682f397b69fc83bb3ab0202918a4ab Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Tue, 17 Oct 2023 04:57:55 +0000
+Subject: [PATCH] PyQt5 5.15.10 fix for sip4
+
+---
+ qpy/QtCore/qpycore_types.cpp | 2 +-
+ sip/QtCore/qcoreevent.sip    | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/qpy/QtCore/qpycore_types.cpp b/qpy/QtCore/qpycore_types.cpp
+index bf7f9a4..c14069d 100644
+--- a/qpy/QtCore/qpycore_types.cpp
++++ b/qpy/QtCore/qpycore_types.cpp
+@@ -388,7 +388,7 @@ static int trawl_type(PyTypeObject *pytype, qpycore_metaobject *qo,
+     Py_ssize_t pos = 0;
+     PyObject *key, *value, *dict;
+ 
+-    if ((dict = sipPyTypeDictRef(pytype)) == NULL)
++    if ((dict = sipPyTypeDict(pytype)) == NULL)
+         return -1;
+ 
+     while (PyDict_Next(dict, &pos, &key, &value))
+diff --git a/sip/QtCore/qcoreevent.sip b/sip/QtCore/qcoreevent.sip
+index a4ed501..9f68674 100644
+--- a/sip/QtCore/qcoreevent.sip
++++ b/sip/QtCore/qcoreevent.sip
+@@ -23,6 +23,7 @@
+ class QEvent /Supertype=sip.wrapper/
+ {
+ %TypeHeaderCode
++#define QT_KEYPAD_NAVIGATION 1
+ #include <qcoreevent.h>
+ %End
+
+-- 
+2.31.1

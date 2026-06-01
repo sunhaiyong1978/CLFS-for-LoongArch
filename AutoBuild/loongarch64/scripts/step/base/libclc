@@ -1,0 +1,46 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=libclc
+export PACKAGE_VERSION=22.1.6
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/libclc/22.1.6/
+rm -rf ${BUILD_DIRECTORY}/llvm-project-22.1.6.src
+tar xvf ${DOWNLOADDIR}/llvm-project-22.1.6.src.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/llvm-project-22.1.6.src
+    pushd libclc
+	sed -i "s@COMMAND \${prepare_builtins_exe}@COMMAND qemu-${ARCH_NAME} \${prepare_builtins_exe}@g" cmake/modules/AddLibclc.cmake
+        mkdir cross-build
+        pushd cross-build
+            CC="clang" CXX="clang++" \
+            cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release \
+		  -DCMAKE_SYSROOT=${SYSROOT_DIR} \
+                  -DCMAKE_FIND_ROOT_PATH=${SYSROOT_DIR}/usr \
+                  -DLLVM_CONFIG=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-llvm-config \
+                  -DLLVM_LIBDIR_SUFFIX=64 \
+                  -DLLVM_TOOL_clang="${CROSSTOOLS_DIR}/bin/clang" \
+                  -DLLVM_TOOL_llvm-as="${CROSSTOOLS_DIR}/bin/llvm-as" \
+                  -DLLVM_TOOL_llvm-link="${CROSSTOOLS_DIR}/bin/llvm-link" \
+                  -DLLVM_TOOL_opt="${CROSSTOOLS_DIR}/bin/opt" \
+                  -DLLVM_SPIRV="${CROSSTOOLS_DIR}/bin/llvm-spirv" \
+		  -DCMAKE_C_COMPILER_CLANG_SCAN_DEPS="${CROSSTOOLS_DIR}/bin/clang-scan-deps" \
+                  -DCMAKE_AR="${CROSSTOOLS_DIR}/bin/llvm-ar" \
+                  -DCMAKE_RANLIB="${CROSSTOOLS_DIR}/bin/llvm-ranlib" \
+                  -DCMAKE_C_COMPILER_AR="${CROSSTOOLS_DIR}/bin/llvm-ar" \
+                  -DCMAKE_C_COMPILER_RANLIB="${CROSSTOOLS_DIR}/bin/llvm-ranlib" \
+		  -DLLVM_DIR:PATH=${SYSROOT_DIR}/usr/lib${LIB_SUFF}/cmake/llvm \
+		  -DPython3_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3 \
+		  -DCMAKE_C_FLAGS="-DNDEBUG --target=${CROSS_TARGET}" -DCMAKE_CXX_FLAGS="-DNDEBUG --target=${CROSS_TARGET}" \
+                  -DLLVM_ENABLE_RTTI:BOOL=ON \
+                  -DLLVM_ENABLE_ZLIB:BOOL=ON \
+                  -DCMAKE_MAKE_PROGRAM:PATH=${CROSSTOOLS_DIR}/bin/ninja \
+                  -DLLVM_ENABLE_TERMINFO:BOOL=OFF \
+                  -DLLVM_USE_SANITIZER:BOOL=ON \
+                  -DLLVM_LINK_LLVM_DYLIB:BOOL=ON \
+		  -DCMAKE_INSTALL_LIBDIR=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_INSTALL_LIBEXECDIR=/usr/libexec -DCMAKE_INSTALL_DATADIR=lib64 \
+                  -DLLVM_HOST_TRIPLE=${CROSS_TARGET}
+             eval ${NINJA_AND_INSTALL}
+        popd
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/llvm-project-22.1.6.src

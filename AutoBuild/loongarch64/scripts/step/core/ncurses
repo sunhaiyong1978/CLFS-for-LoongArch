@@ -1,0 +1,32 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=ncurses
+export PACKAGE_VERSION=6.6
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/ncurses/6.6/
+rm -rf ${BUILD_DIRECTORY}/ncurses-6.6
+tar xvf ${DOWNLOADDIR}/ncurses-6.6.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/ncurses-6.6
+	./configure --prefix=/usr --libdir=/usr/lib${LIB_SUFF} --build=${CROSS_HOST} \
+	            --host=${CROSS_TARGET} --with-shared --without-debug \
+	            --without-normal --enable-pc-files --without-ada \
+	            --with-pkg-config-libdir=/usr/lib${LIB_SUFF}/pkgconfig --enable-widec \
+	            --disable-stripping
+	make -j${JOBS}
+	make DESTDIR=${SYSROOT_DIR} install
+	
+	for lib in ncurses form panel menu ; do
+	    rm -vf                    ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/lib${lib}.so
+	    echo "INPUT(-l${lib}w)" > ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/lib${lib}.so
+	    ln -sfv ${lib}w.pc        ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/pkgconfig/${lib}.pc
+	done
+	
+	rm -vf  ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/libcursesw.so
+	echo "INPUT(-lncursesw)" > ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/libcursesw.so
+	ln -sfv libncurses.so      ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/libcurses.so
+	rm -fv ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/libncurses++w.a
+popd 
+rm -rf ${BUILD_DIRECTORY}/ncurses-6.6
+cp -v ${SYSROOT_DIR}/usr/bin/ncursesw6-config ${CROSSTOOLS_DIR}/bin/
+sed -i "s@-L\$libdir@@g" ${CROSSTOOLS_DIR}/bin/ncursesw6-config

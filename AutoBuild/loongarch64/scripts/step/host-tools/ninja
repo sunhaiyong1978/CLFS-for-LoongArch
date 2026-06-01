@@ -1,0 +1,14 @@
+source env/host-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=host-tools
+export STEP_PACKAGENAME=ninja
+export PACKAGE_VERSION=1.13.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/host-tools/ninja/1.13.2/
+rm -rf ${BUILD_DIRECTORY}/ninja-1.13.2
+tar xvf ${DOWNLOADDIR}/ninja-1.13.2.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/ninja-1.13.2
+	python3 configure.py --bootstrap
+	install -vm755 ninja ${CROSSTOOLS_DIR}/bin/
+popd 
+rm -rf ${BUILD_DIRECTORY}/ninja-1.13.2

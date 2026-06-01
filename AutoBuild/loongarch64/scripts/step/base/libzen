@@ -1,0 +1,17 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=libzen
+export PACKAGE_VERSION=0.4.41
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/libzen/0.4.41/
+rm -rf ${BUILD_DIRECTORY}/ZenLib
+tar xvf ${DOWNLOADDIR}/libzen-0.4.41.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/ZenLib
+	pushd Project/GNU/Library
+	    autoreconf -ifv
+	    ./configure $COMMON_CONFIG
+	    eval ${MAKE_AND_INSTALL}
+	popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/ZenLib

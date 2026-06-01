@@ -1,0 +1,44 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=glslang
+export PACKAGE_VERSION=16.3.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/glslang/16.3.0/
+rm -rf ${BUILD_DIRECTORY}/glslang-16.3.0
+tar xvf ${DOWNLOADDIR}/glslang-16.3.0.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/glslang-16.3.0
+        
+	mkdir cross-build
+	pushd cross-build
+        	CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++"  \
+		cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${COMMON_DIR}/cmake-cross.cmake \
+	              -DPKG_CONFIG_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-pkg-config \
+	              -DGETTEXT_MSGFMT_EXECUTABLE=/bin/msgfmt \
+        	      -DGETTEXT_MSGMERGE_EXECUTABLE=/bin/msgmerge \
+		      -DPython_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3 \
+		      -DPython3_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3 \
+		      -DPYTHON_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3 \
+		      -DPYTHON3_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3 \
+	              -DPERL_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-perl \
+        	      -DRuby_EXECUTABLE=${CROSSTOOLS_DIR}/bin/ruby \
+	              -DGPERF_EXECUTABLE=/bin/gperf -DGperf_EXECUTABLE=/bin/gperf \
+		      -DDOXYGEN_EXECUTABLE=/bin/doxygen \
+		      -DWaylandScanner_EXECUTABLE=${CROSSTOOLS_DIR}/bin/wayland-scanner \
+		      -DQtWaylandScanner_EXECUTABLE=${CROSSTOOLS_DIR}/bin/qtwaylandscanner \
+		      -DLIBXML2_XMLLINT_EXECUTABLE=${CROSSTOOLS_DIR}/bin/xmllint \
+		      -DINTROSPECTION_SCANNER=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-g-ir-scanner \
+		      -DINTROSPECTION_COMPILER=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-g-ir-compiler \
+		      -DUPDATE_MIME_DATABASE_EXECUTABLE=${CROSSTOOLS_DIR}/bin/update-mime-database \
+		      -DFLEX_EXECUTABLE=/bin/flex \
+		      -DBISON_EXECUTABLE=/bin/bison \
+		      -Dgzip_EXECUTABLE=/bin/gzip \
+		      -DCMAKE_INSTALL_LIBDIR=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_INSTALL_LIBEXECDIR=/usr/libexec \
+       		      -DCMAKE_INSTALL_PREFIX=/usr \
+		      -DBUILD_SHARED_LIBS=ON \
+		      -DENABLE_OPT=0 -Wno-dev ..
+		eval ${MAKE_AND_INSTALL}
+	popd
+        rm -f ${SYSROOT_DIR}/usr/lib64/*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/glslang-16.3.0

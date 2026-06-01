@@ -1,0 +1,57 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=systemd
+export PACKAGE_VERSION=260.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/systemd/260.1/
+rm -rf ${BUILD_DIRECTORY}/systemd-260.1
+tar xvf ${DOWNLOADDIR}/systemd-260.1.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/systemd-260.1
+	
+	pushd src/include/override/sys
+		./generate-syscall.py syscall.h syscall-list.txt syscalls-*.txt
+	popd
+	sed -i -e 's/GROUP="render"/GROUP="video"/' \
+           -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
+
+	mkdir -p build
+	pushd build
+		meson ${MESON_CONFIG} \
+		      -Ddefault-dnssec=no -Dfirstboot=false \
+		      -Dinstall-tests=false -Dldconfig=false -Dsysusers=false \
+		      -Drpmmacrosdir=no -Dhomed=false -Duserdb=false -Dman=false -Dmode=release -Dlogind=true \
+		      -Dpamconfdir=/etc/pam.d -Ddefault-kill-user-processes=false \
+		      -Ddbuspolicydir=/usr/share/dbus-1/system.d -Ddbussessionservicedir=/usr/share/dbus-1/services -Ddbussystemservicedir=/usr/share/dbus-1/system-services \
+		      -Dbashcompletiondir=/usr/share/bash-completion/completions \
+		      ..
+		eval ${NINJA_AND_INSTALL}
+	popd
+
+	rm -f ${SYSROOT_DIR}/usr/lib/systemd/system/systemd-networkd-wait-online.service
+	rm -f ${SYSROOT_DIR}/usr/lib/systemd/system/nm-cloud-setup.{service,timer}
+
+cat >> ${SYSROOT_DIR}/etc/pam.d/system-session << "EOF"
+session  required    pam_loginuid.so
+session  optional    pam_systemd.so
+EOF
+
+cat > ${SYSROOT_DIR}/etc/pam.d/systemd-user << "EOF"
+account  required    pam_access.so
+account  include     system-account
+
+session  required    pam_env.so
+session  required    pam_limits.so
+session  required    pam_unix.so
+session  required    pam_loginuid.so
+session  optional    pam_keyinit.so force revoke
+session  optional    pam_systemd.so
+
+auth     required    pam_deny.so
+password required    pam_deny.so
+EOF
+
+popd 
+rm -rf ${BUILD_DIRECTORY}/systemd-260.1
+
+set_strip_step "/usr/lib/systemd" "0"

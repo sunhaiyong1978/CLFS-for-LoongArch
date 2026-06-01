@@ -1,0 +1,15 @@
+source env/host-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=host-tools
+export STEP_PACKAGENAME=cargo-c
+export PACKAGE_VERSION=0.10.22
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/host-tools/cargo-c/0.10.22/
+rm -rf ${BUILD_DIRECTORY}/cargo-c-0.10.22
+tar xvf ${DOWNLOADDIR}/cargo-c-0.10.22.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/cargo-c-0.10.22
+	RUSTFLAGS="-C link-args=-Wl,-rpath=${CROSSTOOLS_DIR}/lib:${CROSSTOOLS_DIR}/lib64:/usr/lib:/usr/lib64" \
+	cargo build --release
+	install -Dm755 target/release/cargo-{capi,cbuild,cinstall,ctest} ${CROSSTOOLS_DIR}/bin/
+popd 
+rm -rf ${BUILD_DIRECTORY}/cargo-c-0.10.22

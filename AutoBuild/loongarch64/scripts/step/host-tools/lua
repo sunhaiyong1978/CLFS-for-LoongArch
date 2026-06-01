@@ -1,0 +1,17 @@
+source env/host-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=host-tools
+export STEP_PACKAGENAME=lua
+export PACKAGE_VERSION=5.4.8
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/host-tools/lua/5.4.8/
+rm -rf ${BUILD_DIRECTORY}/lua-5.4.8
+tar xvf ${DOWNLOADDIR}/lua-5.4.8.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/lua-5.4.8
+    sed -i '/#define LUA_ROOT/s:/usr/local/:/usr/:' src/luaconf.h
+    make MYCFLAGS="-fPIC" linux -j${JOBS}
+    make INSTALL_TOP=${CROSSTOOLS_DIR} \
+         INSTALL_LIB=${CROSSTOOLS_DIR}/lib64 \
+         INSTALL_MAN=${CROSSTOOLS_DIR}/share/man/man1 install
+popd 
+rm -rf ${BUILD_DIRECTORY}/lua-5.4.8

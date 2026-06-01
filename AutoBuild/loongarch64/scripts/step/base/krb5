@@ -1,0 +1,25 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=krb5
+export PACKAGE_VERSION=1.22.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/krb5/1.22.2/
+rm -rf ${BUILD_DIRECTORY}/krb5-1.22.2
+tar xvf ${DOWNLOADDIR}/krb5-1.22.2.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/krb5-1.22.2
+    pushd src
+        cp -a -f $(automake --print-libdir)/config.{sub,guess} config/
+        sed -i "s@error=discarded-qualifiers@@g" configure
+        ./configure ${COMMON_CONFIG} --runstatedir=/run \
+                    --with-system-ss --with-system-verto=no \
+                    --enable-dns-for-realm \
+                    krb5_cv_attr_constructor_destructor=yes,yes \
+                    ac_cv_func_regcomp=yes ac_cv_printf_positional=yes
+        eval ${MAKE_AND_INSTALL}
+    popd
+
+    cp -v ${SYSROOT_DIR}/usr/bin/krb5-config ${CROSSTOOLS_DIR}/bin/krb5-config
+    sed -i "s@-L\$libdir@@g" ${CROSSTOOLS_DIR}/bin/krb5-config
+popd 
+rm -rf ${BUILD_DIRECTORY}/krb5-1.22.2

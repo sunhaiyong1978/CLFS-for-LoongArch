@@ -1,0 +1,22 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=tiff
+export PACKAGE_VERSION=4.7.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/tiff/4.7.1/
+rm -rf ${BUILD_DIRECTORY}/tiff-4.7.1
+tar xvf ${DOWNLOADDIR}/tiff-4.7.1.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/tiff-4.7.1
+        
+	mkdir cross-build
+	pushd cross-build
+        	CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++"  \
+		cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${COMMON_DIR}/cmake-cross.cmake \
+		      -DCMAKE_INSTALL_LIBDIR=/usr/lib${LIB_SUFF} \
+       		      -DCMAKE_INSTALL_PREFIX=/usr -Dtiff-docs=OFF -Wno-dev ..
+		eval ${MAKE_AND_INSTALL}
+	popd
+        rm -f ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/tiff-4.7.1

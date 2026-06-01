@@ -1,0 +1,22 @@
+source env/host-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=host-tools
+export STEP_PACKAGENAME=gmp
+export PACKAGE_VERSION=6.3.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/host-tools/gmp/6.3.0/
+rm -rf ${BUILD_DIRECTORY}/gmp-6.3.0
+tar xvf ${DOWNLOADDIR}/gmp-6.3.0.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/gmp-6.3.0
+	
+        for config_i in $(find -name "config.sub")
+        do
+                cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+        done
+        if [ ! -f configure ]; then
+                autoreconf -ifv
+        fi
+	CFLAGS="${CFLAGS} -std=gnu11" CXXFLAGS="${CXXFLAGS} ${LDFLAGS}" ./configure --prefix=${CROSSTOOLS_DIR} --libdir=${CROSSTOOLS_DIR}/lib${LIB_SUFF} --enable-cxx
+	eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/gmp-6.3.0

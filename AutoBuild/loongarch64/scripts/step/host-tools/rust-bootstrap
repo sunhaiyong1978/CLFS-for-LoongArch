@@ -1,0 +1,13 @@
+source env/host-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=host-tools
+export STEP_PACKAGENAME=rust-bootstrap
+export PACKAGE_VERSION=1.95.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/host-tools/rust-bootstrap/1.95.0/
+rm -rf ${BUILD_DIRECTORY}/rust-1.95.0-x86_64-unknown-linux-gnu
+tar xvf ${DOWNLOADDIR}/rust-1.95.0-x86_64-unknown-linux-gnu.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/rust-1.95.0-x86_64-unknown-linux-gnu
+./install.sh --destdir=${CROSSTOOLS_DIR}/rust
+popd 
+rm -rf ${BUILD_DIRECTORY}/rust-1.95.0-x86_64-unknown-linux-gnu

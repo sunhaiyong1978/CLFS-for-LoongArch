@@ -1,0 +1,21 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=gcr3
+export PACKAGE_VERSION=3.41.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/gcr3/3.41.2/
+rm -rf ${BUILD_DIRECTORY}/gcr-3.41.2
+tar xvf ${DOWNLOADDIR}/gcr-3.41.2.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/gcr-3.41.2
+    sed -i 's:"/desktop:"/org:' schema/*.xml
+    mkdir cross-build
+    pushd cross-build
+        meson ${MESON_CONFIG} \
+              -Dgtk_doc=false -Dsystemd=disabled \
+              ..
+        CC="${CROSS_TARGET}-gcc" ninja
+        DESTDIR=${SYSROOT_DIR} ninja install
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/gcr-3.41.2

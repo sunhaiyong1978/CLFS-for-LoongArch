@@ -1,0 +1,33 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=compiler-rt
+export PACKAGE_VERSION=22.1.6
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/compiler-rt/22.1.6/
+rm -rf ${BUILD_DIRECTORY}/llvm-project-22.1.6.src
+tar xvf ${DOWNLOADDIR}/llvm-project-22.1.6.src.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/llvm-project-22.1.6.src
+    pushd compiler-rt
+        mkdir cross-build
+        pushd cross-build
+            CC="clang" CXX="clang++" \
+            cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release \
+                  -DLLVM_CONFIG=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-llvm-config \
+                  -DLLVM_LIBDIR_SUFFIX=64 \
+                  -DCMAKE_AR="${CROSSTOOLS_DIR}/bin/llvm-ar" \
+                  -DCMAKE_RANLIB="${CROSSTOOLS_DIR}/bin/llvm-ranlib" \
+                  -DCMAKE_C_FLAGS="-DNDEBUG" \
+		  -DCMAKE_CXX_FLAGS="-DNDEBUG" \
+                  -DCMAKE_MAKE_PROGRAM:PATH=${HOST_TOOLS_DIR}/bin/ninja \
+		  -DPython3_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3 \
+                  -DCMAKE_SYSROOT=${SYSROOT_DIR} \
+                  -DCMAKE_FIND_ROOT_PATH=${SYSROOT_DIR}/usr \
+		  -DLLVM_USE_SANITIZER:BOOL=ON \
+                  -DLLVM_LINK_LLVM_DYLIB:BOOL=ON \
+                  -DLLVM_HOST_TRIPLE=${CROSS_TARGET}
+             eval ${NINJA_AND_INSTALL}
+        popd
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/llvm-project-22.1.6.src

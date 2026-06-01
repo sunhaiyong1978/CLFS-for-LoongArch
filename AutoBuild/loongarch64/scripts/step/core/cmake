@@ -1,0 +1,22 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=cmake
+export PACKAGE_VERSION=4.3.3
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/cmake/4.3.3/
+rm -rf ${BUILD_DIRECTORY}/cmake-4.3.3
+tar xvf ${DOWNLOADDIR}/cmake-4.3.3.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/cmake-4.3.3
+    patch -Np1 -i ${SYSDIR}/files/core/cmake/4.3.3/patches/cmake-3.22.3-add-loongarch64-to-checktypesize.patch 
+	 
+    mkdir build
+    pushd build
+        cmake -DCMAKE_CXX_COMPILER="${CROSS_TARGET}-g++" -DCMAKE_C_COMPILER="${CROSS_TARGET}-gcc" \
+              -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_DOC_DIR=/share/doc/cmake-4.3.3 \
+              -DOPENSSL_ROOT_DIR=${SYSDIR}/sysroot/usr -DCMAKE_BUILD_TYPE=RELEASE -DCMake_TEST_Qt6=0 -DBUILD_CursesDialog=OFF ../
+        sed -i "/P cmake_install.cmake/s@\tbin/cmake@\t/bin/cmake@g" Makefile
+	eval ${MAKE_AND_INSTALL}
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/cmake-4.3.3

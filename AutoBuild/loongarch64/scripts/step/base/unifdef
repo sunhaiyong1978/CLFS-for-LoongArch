@@ -1,0 +1,16 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=unifdef
+export PACKAGE_VERSION=2.12
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/unifdef/2.12/
+rm -rf ${BUILD_DIRECTORY}/unifdef-2.12
+tar xvf ${DOWNLOADDIR}/unifdef-2.12.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/unifdef-2.12
+    make prefix="/usr" CC=${CROSS_TARGET}-gcc CFLAGS="${CFLAGS} -std=gnu17"
+    make prefix="/usr" CC=${CROSS_TARGET}-gcc CFLAGS="${CFLAGS} -std=gnu17" DESTDIR=${PWD}/dest install
+    cp -av dest/usr/bin/* ${SYSROOT_DIR}/usr/bin/
+    cp -av dest/usr/share/man/man* ${SYSROOT_DIR}/usr/share/man/
+popd 
+rm -rf ${BUILD_DIRECTORY}/unifdef-2.12

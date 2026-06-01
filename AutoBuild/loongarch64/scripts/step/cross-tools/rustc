@@ -1,0 +1,32 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=rustc
+export PACKAGE_VERSION=1.95.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/rustc/1.95.0/
+rm -rf ${BUILD_DIRECTORY}/rustc-1.95.0-src
+tar xvf ${DOWNLOADDIR}/rustc-1.95.0-src.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/rustc-1.95.0-src
+	patch -Np1 -i ${SYSDIR}/files/cross-tools/rustc/1.95.0/patches/0001-rust-1.80.0-fix-for-gcc-15.patch 
+	 
+	./configure --target=${CROSS_TARGET},$(echo ${CROSS_HOST} | sed 's@cross@unknown@g') \
+	            --prefix=${CROSSTOOLS_DIR} --sysconfdir=${CROSSTOOLS_DIR}/etc \
+	            --local-rust-root=${CROSSTOOLS_DIR}/rust/usr/local \
+	            --enable-extended --enable-vendor --disable-docs --disable-dist-src --release-channel=dev \
+		    --set=target.${CROSS_TARGET}.linker="${CROSS_TARGET}-gcc" \
+		    --set=target.${CROSS_TARGET}.cc="${CROSS_TARGET}-gcc" \
+		    --set=target.${CROSS_TARGET}.cxx="${CROSS_TARGET}-g++" \
+		    --set=target.${CROSS_TARGET}.llvm-config="${CROSS_TARGET}-llvm-config" \
+		    --set=target.$(echo ${CROSS_HOST} | sed 's@cross@unknown@g').llvm-config="${CROSSTOOLS_DIR}/bin/llvm-config" \
+	            --disable-codegen-tests --experimental-targets="" --enable-llvm-static-stdcpp --enable-profiler
+
+        export CARGO_TARGET_$(echo ${CROSS_TARGET^^} | tr '-' '_')_LINKER="${CROSS_TARGET}-gcc"
+        export CARGO_TARGET_$(echo ${CROSS_TARGET^^} | tr '-' '_')_RUSTFLAGS="-Ccode-model=large"
+	export CARGO_TARGET_$(echo ${CROSS_HOST^^} | sed 's@CROSS@UNKNOWN@g' | tr '-' '_')_RUSTFLAGS="-Clink-arg=-Wl,-rpath,${CROSSTOOLS_DIR}/lib:${CROSSTOOLS_DIR}/lib64:/usr/lib:/usr/lib64 -Clink-arg=-Wl,-rpath-link,${CROSSTOOLS_DIR}/lib:${CROSSTOOLS_DIR}/lib64:/usr/lib:/usr/lib64"
+        make -j${JOBS} HOST_CC="gcc"
+        make -j${JOBS} HOST_CC="gcc" install
+popd 
+rm -rf ${BUILD_DIRECTORY}/rustc-1.95.0-src
+
+save_package_version cross-tools_rustc "${PACKAGE_VERSION}-dev"

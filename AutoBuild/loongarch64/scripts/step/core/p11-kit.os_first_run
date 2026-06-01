@@ -1,0 +1,1 @@
+ln -sf /etc/pki/tls/certs/ca-bundle.crt /etc/ssl/certs/

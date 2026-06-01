@@ -1,0 +1,25 @@
+From 37c324fa30317756fb21e9a8bd92df8abb9a2989 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Sat, 18 Nov 2023 01:48:41 +0000
+Subject: [PATCH] remove  -Werror=implicit-function-declaration flags.
+
+---
+ configure | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure b/configure
+index 47c037b..c58af5a 100755
+--- a/configure
++++ b/configure
+@@ -12989,7 +12989,7 @@ fi
+   -Wunused -Wreturn-type -Wswitch -Wcomment -Wtrigraphs \
+   -Wchar-subscripts -Wparentheses -Winline -Wredundant-decls \
+   -Wformat-nonliteral -Werror=format-security \
+-  -Wsign-compare -Werror=implicit-function-declaration \
++  -Wsign-compare \
+   -Wpointer-arith -Wwrite-strings -Wstrict-prototypes \
+   -Waggregate-return -Wcast-align -Wimplicit -Wuninitialized \
+   -Wmissing-prototypes -Wmissing-declarations -Wnested-externs \
+-- 
+2.31.1
+

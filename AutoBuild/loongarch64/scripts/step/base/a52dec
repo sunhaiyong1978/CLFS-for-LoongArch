@@ -1,0 +1,25 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=a52dec
+export PACKAGE_VERSION=0.8.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/a52dec/0.8.0/
+rm -rf ${BUILD_DIRECTORY}/a52dec-0.8.0
+tar xvf ${DOWNLOADDIR}/a52dec-0.8.0.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/a52dec-0.8.0
+	
+	for config_i in $(find -name "config.sub")
+	do
+		cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+	done
+	if [ ! -f configure ]; then
+		autoreconf -ifv
+	fi
+	 ./configure ${COMMON_CONFIG} --mandir=/usr/share/man CFLAGS="-fPIC" --enable-malloc0returnsnull
+	CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" make -j${JOBS}
+	run_step_package_check check
+        make DESTDIR=${SYSROOT_DIR} install
+	rm -f ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/a52dec-0.8.0

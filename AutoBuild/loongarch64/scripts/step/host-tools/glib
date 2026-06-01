@@ -1,0 +1,20 @@
+source env/host-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=host-tools
+export STEP_PACKAGENAME=glib
+export PACKAGE_VERSION=2.89.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/host-tools/glib/2.89.0/
+rm -rf ${BUILD_DIRECTORY}/glib-2.89.0
+tar xvf ${DOWNLOADDIR}/glib-2.89.0.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/glib-2.89.0
+    
+    mkdir -p native-build
+    pushd native-build
+        meson --prefix=${PREFIX} --libdir=${PREFIX}/lib${LIB_SUFF} --default-library=both -Dtests=false -Dintrospection=disabled \
+              --buildtype=release ..
+        ninja
+        ninja install
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/glib-2.89.0

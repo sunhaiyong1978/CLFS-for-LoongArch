@@ -1,0 +1,15 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=adwaita-icon-theme
+export PACKAGE_VERSION=
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/adwaita-icon-theme//
+for i in cross cross_reverse diamond_cross tcross arrow left_ptr top_left_arrow right_side sb_h_double_arrow hand1 question_arrow \
+	top_side top_right_corner fd_double_arrow sb_v_double_arrow top_left_corner bd_double_arrow hand2 bottom_side \
+	bottom_right_corner bottom_left_corner xterm left_side watch fleur
+do
+	if [ -f ${SYSROOT_DIR}/usr/share/icons/Adwaita/cursors/${i} ]; then
+		rm -f ${SYSROOT_DIR}/usr/share/icons/Adwaita/cursors/${i}
+	fi
+done

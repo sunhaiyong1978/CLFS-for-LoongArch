@@ -1,0 +1,25 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=libxshmfence
+export PACKAGE_VERSION=1.3.3
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/libxshmfence/1.3.3/
+rm -rf ${BUILD_DIRECTORY}/libxshmfence-1.3.3
+tar xvf ${DOWNLOADDIR}/libxshmfence-1.3.3.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/libxshmfence-1.3.3
+	
+	for config_i in $(find -name "config.sub")
+	do
+		cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+	done
+	if [ ! -f configure ]; then
+		autoreconf -ifv
+	fi
+	 ./configure ${COMMON_CONFIG}  --enable-malloc0returnsnull
+	CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" make -j${JOBS}
+	run_step_package_check check
+        make DESTDIR=${SYSROOT_DIR} install
+	rm -f ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/libxshmfence-1.3.3

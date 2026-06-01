@@ -1,0 +1,34 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=mesa
+export PACKAGE_VERSION=26.1.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/mesa/26.1.1/
+rm -rf ${BUILD_DIRECTORY}/mesa-26.1.1
+tar xvf ${DOWNLOADDIR}/mesa-26.1.1.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/mesa-26.1.1
+    
+    tar xf ${RESOURCEDIR}/files/mesa-DirectX-Headers_git.tar.gz -C subprojects/
+    mv subprojects/{mesa-DirectX-Headers_git,DirectX-Headers-1.0}
+
+    sed -i -e "/dep_wl_scanner/s@, native: true@@g" \
+           -e "/prog_wl_scanner/s@find_program\(.*\)\$@'wayland-scanner'@g" meson.build
+
+
+    mkdir cross-build
+    pushd cross-build
+	CFLAGS="${CFLAGS} -Wno-error=format-overflow" \
+        meson ${MESON_CONFIG} \
+              -Dgallium-drivers="radeonsi,r300,r600,nouveau,v3d,vc4,tegra,svga,virgl,panfrost,lima,zink,d3d12,llvmpipe" \
+              -Dplatforms=x11,wayland \
+              -Dglx=dri -Dopengl=true -Degl=enabled -Dglvnd=enabled -Dllvm-orcjit=true \
+              -Dgles2=enabled \
+              -Dlibunwind=disabled -Dvulkan-drivers="amd,swrast,virtio" \
+              -Dvideo-codecs="vc1dec,h264dec,h264enc,h265dec,h265enc,av1dec,av1enc,vp9dec" \
+              -Dllvm=enabled -Dshared-llvm=enabled -Ddraw-use-llvm=true -Dgallium-d3d12-video=auto -Dshader-cache-max-size=8G -Dglx-direct=true -Dvulkan-layers=overlay \
+               ..
+        eval ${NINJA_AND_INSTALL}
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/mesa-26.1.1

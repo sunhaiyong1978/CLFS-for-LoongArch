@@ -1,0 +1,75 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=final_run
+export PACKAGE_VERSION=
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/final_run//
+rm -f ${SYSROOT_DIR}/usr/lib64/perl5/5.3x/site_perl/auto/XML/Parser/.packlist
+rm -f ${SYSROOT_DIR}/usr/lib64/perl5/5.3x/site_perl/auto/URI/.packlist
+rm -f ${SYSROOT_DIR}/usr/lib64/rustlib/install.log
+
+touch ${TEMP_DIRECTORY}/strip-foo
+
+sed -i "s@${CROSSTOOLS_DIR}/bin/perl@/usr/bin/perl@g" \
+       $(file ${SYSROOT_DIR}/usr/{bin,libexec}/* | grep "Perl script text" | awk -F':' '{ print $1 }') \
+       ${TEMP_DIRECTORY}/strip-foo
+
+sed -i "s@${CROSSTOOLS_DIR}/bin@/usr/bin@g" \
+       $(file ${SYSROOT_DIR}/usr/{bin,libexec}/* | grep "Python script, ASCII text" | awk -F':' '{ print $1 }') \
+       ${TEMP_DIRECTORY}/strip-foo
+
+sed -i -e "s@${SYSROOT_DIR}/lib@/usr/lib@g" \
+       -e "s@${SYSROOT_DIR}/usr@/usr@g" \
+       -e "s@${SYSROOT_DIR}@@g" \
+       -e "s@${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-@/usr/bin/@g" \
+       $(file ${SYSROOT_DIR}/usr/bin/*-config | grep ASCII | awk -F':' '{ print $1 }') \
+       $(find ${SYSROOT_DIR}/usr/lib64/ -type f -name "*.sh") \
+       $(find ${SYSROOT_DIR}/usr/lib64/pkgconfig/ -type f) \
+       $(find ${SYSROOT_DIR}/usr/share/pkgconfig/ -type f) \
+       $(find ${SYSROOT_DIR}/usr/lib64/ -type f -name "*.cmake") \
+       $(find ${SYSROOT_DIR}/usr/lib64/ -type f -name "Makefile*") \
+       ${TEMP_DIRECTORY}/strip-foo
+       
+sed -i -e "s@${SYSROOT_DIR}@@g" \
+       -e "s@${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-@/usr/bin/@g" \
+       $(find ${SYSROOT_DIR}/usr/lib64/ -type f -name "*.py") \
+       $(file ${SYSROOT_DIR}/usr/lib64/rustlib/* | grep ASCII | awk -F':' '{ print $1 }') \
+       $(find ${SYSROOT_DIR}/usr/lib64/ -type f -name "*.pri") \
+       ${TEMP_DIRECTORY}/strip-foo
+
+sed -i -e "s@${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-@/usr/bin/@g" \
+       -e "s@${SYSROOT_DIR}/usr@/usr@g" \
+       -e "s@/bin/${CROSS_TARGET}-@/bin/@g" \
+       $(file ${SYSROOT_DIR}/usr/bin/*-config | grep ASCII | awk -F':' '{ print $1 }') \
+       $(file ${SYSROOT_DIR}/usr/bin/*-setup | grep ASCII | awk -F':' '{ print $1 }') \
+       $(file ${SYSROOT_DIR}/usr/share/gtk-doc/python/gtkdoc/config_data.py | grep ASCII | awk -F':' '{ print $1 }') \
+       ${TEMP_DIRECTORY}/strip-foo
+
+sed -i -e "s@${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-@/usr/bin/@g" \
+       $(find ${SYSROOT_DIR}/usr -name "*.py" | grep -l "${CROSSTOOLS_DIR}") \
+       $(find ${SYSROOT_DIR}/usr -name "*.pl" | grep -l "${CROSSTOOLS_DIR}") \
+       ${TEMP_DIRECTORY}/strip-foo
+
+sed -i -e "s@${CROSSTOOLS_DIR}/bin@/usr/bin@g" \
+       $(grep -rl "cross-tools" $(file ${SYSROOT_DIR}/usr/bin/* | grep ASCII | awk -F':' '{ print $1 }') ${TEMP_DIRECTORY}/strip-foo) \
+       $(grep -rl "cross-tools" $(file ${SYSROOT_DIR}/usr/bin/* | grep text | awk -F':' '{ print $1 }') ${TEMP_DIRECTORY}/strip-foo) \
+       $(find ${SYSROOT_DIR}/usr/share/ -type f -name "*.pl") \
+       ${TEMP_DIRECTORY}/strip-foo
+
+if [ -d ${SYSROOT_DIR}/usr/lib64/ ]; then
+	find ${SYSROOT_DIR}/usr/lib64/ -type f -name "*.la" -exec rm '{}' ';'
+	find ${SYSROOT_DIR}/usr/lib64/ -type f -name "*.prl" -exec rm '{}' ';'
+fi
+
+sed -i -e "s@${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-@/usr/bin/@g" \
+       -e "s@/bin/${CROSS_TARGET}-@/bin/@g" \
+       $(file ${SYSROOT_DIR}/usr/share/gtk-doc/python/gtkdoc/config_data.py | grep ASCII | awk -F':' '{ print $1 }') \
+       ${TEMP_DIRECTORY}/strip-foo
+
+
+if [ -f ${SYSROOT_DIR}/usr/sbin/ldconfig ]; then
+	qemu-${ARCH_NAME} ${SYSROOT_DIR}/usr/sbin/ldconfig -r ${SYSROOT_DIR}/
+fi
+
+rm -f ${TEMP_DIRECTORY}/strip-foo

@@ -1,0 +1,2 @@
+gtk-update-icon-cache -qtf /usr/share/icons/hicolor
+gtk-query-immodules-3.0 --update-cache

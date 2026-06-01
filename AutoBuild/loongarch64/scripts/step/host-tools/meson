@@ -1,0 +1,14 @@
+source env/host-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=host-tools
+export STEP_PACKAGENAME=meson
+export PACKAGE_VERSION=1.11.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/host-tools/meson/1.11.1/
+rm -rf ${BUILD_DIRECTORY}/meson-1.11.1
+tar xvf ${DOWNLOADDIR}/meson-1.11.1.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/meson-1.11.1
+    ${CROSSTOOLS_DIR}/bin/python3 setup.py build
+    ${CROSSTOOLS_DIR}/bin/python3 setup.py install
+popd 
+rm -rf ${BUILD_DIRECTORY}/meson-1.11.1

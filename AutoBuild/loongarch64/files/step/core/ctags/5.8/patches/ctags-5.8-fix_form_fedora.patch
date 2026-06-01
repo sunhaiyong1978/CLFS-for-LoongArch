@@ -1,0 +1,732 @@
+diff -up ctags-5.7/Makefile.in.destdir ctags-5.7/Makefile.in
+--- ctags-5.7/Makefile.in.destdir	2006-10-12 05:26:40.000000000 +0200
++++ ctags-5.7/Makefile.in	2008-02-15 17:10:23.000000000 +0100
+@@ -59,7 +59,7 @@ include $(srcdir)/source.mak
+ 
+ VPATH	= $(srcdir)
+ 
+-INSTALL		= cp
++INSTALL		= cp -p
+ INSTALL_PROG	= $(INSTALL)
+ INSTALL_DATA	= $(INSTALL)
+ 
+@@ -138,7 +141,8 @@ install-ebin: $(DEST_ETAGS)
+ install-lib: $(DEST_READ_LIB) $(DEST_READ_INC)
+ 
+ $(DEST_CTAGS): $(CTAGS_EXEC) $(bindir) FORCE
+-	$(INSTALL_PROG) $(CTAGS_EXEC) $@  &&  chmod 755 $@
++	$(srcdir)/mkinstalldirs $(DESTDIR)$(bindir)
++	$(INSTALL_PROG) $(CTAGS_EXEC) $(DESTDIR)$@  &&  chmod 755 $(DESTDIR)$@
+ 
+ $(DEST_ETAGS):
+ 	- if [ -x $(DEST_CTAGS) ]; then \
+@@ -153,7 +157,8 @@ install-cman: $(DEST_CMAN)
+ install-eman: $(DEST_EMAN)
+ 
+ $(DEST_CMAN): $(man1dir) $(MANPAGE) FORCE
+-	- $(INSTALL_DATA) $(srcdir)/$(MANPAGE) $@  &&  chmod 644 $@
++	$(srcdir)/mkinstalldirs $(DESTDIR)$(man1dir)
++	- $(INSTALL_DATA) $(srcdir)/$(MANPAGE) $(DESTDIR)$@  &&  chmod 644 $(DESTDIR)$@
+ 
+ $(DEST_EMAN):
+ 	- if [ -f $(DEST_CMAN) ]; then \
+@@ -164,9 +169,11 @@ $(DEST_EMAN):
+ # install the library
+ #
+ $(DEST_READ_LIB): $(READ_LIB) $(libdir) FORCE
++	$(srcdir)/mkinstalldirs $(DESTDIR)$(libdir)
+ 	$(INSTALL_PROG) $(READ_LIB) $@  &&  chmod 644 $@
+ 
+ $(DEST_READ_INC): $(READ_INC) $(incdir) FORCE
++	$(srcdir)/mkinstalldirs $(DESTDIR)$(incdir)
+ 	$(INSTALL_PROG) $(READ_INC) $@  &&  chmod 644 $@
+ 
+ 
+diff -ruN -x '*~' ctags-5.7/vim.c ctags-5.7/vim.c
+--- ctags-5.7/vim.c	2006-10-26 12:06:21.000000000 +0900
++++ ctags-5.7/vim.c	2009-08-28 22:21:31.000000000 +0900
+@@ -328,7 +328,7 @@
+ 	 */
+ 	const unsigned char *cp = line;
+ 
+-	if ( (int) *cp == '\\' ) 
++	if ( cp && ( (int) *cp == '\\' ) ) 
+ 	{
+ 		/*
+ 		 * We are recursively calling this function is the command
+@@ -350,9 +350,10 @@
+ 		while (*cp && isspace ((int) *cp))
+ 			++cp; 
+ 	}
+-	else if ( (!strncmp ((const char*) line, "comp", (size_t) 4) == 0) && 
+-		     (!strncmp ((const char*) line, "comc", (size_t) 4) == 0) && 
+-				(strncmp ((const char*) line, "com", (size_t) 3) == 0) )
++	else if ( line && 
++                     (!strncmp ((const char*) line, "comp", (size_t) 4) == 0) && 
++		                (!strncmp ((const char*) line, "comc", (size_t) 4) == 0) && 
++				          (strncmp ((const char*) line, "com", (size_t) 3) == 0) )
+ 	{
+ 		cp += 2;
+ 		if ((int) *++cp == 'm' && (int) *++cp == 'a' &&
+@@ -394,6 +395,14 @@
+ 			while (*cp && !isspace ((int) *cp))
+ 				++cp; 
+ 		}
++		else if (!isalnum ((int) *cp))
++		{
++			/*
++			 * Broken syntax: throw away this line
++			 */
++			cmdProcessed = TRUE;
++			goto cleanUp;
++		}
+ 	} while ( *cp &&  !isalnum ((int) *cp) );
+ 
+ 	if ( ! *cp )
+diff -up ctags-5.8/css.c.me ctags-5.8/css.c
+--- ctags-5.8/css.c.me	2012-02-08 13:59:35.000000000 +0100
++++ ctags-5.8/css.c	2012-02-08 13:55:16.000000000 +0100
+@@ -0,0 +1,226 @@
++/***************************************************************************
++ * css.c
++ * Character-based parser for Css definitions
++ * Author - Iago Rubio <iagorubio(at)users.sourceforge.net>
++ **************************************************************************/
++#include "general.h"
++
++#include <string.h> 
++#include <ctype.h> 
++
++#include "parse.h" 
++#include "read.h" 
++
++
++typedef enum eCssKinds {
++    K_NONE = -1, K_CLASS, K_SELECTOR, K_ID
++} cssKind;
++
++static kindOption CssKinds [] = {
++    { TRUE, 'c', "class", "classes" },
++    { TRUE, 's', "selector",  "selectors"  },
++    { TRUE, 'i', "id",  "identities"  }
++};
++
++typedef enum _CssParserState {  // state of parsing
++  P_STATE_NONE,         // default state
++  P_STATE_IN_COMMENT,     // into a comment, only multi line in CSS
++  P_STATE_IN_SINGLE_STRING, // into a single quoted string
++  P_STATE_IN_DOUBLE_STRING, // into a double quoted string
++  P_STATE_IN_DEFINITION,    // on the body of the style definition, nothing for us
++  P_STATE_IN_MEDIA,     // on a @media declaration, can be multi-line
++  P_STATE_IN_IMPORT,      // on a @import declaration, can be multi-line
++  P_STATE_IN_NAMESPACE,   // on a @namespace declaration  
++  P_STATE_IN_PAGE,      // on a @page declaration
++  P_STATE_IN_FONTFACE,    // on a @font-face declaration
++  P_STATE_AT_END        // end of parsing
++} CssParserState;
++
++static void makeCssSimpleTag( vString *name, cssKind kind, boolean delete )
++{
++  vStringTerminate (name);
++  makeSimpleTag (name, CssKinds, kind);
++  vStringClear (name);
++  if( delete )
++    vStringDelete (name);
++}
++
++static boolean isCssDeclarationAllowedChar( const unsigned char *cp )
++{
++  return  isalnum ((int) *cp) ||
++      isspace ((int) *cp) ||
++      *cp == '_' || // allowed char
++      *cp == '-' || // allowed char     
++      *cp == '+' ||   // allow all sibling in a single tag
++      *cp == '>' ||   // allow all child in a single tag 
++      *cp == '{' ||   // allow the start of the declaration
++      *cp == '.' ||   // allow classes and selectors
++      *cp == ',' ||   // allow multiple declarations
++      *cp == ':' ||   // allow pseudo classes
++      *cp == '*' ||   // allow globs as P + *
++      *cp == '#';   // allow ids 
++}
++
++static CssParserState parseCssDeclaration( const unsigned char **position, cssKind kind )
++{
++  vString *name = vStringNew ();
++  const unsigned char *cp = *position;
++
++  // pick to the end of line including children and sibling
++  // if declaration is multiline go for the next line 
++  while ( isCssDeclarationAllowedChar(cp) || 
++      *cp == '\0' )   // track the end of line into the loop
++  {
++    if( (int) *cp == '\0' )
++    { 
++      cp = fileReadLine ();
++      if( cp == NULL ){
++        makeCssSimpleTag(name, kind, TRUE);
++        *position = cp;
++        return P_STATE_AT_END;
++      }
++    }
++    else if( *cp == ',' )
++    {
++      makeCssSimpleTag(name, kind, TRUE);
++      *position = ++cp;
++      return P_STATE_NONE;
++    }
++    else if( *cp == '{' )
++    {
++      makeCssSimpleTag(name, kind, TRUE);
++      *position = ++cp;
++      return P_STATE_IN_DEFINITION;
++    }
++
++    vStringPut (name, (int) *cp);
++    ++cp;
++  }
++  
++  makeCssSimpleTag(name, kind, TRUE);
++  *position = cp;
++
++  return P_STATE_NONE;
++}
++
++static CssParserState parseCssLine( const unsigned char *line, CssParserState state )
++{
++  vString *aux;
++
++  while( *line != '\0' ) // fileReadLine returns NULL terminated strings
++  {
++    while (isspace ((int) *line))
++      ++line;
++    switch( state )
++    {
++      case P_STATE_NONE:
++        // pick first char if alphanumeric is a selector
++        if( isalnum ((int) *line) )
++          state = parseCssDeclaration( &line, K_SELECTOR );
++        else if( *line == '.' ) // a class
++          state = parseCssDeclaration( &line, K_CLASS );
++        else if( *line == '#' ) // an id
++          state = parseCssDeclaration( &line, K_ID );
++        else if( *line == '@' ) // at-rules, we'll ignore them
++        {
++          ++line;
++          aux = vStringNew();
++          while( !isspace((int) *line) )
++          {
++            vStringPut (aux, (int) *line);
++            ++line;         
++          }
++          vStringTerminate (aux);
++          if( strcmp( aux->buffer, "media" ) == 0 )
++            state = P_STATE_IN_MEDIA;
++          else if ( strcmp( aux->buffer, "import" ) == 0 )
++            state = P_STATE_IN_IMPORT;
++          else if ( strcmp( aux->buffer, "namespace" ) == 0 )
++            state = P_STATE_IN_NAMESPACE; 
++          else if ( strcmp( aux->buffer, "page" ) == 0 )
++            state = P_STATE_IN_PAGE;
++          else if ( strcmp( aux->buffer, "font-face" ) == 0 )
++            state = P_STATE_IN_FONTFACE;
++          vStringDelete (aux);
++        }
++        else if( *line == '*' && *(line-1) == '/' ) // multi-line comment
++          state = P_STATE_IN_COMMENT;
++      break;
++      case P_STATE_IN_COMMENT:
++        if( *line == '/' && *(line-1) == '*')
++          state = P_STATE_NONE;
++      break;
++      case  P_STATE_IN_SINGLE_STRING: 
++        if( *line == '\'' && *(line-1) != '\\' )
++          state = P_STATE_IN_DEFINITION; // PAGE, FONTFACE and DEFINITION are treated the same way
++      break;
++      case  P_STATE_IN_DOUBLE_STRING:
++        if( *line=='"' && *(line-1) != '\\' )
++          state = P_STATE_IN_DEFINITION; // PAGE, FONTFACE and DEFINITION are treated the same way
++      break;
++      case  P_STATE_IN_MEDIA:
++        // skip to start of media body or line end
++        while( *line != '{' )
++        {
++          if( *line == '\0' )
++            break;
++          ++line;
++        }
++        if( *line == '{' )
++            state = P_STATE_NONE;
++      break;
++      case  P_STATE_IN_IMPORT:
++      case  P_STATE_IN_NAMESPACE:
++        // skip to end of declaration or line end
++        while( *line != ';' )
++        {
++          if( *line == '\0' )
++            break;
++          ++line;
++        }
++        if( *line == ';' )
++          state = P_STATE_NONE;
++      break;
++      case P_STATE_IN_PAGE:
++      case P_STATE_IN_FONTFACE:
++      case P_STATE_IN_DEFINITION:
++        if( *line == '}' )
++          state = P_STATE_NONE;
++        else if( *line == '\'' )
++          state = P_STATE_IN_SINGLE_STRING;
++        else if( *line == '"' )
++          state = P_STATE_IN_DOUBLE_STRING;
++      break;
++      case P_STATE_AT_END:
++        return state;
++      break;
++    }   
++    line++;
++  }
++  return state;
++}
++
++static void findCssTags (void)
++{
++    const unsigned char *line;
++  CssParserState state = P_STATE_NONE;
++
++    while ( (line = fileReadLine ()) != NULL )
++    {
++    state = parseCssLine( line, state );
++    if( state==P_STATE_AT_END ) return;
++    }    
++}
++
++/* parser definition */
++extern parserDefinition* CssParser (void)
++{
++    static const char *const extensions [] = { "css", NULL };
++    parserDefinition* def = parserNew ("CSS");
++    def->kinds      = CssKinds;
++    def->kindCount  = KIND_COUNT (CssKinds);
++    def->extensions = extensions;
++    def->parser     = findCssTags;
++    return def;
++}
++
+diff -up ctags-5.8/parsers.h.me ctags-5.8/parsers.h
+--- ctags-5.8/parsers.h.me	2012-02-08 13:56:46.000000000 +0100
++++ ctags-5.8/parsers.h	2012-02-08 13:57:25.000000000 +0100
+@@ -26,6 +26,7 @@
+ 	CppParser, \
+ 	CsharpParser, \
+ 	CobolParser, \
++	CssParser, \
+ 	DosBatchParser, \
+ 	EiffelParser, \
+ 	ErlangParser, \
+diff -up ctags-5.8/source.mak.me ctags-5.8/source.mak
+--- ctags-5.8/source.mak.me	2012-02-08 13:58:02.000000000 +0100
++++ ctags-5.8/source.mak	2012-02-08 13:58:42.000000000 +0100
+@@ -17,6 +17,7 @@ SOURCES = \
+ 	beta.c \
+ 	c.c \
+ 	cobol.c \
++	css.c \
+ 	dosbatch.c \
+ 	eiffel.c \
+ 	entry.c \
+@@ -79,6 +80,7 @@ OBJECTS = \
+ 	beta.$(OBJEXT) \
+ 	c.$(OBJEXT) \
+ 	cobol.$(OBJEXT) \
++	css.$(OBJEXT) \
+ 	dosbatch.$(OBJEXT) \
+ 	eiffel.$(OBJEXT) \
+ 	entry.$(OBJEXT) \
+diff -up ctags-5.8/css.c.me ctags-5.8/css.c
+--- ctags-5.8/css.c.me	2012-10-18 22:03:20.126163700 +0200
++++ ctags-5.8/css.c	2012-10-18 22:04:03.237107358 +0200
+@@ -73,10 +73,11 @@ static CssParserState parseCssDeclaratio
+   {
+     if( (int) *cp == '\0' )
+     { 
++      /* assign position to the end of line. */
++      *position = cp;
+       cp = fileReadLine ();
+       if( cp == NULL ){
+         makeCssSimpleTag(name, kind, TRUE);
+-        *position = cp;
+         return P_STATE_AT_END;
+       }
+     }
+diff -Naur ctags-5.8.orig/lregex.c ctags-5.8/lregex.c
+--- ctags-5.8.orig/lregex.c	2007-09-10 04:36:48.000000000 +0200
++++ ctags-5.8/lregex.c	2014-04-14 21:09:17.716000000 +0200
+@@ -408,7 +408,7 @@
+ 		const char* regexfile = parameter + 1;
+ 		FILE* const fp = fopen (regexfile, "r");
+ 		if (fp == NULL)
+-			error (WARNING | PERROR, regexfile);
++			error (WARNING | PERROR, "%s", regexfile);
+ 		else
+ 		{
+ 			vString* const regex = vStringNew ();
+diff -r -u ctags-5.8.orig/routines.c ctags-5.8/routines.c
+--- ctags-5.8.orig/routines.c	2013-06-13 10:42:08.048576327 -0400
++++ ctags-5.8/routines.c	2013-06-13 10:48:25.150366836 -0400
+@@ -757,13 +757,13 @@
+ 				else if (cp [0] != PATH_SEPARATOR)
+ 					cp = slashp;
+ #endif
+-				strcpy (cp, slashp + 3);
++				memmove (cp, slashp + 3, strlen(slashp + 3) + 1);
+ 				slashp = cp;
+ 				continue;
+ 			}
+ 			else if (slashp [2] == PATH_SEPARATOR  ||  slashp [2] == '\0')
+ 			{
+-				strcpy (slashp, slashp + 2);
++				memmove (slashp, slashp + 2, strlen(slashp + 2) + 1);
+ 				continue;
+ 			}
+ 		}
+diff -up ctags-5.8/ocaml.c.me ctags-5.8/ocaml.c
+--- ctags-5.8/ocaml.c.me	2012-08-02 12:42:21.652211192 +0200
++++ ctags-5.8/ocaml.c	2012-08-02 13:06:59.751283639 +0200
+@@ -72,6 +72,7 @@ typedef enum {
+ 	OcaKEYWORD_if,
+ 	OcaKEYWORD_in,
+ 	OcaKEYWORD_let,
++	OcaKEYWORD_value,
+ 	OcaKEYWORD_match,
+ 	OcaKEYWORD_method,
+ 	OcaKEYWORD_module,
+@@ -145,7 +146,7 @@ static const ocaKeywordDesc OcamlKeyword
+ 	{ "try"       , OcaKEYWORD_try       }, 
+ 	{ "type"      , OcaKEYWORD_type      }, 
+ 	{ "val"       , OcaKEYWORD_val       }, 
+-	{ "value"     , OcaKEYWORD_let       }, /* just to handle revised syntax */
++	{ "value"     , OcaKEYWORD_value     }, /* just to handle revised syntax */
+ 	{ "virtual"   , OcaKEYWORD_virtual   }, 
+ 	{ "while"     , OcaKEYWORD_while     }, 
+ 	{ "with"      , OcaKEYWORD_with      }, 
+@@ -297,7 +298,6 @@ static void eatComment (lexingState * st
+ 			if (st->cp == NULL)
+ 				return;
+ 			c = st->cp;
+-			continue;
+ 		}
+ 		/* we've reached the end of the comment */
+ 		else if (*c == ')' && lastIsStar)
+@@ -308,13 +308,33 @@ static void eatComment (lexingState * st
+ 		{
+ 			st->cp = c;
+ 			eatComment (st);
++
+ 			c = st->cp;
++			if (c == NULL)
++			    return;
++
+ 			lastIsStar = FALSE;
++            c++;
+ 		}
++		/* OCaml has a rule which says :
++		 *
++		 *   "Comments do not occur inside string or character literals.
++		 *    Nested comments are handled correctly."
++		 *
++		 * So if we encounter a string beginning, we must parse it to
++		 * get a good comment nesting (bug ID: 3117537)
++		 */
++        else if (*c == '"')
++        {
++            st->cp = c;
++            eatString (st);
++            c = st->cp;
++        }
+ 		else
++        {
+ 			lastIsStar = '*' == *c;
+-
+-		c++;
++            c++;
++        }
+ 	}
+ 
+ 	st->cp = c;
+@@ -554,8 +574,7 @@ static int getLastNamedIndex ( void )
+ 
+ 	for (i = stackIndex - 1; i >= 0; --i)
+ 	{
+-		if (stack[i].contextName->buffer &&
+-			strlen (stack[i].contextName->buffer) > 0)
++        if (vStringLength (stack[i].contextName) > 0)
+ 		{
+ 			return i;
+ 		}
+@@ -866,6 +885,11 @@ static void prepareTag (tagEntryInfo * t
+ 	tag->kindName = OcamlKinds[kind].name;
+ 	tag->kind = OcamlKinds[kind].letter;
+ 
++	if (kind == K_MODULE)
++	{
++		tag->lineNumberEntry = TRUE;
++		tag->lineNumber = 1;
++	}
+ 	parentIndex = getLastNamedIndex ();
+ 	if (parentIndex >= 0)
+ 	{
+@@ -880,9 +904,12 @@ static void prepareTag (tagEntryInfo * t
+  * more information to it in the future */
+ static void addTag (vString * const ident, int kind)
+ {
+-	tagEntryInfo toCreate;
+-	prepareTag (&toCreate, ident, kind);
+-	makeTagEntry (&toCreate);
++	if (OcamlKinds [kind].enabled  &&  ident != NULL  &&  vStringLength (ident) > 0)
++	{
++		tagEntryInfo toCreate;
++		prepareTag (&toCreate, ident, kind);
++		makeTagEntry (&toCreate);
++	}
+ }
+ 
+ boolean needStrongPoping = FALSE;
+@@ -942,15 +969,17 @@ static void typeRecord (vString * const
+ }
+ 
+ /* handle :
+- * exception ExceptionName ... */
++ * exception ExceptionName of ... */
+ static void exceptionDecl (vString * const ident, ocaToken what)
+ {
+ 	if (what == OcaIDENTIFIER)
+ 	{
+ 		addTag (ident, K_EXCEPTION);
+ 	}
+-	/* don't know what to do on else... */
+-
++    else /* probably ill-formed, give back to global scope */
++    { 
++        globalScope (ident, what);
++    }
+ 	toDoNext = &globalScope;
+ }
+ 
+@@ -1006,7 +1035,6 @@ static void constructorValidation (vStri
+  */
+ static void typeDecl (vString * const ident, ocaToken what)
+ {
+-
+ 	switch (what)
+ 	{
+ 		/* parameterized */
+@@ -1046,7 +1074,6 @@ static void typeDecl (vString * const id
+  * let typeRecord handle it. */
+ static void typeSpecification (vString * const ident, ocaToken what)
+ {
+-
+ 	switch (what)
+ 	{
+ 	case OcaIDENTIFIER:
+@@ -1243,8 +1270,14 @@ static void localLet (vString * const id
+  * than the let definitions.
+  * Used after a match ... with, or a function ... or fun ...
+  * because their syntax is similar.  */
+-static void matchPattern (vString * const UNUSED (ident), ocaToken what)
++static void matchPattern (vString * const ident, ocaToken what)
+ {
++    /* keep track of [], as it
++     * can be used in patterns and can
++     * mean the end of match expression in
++     * revised syntax */
++    static int braceCount = 0;
++
+ 	switch (what)
+ 	{
+ 	case Tok_To:
+@@ -1252,6 +1285,14 @@ static void matchPattern (vString * cons
+ 		toDoNext = &mayRedeclare;
+ 		break;
+ 
++    case Tok_BRL:
++        braceCount++;
++        break;
++
++    case OcaKEYWORD_value:
++		popLastNamed ();
++        globalScope (ident, what);
++        break;
+ 
+ 	case OcaKEYWORD_in:
+ 		popLastNamed ();
+@@ -1269,6 +1310,11 @@ static void mayRedeclare (vString * cons
+ {
+ 	switch (what)
+ 	{
++    case OcaKEYWORD_value:
++        /* let globalScope handle it */
++        globalScope (ident, what);
++        break;
++
+ 	case OcaKEYWORD_let:
+ 	case OcaKEYWORD_val:
+ 		toDoNext = localLet;
+@@ -1388,6 +1434,7 @@ static void classSpecif (vString * const
+  * nearly a copy/paste of globalLet. */
+ static void methodDecl (vString * const ident, ocaToken what)
+ {
++
+ 	switch (what)
+ 	{
+ 	case Tok_PARL:
+@@ -1435,6 +1482,7 @@ vString *lastModule;
+  */
+ static void moduleSpecif (vString * const ident, ocaToken what)
+ {
++
+ 	switch (what)
+ 	{
+ 	case OcaKEYWORD_functor:
+@@ -1566,7 +1614,7 @@ static void globalScope (vString * const
+ {
+ 	/* Do not touch, this is used only by the global scope
+ 	 * to handle an 'and' */
+-	static parseNext previousParser = NULL;
++	static parseNext previousParser = &globalScope;
+ 
+ 	switch (what)
+ 	{
+@@ -1608,6 +1656,7 @@ static void globalScope (vString * const
+ 		/* val is mixed with let as global
+ 		 * to be able to handle mli & new syntax */
+ 	case OcaKEYWORD_val:
++	case OcaKEYWORD_value:
+ 	case OcaKEYWORD_let:
+ 		cleanupPreviousParser ();
+ 		toDoNext = &globalLet;
+@@ -1617,7 +1666,7 @@ static void globalScope (vString * const
+ 	case OcaKEYWORD_exception:
+ 		cleanupPreviousParser ();
+ 		toDoNext = &exceptionDecl;
+-		previousParser = NULL;
++		previousParser = &globalScope;
+ 		break;
+ 
+ 		/* must be a #line directive, discard the
+@@ -1769,7 +1818,7 @@ static void computeModuleName ( void )
+ 	if (isLowerAlpha (moduleName->buffer[0]))
+ 		moduleName->buffer[0] += ('A' - 'a');
+ 
+-	makeSimpleTag (moduleName, OcamlKinds, K_MODULE);
++	addTag (moduleName, K_MODULE);
+ 	vStringDelete (moduleName);
+ }
+ 
+@@ -1779,6 +1828,7 @@ static void initStack ( void )
+ 	int i;
+ 	for (i = 0; i < OCAML_MAX_STACK_SIZE; ++i)
+ 		stack[i].contextName = vStringNew ();
++    stackIndex = 0;
+ }
+ 
+ static void clearStack ( void )
+@@ -1794,8 +1844,8 @@ static void findOcamlTags (void)
+ 	lexingState st;
+ 	ocaToken tok;
+ 
+-	computeModuleName ();
+ 	initStack ();
++	computeModuleName ();
+ 	tempIdent = vStringNew ();
+ 	lastModule = vStringNew ();
+ 	lastClass = vStringNew ();
+--- ctags/jscript.c.orig	2008-10-13 00:27:38.000000000 +0200
++++ ctags/jscript.c	2014-09-30 13:49:34.837349283 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *	 $Id: jscript.c 666 2008-05-15 17:47:31Z dfishburn $
++ *	 $Id: jscript.c 791 2012-10-24 01:13:13Z dfishburn $
+  *
+  *	 Copyright (c) 2003, Darren Hiebert
+  *
+@@ -215,6 +215,7 @@
+  *	 Tag generation functions
+  */
+ 
++/*
+ static void makeConstTag (tokenInfo *const token, const jsKind kind)
+ {
+ 	if (JsKinds [kind].enabled && ! token->ignoreTag )
+@@ -238,12 +239,13 @@
+ 
+ 	if (JsKinds [kind].enabled && ! token->ignoreTag )
+ 	{
+-		/*
++		*
+ 		 * If a scope has been added to the token, change the token
+ 		 * string to include the scope when making the tag.
+-		 */
++		 *
+ 		if ( vStringLength(token->scope) > 0 )
+ 		{
++			*
+ 			fulltag = vStringNew ();
+ 			vStringCopy(fulltag, token->scope);
+ 			vStringCatS (fulltag, ".");
+@@ -251,8 +253,54 @@
+ 			vStringTerminate(fulltag);
+ 			vStringCopy(token->string, fulltag);
+ 			vStringDelete (fulltag);
++			*
++ 			jsKind parent_kind = JSTAG_CLASS;
++ 
++ 			* 
++			 * if we're creating a function (and not a method),
++ 			 * guess we're inside another function 
++			 *
++ 			if (kind == JSTAG_FUNCTION)
++ 				parent_kind = JSTAG_FUNCTION;
++ 
++ 			e.extensionFields.scope[0] = JsKinds [parent_kind].name;
++ 			e.extensionFields.scope[1] = vStringValue (token->scope);
+ 		}
+-		makeConstTag (token, kind);
++		* makeConstTag (token, kind); *
++ 		makeTagEntry (&e);
++	}
++}
++*/
++
++static void makeJsTag (tokenInfo *const token, const jsKind kind)
++{
++	if (JsKinds [kind].enabled && ! token->ignoreTag )
++	{
++		const char *const name = vStringValue (token->string);
++		tagEntryInfo e;
++		initTagEntry (&e, name);
++
++		e.lineNumber   = token->lineNumber;
++		e.filePosition = token->filePosition;
++		e.kindName	   = JsKinds [kind].name;
++		e.kind		   = JsKinds [kind].letter;
++
++		if ( vStringLength(token->scope) > 0 )
++		{
++			jsKind parent_kind = JSTAG_CLASS;
++
++			/* 
++			 * If we're creating a function (and not a method),
++			 * guess we're inside another function 
++			 */
++			if (kind == JSTAG_FUNCTION)
++				parent_kind = JSTAG_FUNCTION;
++
++			e.extensionFields.scope[0] = JsKinds [parent_kind].name;
++			e.extensionFields.scope[1] = vStringValue (token->scope);
++		}
++
++		makeTagEntry (&e);
+ 	}
+ }
+ 

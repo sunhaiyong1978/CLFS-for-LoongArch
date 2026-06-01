@@ -1,0 +1,15 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=util-macros
+export PACKAGE_VERSION=1.20.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/util-macros/1.20.2/
+rm -rf ${BUILD_DIRECTORY}/util-macros-1.20.2
+tar xvf ${DOWNLOADDIR}/util-macros-1.20.2.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/util-macros-1.20.2
+    ./configure ${COMMON_CONFIG}
+    make DESTDIR=${SYSROOT_DIR} install
+    cp -v ${SYSROOT_DIR}/usr/share/aclocal/xorg-macros.m4 ${CROSSTOOLS_DIR}/share/aclocal/
+popd 
+rm -rf ${BUILD_DIRECTORY}/util-macros-1.20.2

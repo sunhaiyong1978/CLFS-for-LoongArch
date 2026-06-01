@@ -1,0 +1,9 @@
+echo "[User]
+Email=
+Session=
+PasswordHint=
+Icon=/var/lib/AccountsService/icons/${DISTRO_DEFAULT_USER}
+SystemAccount=false" > /var/lib/AccountsService/users/${DISTRO_DEFAULT_USER}
+if [ -f /var/opt/default-user ]; then
+	cp /var/opt/default-user /var/lib/AccountsService/icons/${DISTRO_DEFAULT_USER}
+fi

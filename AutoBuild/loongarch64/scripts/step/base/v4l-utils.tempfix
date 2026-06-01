@@ -1,0 +1,36 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=v4l-utils
+export PACKAGE_VERSION=
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/v4l-utils//
+for bin_file in qmake moc uic rcc lrelease qmltyperegistrar qmlcachegen
+do
+        if [ -f ${SYSROOT_DIR}/usr/bin/${bin_file} ]; then
+                mv ${SYSROOT_DIR}/usr/bin/${bin_file}{,.orig}
+                echo "#!/bin/bash
+qemu-${ARCH_NAME} ${SYSROOT_DIR}/usr/bin/${bin_file}.orig \"\$@\"" > ${SYSROOT_DIR}/usr/bin/${bin_file}
+                chmod +x ${SYSROOT_DIR}/usr/bin/${bin_file}
+        fi
+done
+
+for bin_file in moc uic rcc
+do
+        if [ -f ${SYSROOT_DIR}/usr/lib64/qt6/libexec/${bin_file} ]; then
+                mv ${SYSROOT_DIR}/usr/lib64/qt6/libexec/${bin_file}{,-qt6}
+                echo "#!/bin/bash -e
+qemu-${ARCH_NAME} ${SYSROOT_DIR}/usr/lib64/qt6/libexec/${bin_file}-qt6 \"\$@\"" > ${SYSROOT_DIR}/usr/lib64/qt6/libexec/${bin_file}
+                chmod +x ${SYSROOT_DIR}/usr/lib64/qt6/libexec/${bin_file}
+        fi
+done
+
+for bin_file in lrelease
+do
+        if [ -f ${SYSROOT_DIR}/usr/lib64/qt6/bin/${bin_file} ]; then
+                mv ${SYSROOT_DIR}/usr/lib64/qt6/bin/${bin_file}{,-qt6}
+                echo "#!/bin/bash -e
+qemu-${ARCH_NAME} ${SYSROOT_DIR}/usr/lib64/qt6/bin/${bin_file}-qt6 \"\$@\"" > ${SYSROOT_DIR}/usr/lib64/qt6/bin/${bin_file}
+                chmod +x ${SYSROOT_DIR}/usr/lib64/qt6/bin/${bin_file}
+        fi
+done

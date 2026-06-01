@@ -1,0 +1,14 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=create_files
+export PACKAGE_VERSION=1.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/create_files/1.0/
+cp -a ${RESOURCEDIR}/bin-run-startx.sh ${SYSROOT_DIR}/usr/bin/run-startx.sh
+chmod u+x ${SYSROOT_DIR}/usr/bin/run-startx.sh
+
+mkdir -pv ${SYSROOT_DIR}/etc/X11/app-defaults/
+ln -sfv ../xinit/xinitrc.d ${SYSROOT_DIR}/etc/X11/app-defaults/
+
+cp -a ${RESOURCEDIR}/root-xinitrc ${SYSROOT_DIR}/root/.xinitrc

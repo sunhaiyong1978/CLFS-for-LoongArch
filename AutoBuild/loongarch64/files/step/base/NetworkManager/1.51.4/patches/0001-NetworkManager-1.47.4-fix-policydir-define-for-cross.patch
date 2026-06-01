@@ -1,0 +1,25 @@
+From f3d4b907bb4d07fa929cd0d435ea7558e9360585 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Fri, 19 Apr 2024 02:21:41 +0000
+Subject: [PATCH] NetworkManager 1.47.4 fix policydir define for cross build.
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index a7d5ea9..1300cf5 100644
+--- a/meson.build
++++ b/meson.build
+@@ -495,7 +495,7 @@ endif
+ enable_polkit = get_option('polkit')
+ if enable_polkit
+   # FIXME: policydir should be relative to `datadir`, not `prefix`. Fixed in https://gitlab.freedesktop.org/polkit/polkit/merge_requests/2
+-  polkit_gobject_policydir = dependency('polkit-gobject-1').get_variable(pkgconfig: 'policydir', pkgconfig_define: ['prefix', nm_prefix])
++  polkit_gobject_policydir = dependency('polkit-gobject-1').get_variable(pkgconfig: 'policydir', pkgconfig_define: ['datadir', nm_datadir])
+ endif
+ 
+ config_auth_polkit_default = get_option('config_auth_polkit_default')
+-- 
+2.31.1
+

@@ -1,0 +1,27 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=xorg-server
+export PACKAGE_VERSION=21.1.22
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/xorg-server/21.1.22/
+rm -rf ${BUILD_DIRECTORY}/xorg-server-21.1.22
+tar xvf ${DOWNLOADDIR}/xorg-server-21.1.22.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/xorg-server-21.1.22
+    patch -Np1 -i ${SYSDIR}/files/base/xorg-server/21.1.22/patches/xorg-server-21.1.3-fix-x11perf-segment-fault.patch 
+	patch -Np1 -i ${SYSDIR}/files/base/xorg-server/21.1.22/patches/0001-xorg-server-fix-for-Yongbao-cross-build.patch 
+	 
+    ./configure ${COMMON_CONFIG} --enable-glamor \
+            --enable-suid-wrapper --disable-selective-werror \
+            --with-xkb-output=/var/lib/xkb \
+            --with-xkb-bin-directory=/usr/bin --with-xkb-path=/usr/share/X11/xkb \
+	    --with-fontrootdir=/usr/share/fonts/X11
+    eval ${MAKE_AND_INSTALL}
+
+    cp -v ${SYSROOT_DIR}/usr/share/aclocal/xorg-server.m4 ${CROSSTOOLS_DIR}/share/aclocal/
+cat >> ${SYSROOT_DIR}/etc/sysconfig/createfiles << "EOF"
+/tmp/.ICE-unix dir 1777 root root
+/tmp/.X11-unix dir 1777 root root
+EOF
+popd 
+rm -rf ${BUILD_DIRECTORY}/xorg-server-21.1.22

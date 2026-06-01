@@ -1,0 +1,35 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=SPIRV-Tools
+export PACKAGE_VERSION=git
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/SPIRV-Tools/git/
+rm -rf ${BUILD_DIRECTORY}/SPIRV-Tools-git_git
+tar xvf ${DOWNLOADDIR}/SPIRV-Tools-git_git.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/SPIRV-Tools-git_git
+        
+	tar xvf ${DOWNLOADDIR}/SPIRV-Headers-$(get_package_version "SPIRV-Headers").tar.gz
+        mkdir cross-build
+        pushd cross-build
+                CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" CXXFLAGS="-Wno-error=switch" \
+                cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${COMMON_DIR}/cmake-cross.cmake \
+                      -DCMAKE_INSTALL_LIBDIR=/usr/lib64 -DLIB_SUFFIX=64 \
+                      -DCMAKE_INSTALL_PREFIX=/usr \
+                      -DBUILD_SHARED_LIBS=ON \
+                      -DSPIRV-Headers_SOURCE_DIR=${BUILD_DIRECTORY}/SPIRV-Tools-git_git/SPIRV-Headers-$(get_package_version "SPIRV-Headers") -Wno-dev ..
+                eval ${MAKE_AND_INSTALL}
+        popd
+        rm -f ${SYSROOT_DIR}/usr/lib64/*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/SPIRV-Tools-git_git
+
+echo "#!/bin/bash -e
+qemu-${ARCH_NAME} ${SYSROOT_DIR}/usr/bin/spirv-opt \"\$@\"" > ${CROSSTOOLS_DIR}/bin/spirv-opt
+chmod +x ${CROSSTOOLS_DIR}/bin/spirv-opt
+
+if [ "x${PACKAGE_VERSION}" == "xgit" ]; then
+        save_package_version ${STEP_PACKAGENAME} "${PACKAGE_VERSION}_git"
+else
+	save_package_version ${STEP_PACKAGENAME} "${PACKAGE_VERSION}"
+fi

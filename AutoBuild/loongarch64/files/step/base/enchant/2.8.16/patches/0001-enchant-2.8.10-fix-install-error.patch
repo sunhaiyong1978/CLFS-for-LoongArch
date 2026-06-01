@@ -1,0 +1,24 @@
+From 0035a30856c08860d693fd005e394ccfd8c13095 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Sun, 29 Jun 2025 14:02:44 +0000
+Subject: [PATCH] enchant 2.8.10 fix install error.
+
+---
+ providers/Makefile.in | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/providers/Makefile.in b/providers/Makefile.in
+index 3ec2c84..4262352 100644
+--- a/providers/Makefile.in
++++ b/providers/Makefile.in
+@@ -1352,7 +1352,6 @@ uninstall-am: uninstall-libenchant_dataDATA \
+ 
+ 
+ install-data-hook:
+-	cd $(DESTDIR)$(providerdir) && $(RM) $(provider_LTLIBRARIES) *.a
+ 
+ # Removing files in install-data-hook seems to confuse libtool's uninstall mode,
+ # so it fails to remove the .so files. Remove them for it.
+-- 
+2.31.1
+

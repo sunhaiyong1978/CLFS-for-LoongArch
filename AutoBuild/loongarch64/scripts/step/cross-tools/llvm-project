@@ -1,0 +1,39 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=llvm-project
+export PACKAGE_VERSION=22.1.6
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/llvm-project/22.1.6/
+rm -rf ${BUILD_DIRECTORY}/llvm-project-22.1.6.src
+tar xvf ${DOWNLOADDIR}/llvm-project-22.1.6.src.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/llvm-project-22.1.6.src
+	
+pushd llvm
+    mkdir -p native-build
+    pushd native-build
+        PKG_CONFIG_SYSROOT_DIR="" \
+	LDFLAGS="${LDFLAGS} -lutil"
+        cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX:PATH=${CROSSTOOLS_DIR} \
+                 -DCMAKE_CXX_COMPILER="g++" -DCMAKE_C_COMPILER="gcc" \
+                 -DBUILD_SHARED_LIBS:BOOL=OFF   -DCMAKE_BUILD_TYPE=Release  \
+                 -DLLVM_LIBDIR_SUFFIX=64 \
+                 -DCMAKE_C_FLAGS="-DNDEBUG" -DCMAKE_CXX_FLAGS="-DNDEBUG" \
+                 -DLLVM_ENABLE_LIBCXX:BOOL=OFF \
+		 -DLLVM_ENABLE_TERMINFO:BOOL=OFF \
+                 -DLLVM_ENABLE_RTTI:BOOL=ON -DLLVM_BUILD_LLVM_DYLIB:BOOL=ON  \
+                 -DLLVM_LINK_LLVM_DYLIB:BOOL=ON  \
+                 -DCMAKE_INSTALL_RPATH="${CROSSTOOLS_DIR}/lib64;${CROSSTOOLS_DIR}/build-tools/lib64;\\\${ORIGIN}/../lib64" \
+                 -DLLVM_BUILD_EXTERNAL_COMPILER_RT:BOOL=ON   \
+                 -DLLVM_INSTALL_TOOLCHAIN_ONLY:BOOL=OFF \
+		 -DDEFAULT_SYSROOT:PATH="${SYSROOT_DIR}" \
+                 -DLLVM_DEFAULT_TARGET_TRIPLE=${CROSS_TARGET} \
+		 -DLLVM_ENABLE_PROJECTS='llvm;clang;lld;lldb'
+        ninja
+        ninja install
+
+	LLVM_DIST_VERSION="$(${CROSSTOOLS_DIR}/bin/llvm-config --version)"
+	save_package_version cross-tools_llvm-project "${LLVM_DIST_VERSION}"
+popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/llvm-project-22.1.6.src

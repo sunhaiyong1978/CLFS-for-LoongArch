@@ -1,0 +1,50 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=wpa_supplicant
+export PACKAGE_VERSION=2.11
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/wpa_supplicant/2.11/
+rm -rf ${BUILD_DIRECTORY}/wpa_supplicant-2.11
+tar xvf ${DOWNLOADDIR}/wpa_supplicant-2.11.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/wpa_supplicant-2.11
+pushd wpa_supplicant
+cat > .config << "EOF"
+    CONFIG_BACKEND=file
+    CONFIG_CTRL_IFACE=y
+    CONFIG_DEBUG_FILE=y
+    CONFIG_DRIVER_NL80211=y
+    CONFIG_DRIVER_WEXT=y
+    CONFIG_DRIVER_WIRED=y
+    CONFIG_EAP_GTC=y
+    CONFIG_EAP_LEAP=y
+    CONFIG_EAP_MD5=y
+    CONFIG_EAP_MSCHAPV2=y
+    CONFIG_EAP_OTP=y
+    CONFIG_EAP_PEAP=y
+    CONFIG_EAP_TLS=y
+    CONFIG_EAP_TTLS=y
+    CONFIG_IEEE8021X_EAPOL=y
+    CONFIG_IPV6=y
+    CONFIG_LIBNL32=y
+    CONFIG_PEERKEY=y
+    CONFIG_PKCS12=y
+    CONFIG_READLINE=y
+    CONFIG_SMARTCARD=y
+    CONFIG_WPS=y
+    CONFIG_CTRL_IFACE_DBUS=y
+    CONFIG_CTRL_IFACE_DBUS_NEW=y
+    CONFIG_CTRL_IFACE_DBUS_INTRO=y
+EOF
+    make -j${JOBS} CC="${CROSS_TARGET}-gcc" PKG_CONFIG=${CROSS_TARGET}-pkg-config \
+         BINDIR=/usr/sbin LIBDIR=/usr/lib64
+    install -v -m755 wpa_{cli,passphrase,supplicant} ${SYSROOT_DIR}/usr/sbin/
+    install -v -m644 systemd/*.service ${SYSROOT_DIR}/usr/lib/systemd/system/
+    install -v -m644 dbus/fi.w1.wpa_supplicant1.service \
+                     ${SYSROOT_DIR}/usr/share/dbus-1/system-services/
+    install -v -d -m755 ${SYSROOT_DIR}/etc/dbus-1/system.d
+    install -v -m644 dbus/dbus-wpa_supplicant.conf \
+                     ${SYSROOT_DIR}/etc/dbus-1/system.d/wpa_supplicant.conf
+popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/wpa_supplicant-2.11

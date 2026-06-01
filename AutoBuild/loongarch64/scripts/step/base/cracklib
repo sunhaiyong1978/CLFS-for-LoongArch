@@ -1,0 +1,21 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=cracklib
+export PACKAGE_VERSION=2.10.3
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/cracklib/2.10.3/
+rm -rf ${BUILD_DIRECTORY}/cracklib-2.10.3
+tar xvf ${DOWNLOADDIR}/cracklib-2.10.3.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/cracklib-2.10.3
+    pushd src
+	./autogen.sh
+        PYTHON=python3 ./configure ${COMMON_CONFIG} --with-default-dict=/usr/lib/cracklib/pw_dict
+        eval ${MAKE_AND_INSTALL}
+        install -v -m644 -D  ${RESOURCEDIR}/files/cracklib-words.gz \
+                             ${SYSROOT_DIR}/usr/share/dict/cracklib-words.gz
+        gunzip -fv ${SYSROOT_DIR}/usr/share/dict/cracklib-words.gz
+        install -v -m755 -d ${SYSROOT_DIR}/usr/lib/cracklib
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/cracklib-2.10.3

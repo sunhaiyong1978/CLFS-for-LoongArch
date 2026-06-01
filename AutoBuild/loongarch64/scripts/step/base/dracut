@@ -1,0 +1,16 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=dracut
+export PACKAGE_VERSION=056
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/dracut/056/
+rm -rf ${BUILD_DIRECTORY}/dracut-056
+tar xvf ${DOWNLOADDIR}/dracut-056.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/dracut-056
+    CC=${CROSS_TARGET}-gcc \
+    ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libdir=/usr/lib64
+    make -j${JOBS} CC=${CROSS_TARGET}-gcc
+    make DESTDIR=${SYSROOT_DIR} install
+popd 
+rm -rf ${BUILD_DIRECTORY}/dracut-056

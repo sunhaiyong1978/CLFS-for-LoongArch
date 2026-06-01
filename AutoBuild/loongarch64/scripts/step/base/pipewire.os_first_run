@@ -1,0 +1,2 @@
+systemctl --no-reload preset --global pipewire
+systemctl --no-reload preset --global pipewire-pulse

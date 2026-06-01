@@ -1,0 +1,28 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=protobuf
+export PACKAGE_VERSION=
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/protobuf//
+
+touch ${TEMP_DIRECTORY}/strip-foo
+
+if [ -f ${SYSROOT_DIR}/usr/lib64/pkgconfig/wayland-scanner.pc ]; then
+	sed -i.orig "s@pkgdatadir=\${datarootdir}/wayland@pkgdatadir=${SYSROOT_DIR}/usr/share/wayland@g"  ${SYSROOT_DIR}/usr/lib64/pkgconfig/wayland-scanner.pc
+fi
+
+for cmake_file in $(grep -rl "\.so\." $(find ${SYSROOT_DIR}/usr/lib64/cmake/ -name "*-release.cmake") ${TEMP_DIRECTORY}/strip-foo)
+do
+        if [ -f ${cmake_file} ]; then
+                sed -i.orig "s@\"/usr@\"${SYSROOT_DIR}/usr@g" ${cmake_file}
+        fi
+done
+
+
+for cmake_file in $(grep -rl "_IMPORT_PREFIX \"/usr\"" $(find ${SYSROOT_DIR}/usr/lib64/cmake/ -name "*.cmake") ${TEMP_DIRECTORY}/strip-foo)
+do
+        if [ -f ${cmake_file} ]; then
+                sed -i.orig "s@_IMPORT_PREFIX \"/usr\"@_IMPORT_PREFIX \"${SYSROOT_DIR}/usr\"@g" ${cmake_file}
+        fi
+done

@@ -1,0 +1,22 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=colord
+export PACKAGE_VERSION=1.4.8
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/colord/1.4.8/
+rm -rf ${BUILD_DIRECTORY}/colord-1.4.8
+tar xvf ${DOWNLOADDIR}/colord-1.4.8.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/colord-1.4.8
+	patch -Np1 -i ${SYSDIR}/files/base/colord/1.4.8/patches/0001-Colord-fix-udevdir-error-for-cross-build.patch 
+	 
+	mkdir cross-build
+	pushd cross-build
+		 meson ${MESON_CONFIG} -Ddaemon_user=colord -Dvapi=true -Dsystemd=false -Dlibcolordcompat=true -Dargyllcms_sensor=false -Dbash_completion=false -Ddocs=false -Dman=false \
+                      ..
+		sed -i "s@gi-docgen \(index\|generate\|gen-index\|gen-deps\|search\|check\|serve\) @& --add-include-path ${SYSROOT_DIR}/usr/share/gir-1.0/ @g" build.ninja
+		eval ${NINJA_AND_INSTALL}
+	popd
+	rm -f ${SYSROOT_DIR}/usr/lib${LIB_SUFF}*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/colord-1.4.8

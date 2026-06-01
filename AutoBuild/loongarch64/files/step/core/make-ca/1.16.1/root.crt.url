@@ -1,0 +1,3 @@
+URL=http://www.cacert.org/certs/root.crt
+FILENAME=root.crt
+MODE=FILE

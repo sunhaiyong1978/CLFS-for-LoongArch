@@ -1,0 +1,15 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=Jinja2
+export PACKAGE_VERSION=3.1.6
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/Jinja2/3.1.6/
+rm -rf ${BUILD_DIRECTORY}/jinja2-3.1.6
+tar xvf ${DOWNLOADDIR}/jinja2-3.1.6.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/jinja2-3.1.6
+	
+	_PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} ${CROSSTOOLS_DIR}/bin/pip3 wheel -w dist --no-build-isolation --no-deps ${PWD}
+        _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} ${CROSSTOOLS_DIR}/bin/pip3 install --no-index --find-links dist --no-cache-dir --no-deps --ignore-installed --no-user Jinja2 --root=${SYSROOT_DIR} --prefix=/usr
+popd 
+rm -rf ${BUILD_DIRECTORY}/jinja2-3.1.6

@@ -1,0 +1,21 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=pipewire
+export PACKAGE_VERSION=1.6.6
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/pipewire/1.6.6/
+rm -rf ${BUILD_DIRECTORY}/pipewire-1.6.6
+tar xvf ${DOWNLOADDIR}/pipewire-1.6.6.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/pipewire-1.6.6
+	
+	mkdir cross-build
+	pushd cross-build
+		 meson ${MESON_CONFIG} -Dsession-managers="[]" -Dffmpeg=enabled -Dsystemd-user-unit-dir=/usr/lib/systemd/user \
+                      ..
+		sed -i "s@gi-docgen \(index\|generate\|gen-index\|gen-deps\|search\|check\|serve\) @& --add-include-path ${SYSROOT_DIR}/usr/share/gir-1.0/ @g" build.ninja
+		eval ${NINJA_AND_INSTALL}
+	popd
+	rm -f ${SYSROOT_DIR}/usr/lib${LIB_SUFF}*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/pipewire-1.6.6

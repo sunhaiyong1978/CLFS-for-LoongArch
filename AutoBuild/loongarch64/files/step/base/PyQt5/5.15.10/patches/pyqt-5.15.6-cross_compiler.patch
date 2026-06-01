@@ -1,0 +1,11 @@
+--- PyQt5-5.15.6.orig/configure.py	2021-10-29 14:11:33.366122700 +0000
++++ PyQt5-5.15.6/configure.py	2022-02-12 10:09:57.544427874 +0000
+@@ -2438,7 +2438,7 @@ def run_test_program(mname, test, verbos
+ 
+     # Create the output file, first making sure it doesn't exist.
+     remove_file(out_file)
+-    run_command(test + ' ' + out_file, verbose)
++    run_command('qemu-loongarch64' + ' ' + test + ' ' + out_file, verbose)
+ 
+     if not os.access(out_file, os.F_OK):
+         error("%s failed to create %s. Make sure your Qt installation is correct." % (test, out_file))

@@ -1,0 +1,25 @@
+From 1bbdfe89c77ca39ab9f8f440893dcd43aead8979 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Sat, 11 Oct 2025 08:17:36 +0000
+Subject: [PATCH] p11-kit 0.25.10 fix systemd user unit dir for cross build.
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 93b85df..3eda394 100644
+--- a/meson.build
++++ b/meson.build
+@@ -458,7 +458,7 @@ conf.set_quoted('TRUST_PATHS', trust_paths)
+ with_systemd = false
+ systemd = dependency('systemd', required: get_option('systemd'))
+ if systemd.found()
+-  systemduserunitdir = systemd.get_variable(pkgconfig : 'systemduserunitdir')
++  systemduserunitdir = systemd.get_pkgconfig_variable('systemd_user_unit_dir', define_variable: [ 'prefix', get_option('prefix') ])
+   with_systemd = true
+ endif
+ 
+-- 
+2.31.1
+

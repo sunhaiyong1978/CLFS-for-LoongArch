@@ -1,0 +1,14 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=mdadm
+export PACKAGE_VERSION=4.4
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/mdadm/4.4/
+rm -rf ${BUILD_DIRECTORY}/mdadm-4.4
+tar xvf ${DOWNLOADDIR}/mdadm-4.4.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/mdadm-4.4
+	make -j${JOBS} CC="${CROSS_TARGET}-gcc" CXFLAGS="${CFLAGS} -Wno-error=unterminated-string-initialization -Wno-error=format-truncation -Wno-error=format -Wno-error=unused-but-set-variable -Wno-error=format-overflow"
+	make DESTDIR=${SYSROOT_DIR} PKG_CONFIG=${CROSS_TARGET}-pkg-config install
+popd 
+rm -rf ${BUILD_DIRECTORY}/mdadm-4.4

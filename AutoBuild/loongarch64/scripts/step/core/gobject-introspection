@@ -1,0 +1,29 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=gobject-introspection
+export PACKAGE_VERSION=1.86.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/gobject-introspection/1.86.0/
+rm -rf ${BUILD_DIRECTORY}/gobject-introspection-1.86.0
+tar xvf ${DOWNLOADDIR}/gobject-introspection-1.86.0.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/gobject-introspection-1.86.0
+    tar xvf ${RESOURCEDIR}/files/gobject-introspection-glib_git.tar.gz -C subprojects/
+    mv subprojects/gobject-introspection-glib_git subprojects/glib
+    tar xvf ${RESOURCEDIR}/files/gobject-introspection-gvdb_git.tar.gz -C subprojects/glib/subprojects/
+    rmdir subprojects/glib/subprojects/gvdb
+    mv subprojects/glib/subprojects/gobject-introspection-gvdb_git subprojects/glib/subprojects/gvdb
+    
+
+    sed -i -e "/gircompiler_command/s@gircompiler,@'${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-g-ir-compiler',@g" \
+           -e "/g-ir-scanner/s@'g-ir-scanner'@'${CROSS_TARGET}-g-ir-scanner'@g" \
+           gir/meson.build
+    mkdir -v cross-build
+    pushd cross-build
+        meson ${MESON_CONFIG} \
+              --buildtype=release -Dgi_cross_use_prebuilt_gi=true \
+              ..
+	eval ${NINJA_AND_INSTALL}
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/gobject-introspection-1.86.0

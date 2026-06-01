@@ -1,0 +1,22 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=dconf-editor
+export PACKAGE_VERSION=49.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/dconf-editor/49.0/
+rm -rf ${BUILD_DIRECTORY}/dconf-editor-49.0
+tar xvf ${DOWNLOADDIR}/dconf-editor-49.0.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/dconf-editor-49.0
+        
+        mkdir cross-build
+        pushd cross-build
+                meson ${MESON_CONFIG} \
+                      ..
+                sed -i -e "s@command = valac @command = ${CROSS_TARGET}-valac @g" build.ninja
+                sed -i -e "s@command = ${CROSS_TARGET}-gcc @& -Wno-incompatible-pointer-types @g" build.ninja
+                eval ${NINJA_AND_INSTALL}
+        popd
+        rm -f ${SYSROOT_DIR}/usr/lib64/*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/dconf-editor-49.0

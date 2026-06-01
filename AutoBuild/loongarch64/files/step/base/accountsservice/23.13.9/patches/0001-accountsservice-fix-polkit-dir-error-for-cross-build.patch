@@ -1,0 +1,25 @@
+From b238ec2466afbc0234764bddb9026986369cfc8d Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Tue, 26 Sep 2023 08:47:56 +0000
+Subject: [PATCH] accountsservice fix polkit dir error for cross build.
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 4a509e7..ce3d488 100644
+--- a/meson.build
++++ b/meson.build
+@@ -173,7 +173,7 @@ endif
+ dbus_ifaces_dir = dbus_dep.get_pkgconfig_variable('interfaces_dir', define_variable: ['datadir', act_datadir])
+ dbus_sys_dir = dbus_dep.get_pkgconfig_variable('system_bus_services_dir', define_variable: ['datadir', act_datadir])
+ 
+-policy_dir = polkit_gobject_dep.get_pkgconfig_variable('policydir', define_variable: ['prefix', act_prefix])
++policy_dir = polkit_gobject_dep.get_pkgconfig_variable('policydir', define_variable: ['datadir', act_prefix])
+ 
+ # FIXME: systemd.pc file does not use variables with relative paths, so `define_variable` cannot be used
+ systemd_system_unit_dir = get_option('systemdsystemunitdir')
+-- 
+2.31.1
+

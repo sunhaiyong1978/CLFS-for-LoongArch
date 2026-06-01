@@ -1,0 +1,15 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=Markdown
+export PACKAGE_VERSION=3.10.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/Markdown/3.10.2/
+rm -rf ${BUILD_DIRECTORY}/markdown-3.10.2
+tar xvf ${DOWNLOADDIR}/markdown-3.10.2.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/markdown-3.10.2
+	
+	_PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} ${CROSSTOOLS_DIR}/bin/pip3 wheel -w dist --no-build-isolation --no-deps ${PWD}
+        _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} ${CROSSTOOLS_DIR}/bin/pip3 install --no-index --find-links dist --no-cache-dir --no-deps --ignore-installed --no-user Markdown --root=${SYSROOT_DIR} --prefix=/usr
+popd 
+rm -rf ${BUILD_DIRECTORY}/markdown-3.10.2

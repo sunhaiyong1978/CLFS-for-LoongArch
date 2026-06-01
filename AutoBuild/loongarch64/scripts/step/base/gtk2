@@ -1,0 +1,45 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=gtk2
+export PACKAGE_VERSION=2.24.33
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/gtk2/2.24.33/
+rm -rf ${BUILD_DIRECTORY}/gtk+-2.24.33
+tar xvf ${DOWNLOADDIR}/gtk+-2.24.33.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/gtk+-2.24.33
+    cp -a -f $(automake --print-libdir)/config.{sub,guess} ./
+    sed -i.orig -e "s@gtk-builder-convert@@g" \
+        -e "/\tgtk-update-icon-cache\$(EXEEXT)/s@gtk-update-icon-cache\$(EXEEXT)@@g" \
+        gtk/Makefile.in
+    export CFLAGS="${CFLAGS} -Wno-incompatible-pointer-types -Wno-implicit-int"
+    mkdir cross-prebuild
+    pushd cross-prebuild
+        ../configure ${COMMON_CONFIG} --disable-introspection \
+                     ac_cv_func_httpGetAuthString=yes ac_cv_func_mmap_fixed_mapped=yes \
+                     ac_cv_header_cups_cups_h=yes
+	make -j${JOBS}
+        make DESTDIR=${SYSROOT_DIR} install-exec
+    popd
+    mkdir cross-build
+    pushd cross-build
+        ../configure $COMMON_CONFIG \
+                     ac_cv_func_httpGetAuthString=yes ac_cv_func_mmap_fixed_mapped=yes \
+                     ac_cv_header_cups_cups_h=yes
+        sed -i "/SRC_SUBDIRS/s@ demos@ @g" Makefile
+        make -j${JOBS} INTROSPECTION_SCANNER=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-g-ir-scanner \
+             INTROSPECTION_COMPILER=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-g-ir-compiler \
+             INTROSPECTION_MAKEFILE=${SYSROOT_DIR}/usr/share/gobject-introspection-1.0/Makefile.introspection
+        make INTROSPECTION_SCANNER=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-g-ir-scanner \
+             INTROSPECTION_COMPILER=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-g-ir-compiler \
+             INTROSPECTION_MAKEFILE=${SYSROOT_DIR}/usr/share/gobject-introspection-1.0/Makefile.introspection \
+             DESTDIR=${SYSROOT_DIR} install
+        rm -v ${SYSROOT_DIR}/usr/lib64/libg*-x11*.la
+    popd
+
+cat > ${SYSROOT_DIR}/etc/gtk-2.0/gtkrc << "EOF"
+include "/usr/share/themes/Clearlooks/gtk-2.0/gtkrc"
+gtk-icon-theme-name = "elementary"
+EOF
+popd 
+rm -rf ${BUILD_DIRECTORY}/gtk+-2.24.33

@@ -1,0 +1,26 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=icu4c
+export PACKAGE_VERSION=75_1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/icu4c/75_1/
+rm -rf ${BUILD_DIRECTORY}/icu
+tar xvf ${DOWNLOADDIR}/icu4c-75_1-src.tgz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/icu
+    touch LICENSE
+    pushd source
+    for config_i in $(find -name "config.sub")
+    do
+            cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+    done
+    touch config/icucross.mk
+    touch config/icucross.inc
+    sed -i '/^PKGDATA/s@$(TOOLBINDIR)@/bin@g' data/Makefile.in
+    sed -i '/INVOKE/s@$(TOOLBINDIR)@/bin@g' data/Makefile.in extra/uconv/Makefile.in
+    sed -i '/INVOKE/s@/bin/icupkg@/sbin/icupkg@g' data/Makefile.in
+    ./configure ${COMMON_CONFIG} --with-cross-build=${PWD}
+    eval ${MAKE_AND_INSTALL}
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/icu

@@ -1,0 +1,47 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=mlt
+export PACKAGE_VERSION=7.38.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/mlt/7.38.0/
+rm -rf ${BUILD_DIRECTORY}/mlt-7.38.0
+tar xvf ${DOWNLOADDIR}/mlt-7.38.0.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/mlt-7.38.0
+        
+        mkdir cross-build
+        pushd cross-build
+                CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
+                cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_CROSSCOMPILING_EMULATOR=qemu-loongarch64 \
+                      -DPKG_CONFIG_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-pkg-config \
+                      -DCMAKE_SYSROOT=${SYSROOT_DIR} \
+                      -DCMAKE_FIND_ROOT_PATH=${SYSROOT_DIR}/usr \
+                      -DGETTEXT_MSGFMT_EXECUTABLE=/bin/msgfmt \
+                      -DGETTEXT_MSGMERGE_EXECUTABLE=/bin/msgmerge \
+                      -DPython_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3 \
+                      -DPython3_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3 \
+                      -DPYTHON_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3 \
+                      -DPYTHON3_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3 \
+                      -DPERL_EXECUTABLE=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-perl \
+                      -DRuby_EXECUTABLE=${CROSSTOOLS_DIR}/bin/ruby \
+                      -DGPERF_EXECUTABLE=/bin/gperf -DGperf_EXECUTABLE=/bin/gperf \
+                      -DDOXYGEN_EXECUTABLE=/bin/doxygen \
+		      -DSWIG_EXECUTABLE=${CROSSTOOLS_DIR}/bin/swig \
+		      -DCLANGFORMAT_EXECUTABLE=${CROSSTOOLS_DIR}/bin/clang-format \
+                      -DWaylandScanner_EXECUTABLE=${CROSSTOOLS_DIR}/bin/wayland-scanner \
+                      -DQtWaylandScanner_EXECUTABLE=${CROSSTOOLS_DIR}/bin/qtwaylandscanner \
+                      -DLIBXML2_XMLLINT_EXECUTABLE=${CROSSTOOLS_DIR}/bin/xmllint \
+                      -DFLEX_EXECUTABLE=/bin/flex \
+                      -DBISON_EXECUTABLE=/bin/bison \
+                      -Dgzip_EXECUTABLE=/bin/gzip \
+                      -DCMAKE_INSTALL_LIBDIR=/usr/lib64 -DLIB_SUFFIX=64 \
+                      -DCMAKE_INSTALL_PREFIX=/usr \
+                      -DBUILD_SHARED_LIBS=ON \
+		      -DMOD_QT6=OFF \
+		      -DBUILD_TESTING=OFF -DMOD_GLAXNIMATE=ON -DMOD_MOVIT=OFF -DMOD_RUBBERBAND=OFF -DMOD_SOX=OFF -DMOD_VIDSTAB=OFF -DMOD_PLUS=OFF -DMOD_JACKRACK=OFF \
+                      -Wno-dev ..
+                eval ${MAKE_AND_INSTALL}
+        popd
+        rm -f ${SYSROOT_DIR}/usr/lib64/*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/mlt-7.38.0

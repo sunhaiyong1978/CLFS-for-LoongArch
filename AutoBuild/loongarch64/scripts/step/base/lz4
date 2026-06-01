@@ -1,0 +1,15 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=lz4
+export PACKAGE_VERSION=1.10.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/lz4/1.10.0/
+rm -rf ${BUILD_DIRECTORY}/lz4-1.10.0
+tar xvf ${DOWNLOADDIR}/lz4-1.10.0.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/lz4-1.10.0
+    sed -i.orig "/^LIBDIR /s@lib\$@lib${LIB_SUFF}@g" lib/Makefile
+    make -j${JOBS} CC=${CROSS_TARGET}-gcc PREFIX=/usr
+    make CC=${CROSS_TARGET}-gcc PREFIX=/usr DESTDIR=${SYSROOT_DIR} install
+popd 
+rm -rf ${BUILD_DIRECTORY}/lz4-1.10.0

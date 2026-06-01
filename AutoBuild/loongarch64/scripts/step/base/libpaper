@@ -1,0 +1,19 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=libpaper
+export PACKAGE_VERSION=2.2.8
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/libpaper/2.2.8/
+rm -rf ${BUILD_DIRECTORY}/libpaper-2.2.8
+tar xvf ${DOWNLOADDIR}/libpaper-2.2.8.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/libpaper-2.2.8
+    ./configure ${COMMON_CONFIG}
+    eval ${MAKE_AND_INSTALL}
+
+mkdir -pv ${SYSROOT_DIR}/etc/libpaper.d
+cat > ${SYSROOT_DIR}/etc/papersize << "EOF"
+a4
+EOF
+popd 
+rm -rf ${BUILD_DIRECTORY}/libpaper-2.2.8

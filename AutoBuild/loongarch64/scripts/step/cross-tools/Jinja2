@@ -1,0 +1,15 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=Jinja2
+export PACKAGE_VERSION=3.1.6
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/Jinja2/3.1.6/
+rm -rf ${BUILD_DIRECTORY}/jinja2-3.1.6
+tar xvf ${DOWNLOADDIR}/jinja2-3.1.6.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/jinja2-3.1.6
+	
+	${CROSSTOOLS_DIR}/bin/pip3 wheel -w dist --no-build-isolation --no-deps ${PWD}
+        ${CROSSTOOLS_DIR}/bin/pip3 install --no-index --find-links dist --no-cache-dir --no-deps --force-reinstall --no-user Jinja2
+popd 
+rm -rf ${BUILD_DIRECTORY}/jinja2-3.1.6

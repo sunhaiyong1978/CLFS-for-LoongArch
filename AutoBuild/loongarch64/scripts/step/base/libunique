@@ -1,0 +1,25 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=libunique
+export PACKAGE_VERSION=3.0.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/libunique/3.0.2/
+rm -rf ${BUILD_DIRECTORY}/libunique-3.0.2
+tar xvf ${DOWNLOADDIR}/libunique-3.0.2.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/libunique-3.0.2
+    for config_i in $(find -name "config.sub")
+    do
+            cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+    done
+
+    mkdir cross-build
+    pushd cross-build
+        ../configure $COMMON_CONFIG --enable-introspection
+        make -j${JOBS} INTROSPECTION_SCANNER=${CROSS_TARGET}-g-ir-scanner \
+		   INTROSPECTION_COMPILER=${CROSS_TARGET}-g-ir-compiler \
+                   INTROSPECTION_MAKEFILE=${SYSROOT_DIR}/usr/share/gobject-introspection-1.0/Makefile.introspection
+        make DESTDIR=${SYSROOT_DIR} install
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/libunique-3.0.2

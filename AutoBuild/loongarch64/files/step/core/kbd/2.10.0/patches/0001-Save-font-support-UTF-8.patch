@@ -1,0 +1,25 @@
+From dccd26aa00735b2c8141ef4d639bd649e5a19e9b Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Tue, 13 Jun 2023 14:30:19 +0000
+Subject: [PATCH] Save font support UTF-8.
+
+---
+ src/libkfont/setfont.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libkfont/setfont.c b/src/libkfont/setfont.c
+index 9d31adc..819c1d1 100644
+--- a/src/libkfont/setfont.c
++++ b/src/libkfont/setfont.c
+@@ -601,7 +601,7 @@ save_font(struct kfont_context *ctx, int consolefd, const char *filename,
+ 	unsigned int i, ct, width, height, bytewidth, charsize, kcharsize, vpitch;
+ 	int ret;
+ 
+-	ct = sizeof(buf) / (64 * 128 / 8); /* max size 64x128, 8 bits/byte */
++	ct = 65536 * 2; /* max charcount */
+ 
+ 	if (kfont_get_font(ctx, consolefd, buf, &ct, &width, &height, &vpitch) < 0)
+ 		return -EX_OSERR;
+-- 
+2.31.1
+

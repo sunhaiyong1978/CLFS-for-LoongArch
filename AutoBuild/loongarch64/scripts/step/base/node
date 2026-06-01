@@ -1,0 +1,35 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=node
+export PACKAGE_VERSION=25.9.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/node/25.9.0/
+rm -rf ${BUILD_DIRECTORY}/node-25.9.0
+tar xvf ${DOWNLOADDIR}/node-25.9.0.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/node-25.9.0
+    
+    export CFLAGS="$(echo ${CFLAGS} | sed "s@ -g\( \|$\)@@g")"
+    export CXXFLAGS="$(echo ${CXXFLAGS} | sed "s@ -g\( \|$\)@@g")"
+    export JOBS=$(($(nproc)*1))
+
+    sed -i "s@registry.npmjs.org@registry.loongnix.cn:5873@g" deps/npm/node_modules/@npmcli/config/lib/definitions/definitions.js
+    mkdir -pv out/Release
+    for i in bytecode_builtins_list_generator gen-regexp-special-case torque mksnapshot node_js2c node_mksnapshot
+    do
+        sed -i "/EXECUTABLE_SUFFIX/s@$i<@$i.host<@g" tools/v8_gypfiles/v8.gyp
+        echo -e '#!/bin/bash -e \n' "qemu-${ARCH_NAME} ${PWD}/out/Release/$i \"\$@\"" > ${PWD}/out/Release/$i.host
+        chmod +x ${PWD}/out/Release/$i.host
+    done
+    sed -i "/EXECUTABLE_SUFFIX/s@node_js2c<@node_js2c.host<@g" node.gyp
+    sed -i "/EXECUTABLE_SUFFIX/s@node_mksnapshot<@node_mksnapshot.host<@g" node.gyp
+    sed -i.orig "s@\[ '<(PRODUCT_DIR)@\[ 'qemu-${ARCH_NAME}', '<(PRODUCT_DIR)@g" tools/icu/icu-generic.gyp
+    PKG_CONFIG=${CROSS_TARGET}-pkg-config \
+    CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
+    ./configure --prefix /usr --dest-cpu=$(echo ${ARCH_NAME} | sed 's@arch@@g') --shared-openssl
+    make -j${JOBS} -C out bytecode_builtins_list_generator gen-regexp-special-case torque
+    make -j${JOBS} -C out mksnapshot
+    make -j${JOBS} -C out node_js2c
+    eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/node-25.9.0

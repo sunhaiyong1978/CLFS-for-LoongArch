@@ -1,0 +1,39 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=qt5
+export PACKAGE_VERSION=5.15.19
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/qt5/5.15.19/
+rm -rf ${BUILD_DIRECTORY}/qt-everywhere-src-5.15.19
+tar xvf ${DOWNLOADDIR}/qt-everywhere-opensource-src-5.15.19.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/qt-everywhere-src-5.15.19
+    patch -Np1 -i ${SYSDIR}/files/cross-tools/qt5/5.15.19/patches/qt-everywhere-src-5.15.2-add-loongarch.patch 
+	patch -Np1 -i ${SYSDIR}/files/cross-tools/qt5/5.15.19/patches/0001-QT-5.15.8-add-loongarch64-support.patch 
+	patch -Np1 -i ${SYSDIR}/files/cross-tools/qt5/5.15.19/patches/0001-qt5-5.15-add-stdint-for-compiler-use-gcc-13.patch 
+	patch -Np1 -i ${SYSDIR}/files/cross-tools/qt5/5.15.19/patches/qtlocation-fix-rapidjson-build.patch -d qtlocation 
+	 
+    sed -i "s@defined(__aarch64__)@& || defined(__loongarch__)@g" qtbase/src/3rdparty/forkfd/forkfd_linux.c
+    mkdir host-build
+    pushd host-build
+	../configure -prefix ${CROSSTOOLS_DIR}/qt5 \
+		-confirm-license -opensource \
+                -openssl-linked -system-harfbuzz \
+                -nomake examples \
+                -journald \
+		-rpath -R "${CROSSTOOLS_DIR}/lib${LIB_SUFF}" -R "${CROSSTOOLS_DIR}/lib${LIB_SUFF}" -R "${CROSSTOOLS_DIR}/lib" -R "\\\${ORIGIN}/../lib${LIB_SUFF}" -R "${CROSSTOOLS_DIR}/lib" \
+		ICU_PREFIX=${CROSSTOOLS_DIR} ICU_LIBS="-licui18n -licuuc -licudata" \
+                -skip qtwebengine
+        make -j${JOBS}
+        make install
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/qt-everywhere-src-5.15.19
+
+echo "#!/bin/bash -e
+if [ \"x\${1:0:1}\" == \"xQ\" ]; then
+        ${CROSSTOOLS_DIR}/qt5/bin/qmlplugindump \"\$@\"
+else
+        ${CROSSTOOLS_DIR}/bin/qemu-${ARCH_NAME} ${SYSROOT_DIR}/usr/bin/qmlplugindump \"\$@\"
+fi" >${CROSSTOOLS_DIR}/qt5/bin/qmlplugindump-qt5
+chmod +x ${CROSSTOOLS_DIR}/qt5/bin/qmlplugindump-qt5

@@ -1,0 +1,27 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=sgml-common
+export PACKAGE_VERSION=0.6.3
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/sgml-common/0.6.3/
+rm -rf ${BUILD_DIRECTORY}/sgml-common-0.6.3
+tar xvf ${DOWNLOADDIR}/sgml-common-0.6.3.tgz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/sgml-common-0.6.3
+    patch -Np1 -i ${SYSDIR}/files/base/sgml-common/0.6.3/patches/sgml-common-0.6.3-manpage-1.patch 
+	 
+    autoreconf -ifv
+    ./configure ${COMMON_CONFIG}
+    make -j${JOBS}
+    make docdir=/usr/share/doc DESTDIR=${SYSROOT_DIR} install
+
+cp -a ${SYSROOT_DIR}/usr/bin/install-catalog ${CROSSTOOLS_DIR}/bin/
+sed -i "s@ /etc@ ${SYSROOT_DIR}/etc@g" ${CROSSTOOLS_DIR}/bin/install-catalog
+${CROSSTOOLS_DIR}/bin/install-catalog --add ${SYSROOT_DIR}/etc/sgml/sgml-ent.cat \
+    ${SYSROOT_DIR}/usr/share/sgml/sgml-iso-entities-8879.1986/catalog
+${CROSSTOOLS_DIR}/bin/install-catalog --add ${SYSROOT_DIR}/etc/sgml/sgml-docbook.cat \
+    ${SYSROOT_DIR}/etc/sgml/sgml-ent.cat
+sed -i "s@${SYSROOT_DIR}@@g" ${SYSROOT_DIR}/etc/sgml/*
+
+popd 
+rm -rf ${BUILD_DIRECTORY}/sgml-common-0.6.3

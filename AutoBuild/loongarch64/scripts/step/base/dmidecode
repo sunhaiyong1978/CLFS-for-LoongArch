@@ -1,0 +1,15 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=dmidecode
+export PACKAGE_VERSION=3.7
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/dmidecode/3.7/
+rm -rf ${BUILD_DIRECTORY}/dmidecode-3.7
+tar xvf ${DOWNLOADDIR}/dmidecode-3.7.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/dmidecode-3.7
+    
+    make -j${JOBS} CC=${CROSS_TARGET}-gcc prefix=/usr
+    make DESTDIR=${SYSROOT_DIR} CC=${CROSS_TARGET}-gcc prefix=/usr install
+popd 
+rm -rf ${BUILD_DIRECTORY}/dmidecode-3.7

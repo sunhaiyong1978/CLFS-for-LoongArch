@@ -1,0 +1,15 @@
+source env/host-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=host-tools
+export STEP_PACKAGENAME=automake
+export PACKAGE_VERSION=1.18.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/host-tools/automake/1.18.1/
+rm -rf ${BUILD_DIRECTORY}/automake-1.18.1
+tar xvf ${DOWNLOADDIR}/automake-1.18.1.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/automake-1.18.1
+        
+        ./configure --prefix=${CROSSTOOLS_DIR}
+        eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/automake-1.18.1

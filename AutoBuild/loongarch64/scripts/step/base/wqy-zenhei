@@ -1,0 +1,16 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=wqy-zenhei
+export PACKAGE_VERSION=0.9.45
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/wqy-zenhei/0.9.45/
+rm -rf ${BUILD_DIRECTORY}/wqy-zenhei
+tar xvf ${DOWNLOADDIR}/wqy-zenhei-0.9.45.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/wqy-zenhei
+    mkdir -pv ${SYSROOT_DIR}/usr/share/fonts/wenquanyi/
+    cp -av wqy-zenhei.ttc ${SYSROOT_DIR}/usr/share/fonts/wenquanyi/
+    sed -i "7,11d" 44-wqy-zenhei.conf
+    cp -av 44-wqy-zenhei.conf ${SYSROOT_DIR}/etc/fonts/conf.d/
+popd 
+rm -rf ${BUILD_DIRECTORY}/wqy-zenhei

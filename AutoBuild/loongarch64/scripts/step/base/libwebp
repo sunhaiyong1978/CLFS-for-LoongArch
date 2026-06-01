@@ -1,0 +1,28 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=libwebp
+export PACKAGE_VERSION=1.6.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/libwebp/1.6.0/
+rm -rf ${BUILD_DIRECTORY}/libwebp-1.6.0
+tar xvf ${DOWNLOADDIR}/libwebp-1.6.0.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/libwebp-1.6.0
+        
+        for config_i in $(find -name "config.sub")
+        do
+                cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+        done
+        if [ ! -f configure ]; then
+                autoreconf -ifv
+        fi
+         ./configure ${COMMON_CONFIG} --enable-malloc0returnsnull --enable-libwebpmux --enable-libwebpdemux --enable-libwebpdecoder --enable-libwebpextras --enable-swap-16bit-csp LIBSDL_CONFIG=${CROSSTOOLS_DIR}/bin/${ARCH_NAME}-sdl2-config LIBPNG_CONFIG=${CROSSTOOLS_DIR}/bin/${ARCH_NAME}-libpng-config
+	pushd sharpyuv
+        	CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" make -j${JOBS}
+        	make DESTDIR=${SYSROOT_DIR} install
+	popd
+        CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" make -j${JOBS}
+        make DESTDIR=${SYSROOT_DIR} install
+        rm -f ${SYSROOT_DIR}/usr/lib64/*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/libwebp-1.6.0

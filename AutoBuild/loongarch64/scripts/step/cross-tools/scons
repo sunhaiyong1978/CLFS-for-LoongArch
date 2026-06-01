@@ -1,0 +1,14 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=scons
+export PACKAGE_VERSION=4.10.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/scons/4.10.1/
+rm -rf ${BUILD_DIRECTORY}/scons-4.10.1
+tar xvf ${DOWNLOADDIR}/SCons-4.10.1.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/scons-4.10.1
+	${CROSSTOOLS_DIR}/bin/python3 setup.py build
+        ${CROSSTOOLS_DIR}/bin/python3 setup.py install --optimize=1
+popd 
+rm -rf ${BUILD_DIRECTORY}/scons-4.10.1

@@ -1,0 +1,16 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=gettext
+export PACKAGE_VERSION=1.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/gettext/1.0/
+rm -rf ${BUILD_DIRECTORY}/gettext-1.0
+tar xvf ${DOWNLOADDIR}/gettext-1.0.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/gettext-1.0
+	sed -i "/hello-c++-kde/d" gettext-tools/examples/Makefile.in
+	./configure ${COMMON_CONFIG} \
+	            --with-libncurses-prefix=${SYSROOT_DIR}
+	eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/gettext-1.0

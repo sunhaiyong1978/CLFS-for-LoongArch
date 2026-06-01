@@ -1,0 +1,25 @@
+From eab68b6538834c235f26da1fb72c2c598d38745f Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Tue, 23 Apr 2024 08:25:20 +0000
+Subject: [PATCH] harfbuzz 8.4.4 fix cpp_std to c++17 for icu4c 75_1.
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index fed3dc0..e99e5cc 100644
+--- a/meson.build
++++ b/meson.build
+@@ -4,7 +4,7 @@ project('harfbuzz', 'c', 'cpp',
+   default_options: [
+     'cpp_eh=none',          # Just to support msvc, we are passing -fno-exceptions also anyway
+     # 'cpp_rtti=false',     # Do NOT enable, wraps inherit it and ICU needs RTTI
+-    'cpp_std=c++11',
++    'cpp_std=c++17',
+     'wrap_mode=nofallback', # Use --wrap-mode=default to revert, https://github.com/harfbuzz/harfbuzz/pull/2548
+   ],
+ )
+-- 
+2.31.1
+

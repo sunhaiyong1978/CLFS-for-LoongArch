@@ -1,0 +1,26 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=keybinder3
+export PACKAGE_VERSION=0.3.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/keybinder3/0.3.2/
+rm -rf ${BUILD_DIRECTORY}/keybinder-3.0-0.3.2
+tar xvf ${DOWNLOADDIR}/keybinder-3.0-0.3.2.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/keybinder-3.0-0.3.2
+    for config_i in $(find -name "config.sub")
+    do
+            cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+    done
+
+    mkdir cross-build
+    pushd cross-build
+        ../configure ${COMMON_CONFIG} --enable-introspection
+        make -j${JOBS} INTROSPECTION_SCANNER=${CROSS_TARGET}-g-ir-scanner \
+                   INTROSPECTION_COMPILER=${CROSS_TARGET}-g-ir-compiler \
+                   INTROSPECTION_MAKEFILE=${SYSROOT_DIR}/usr/share/gobject-introspection-1.0/Makefile.introspection
+        make DESTDIR=${SYSROOT_DIR} install
+        rm -v ${SYSROOT_DIR}/usr/lib64/libkeybinder-3.0.la
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/keybinder-3.0-0.3.2

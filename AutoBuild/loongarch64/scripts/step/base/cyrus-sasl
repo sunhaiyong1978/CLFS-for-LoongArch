@@ -1,0 +1,25 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=cyrus-sasl
+export PACKAGE_VERSION=2.1.28
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/cyrus-sasl/2.1.28/
+rm -rf ${BUILD_DIRECTORY}/cyrus-sasl-2.1.28
+tar xvf ${DOWNLOADDIR}/cyrus-sasl-2.1.28.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/cyrus-sasl-2.1.28
+	
+	for config_i in $(find -name "config.sub")
+	do
+		cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+	done
+	if [ ! -f configure ]; then
+		autoreconf -ifv
+	fi
+	CFLAGS="${CFLAGS} -Wno-implicit-function-declaration -std=gnu17" ./configure ${COMMON_CONFIG} --enable-auth-sasldb --with-sphinx-build=no --with-dbpath=/var/lib/sasl/sasldb2 --with-saslauthd=/var/run/saslauthd ac_cv_gssapi_supports_spnego=yes --enable-malloc0returnsnull
+	CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" make -j${JOBS}
+	run_step_package_check check
+        make DESTDIR=${SYSROOT_DIR} install
+	rm -f ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/cyrus-sasl-2.1.28

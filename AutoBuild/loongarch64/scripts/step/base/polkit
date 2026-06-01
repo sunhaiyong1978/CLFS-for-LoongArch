@@ -1,0 +1,35 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=polkit
+export PACKAGE_VERSION=124
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/polkit/124/
+rm -rf ${BUILD_DIRECTORY}/polkit-124
+tar xvf ${DOWNLOADDIR}/polkit-124.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/polkit-124
+        patch -Np1 -i ${SYSDIR}/files/base/polkit/124/patches/0001-polkit-124-fix-systemd-dir-for-cross-build.patch 
+	 
+        mkdir cross-build
+        pushd cross-build
+                meson ${MESON_CONFIG} -Dsession_tracking=libsystemd-login -Djs_engine=mozjs \
+                      ..
+                eval ${NINJA_AND_INSTALL}
+        popd
+
+cp -v ${SYSROOT_DIR}/usr/share/gettext/its/polkit* ${CROSSTOOLS_DIR}/share/gettext/its/
+
+cat > ${SYSROOT_DIR}/etc/pam.d/polkit-1 << "EOF"
+ # Begin /etc/pam.d/polkit-1
+
+auth     include        system-auth
+account  include        system-account
+password include        system-password
+session  include        system-session
+
+ # End /etc/pam.d/polkit-1
+EOF
+chmod +s ${SYSROOT_DIR}/usr/lib/polkit-1/polkit-agent-helper-1
+
+popd 
+rm -rf ${BUILD_DIRECTORY}/polkit-124

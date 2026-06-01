@@ -1,0 +1,25 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=binutils
+export PACKAGE_VERSION=2.46.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/binutils/2.46.0/
+rm -rf ${BUILD_DIRECTORY}/binutils-2.46.0
+tar xvf ${DOWNLOADDIR}/binutils-2.46.0.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/binutils-2.46.0
+	
+	rm -rf gdb* libdecnumber readline sim
+	mkdir -p tools-build
+	pushd tools-build
+    	CC=gcc AR=ar AS=as \
+	    ../configure --prefix=${CROSSTOOLS_DIR} --build=${CROSS_HOST} --host=${CROSS_HOST} \
+	                 --target=${CROSS_TARGET} --with-sysroot=${SYSROOT_DIR} --disable-nls \
+	                 --disable-static --enable-64-bit-bfd --disable-werror
+    	make -j${JOBS} configure-host
+    	make -j${JOBS}
+    	make install-strip
+    	cp -v ../include/libiberty.h ${SYSDIR}/sysroot/usr/include
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/binutils-2.46.0

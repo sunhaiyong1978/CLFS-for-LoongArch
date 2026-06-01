@@ -1,0 +1,32 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=frei0r
+export PACKAGE_VERSION=
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/frei0r//
+touch ${TEMP_DIRECTORY}/strip-foo
+
+for cmake_file in $(grep -rl "\.so\." $(find ${SYSROOT_DIR}/usr/lib64/cmake/ -name "*-release.cmake") ${TEMP_DIRECTORY}/strip-foo)
+do
+        if [ -f ${cmake_file} ]; then
+                sed -i.orig "s@\"/usr@\"${SYSROOT_DIR}/usr@g" ${cmake_file}
+        fi
+done
+
+
+for cmake_file in $(grep -rl "_IMPORT_PREFIX \"/usr\"" $(find ${SYSROOT_DIR}/usr/lib64/cmake/ -name "*.cmake") ${TEMP_DIRECTORY}/strip-foo)
+do
+        if [ -f ${cmake_file} ]; then
+                sed -i.orig "s@_IMPORT_PREFIX \"/usr\"@_IMPORT_PREFIX \"${SYSROOT_DIR}/usr\"@g" ${cmake_file}
+        fi
+done
+
+for bin_file in qmake moc uic rcc lrelease
+do
+        if [ -f ${SYSROOT_DIR}/usr/bin/${bin_file} ]; then
+                mv ${SYSROOT_DIR}/usr/bin/${bin_file}{,.orig}
+                echo "qemu-${ARCH_NAME} ${SYSROOT_DIR}/usr/bin/${bin_file}.orig \"\$@\"" > ${SYSROOT_DIR}/usr/bin/${bin_file}
+                chmod +x ${SYSROOT_DIR}/usr/bin/${bin_file}
+        fi
+done

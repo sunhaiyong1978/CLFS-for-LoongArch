@@ -1,0 +1,20 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=mesa-demos
+export PACKAGE_VERSION=9.0.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/mesa-demos/9.0.0/
+rm -rf ${BUILD_DIRECTORY}/mesa-demos-9.0.0
+tar xvf ${DOWNLOADDIR}/mesa-demos-9.0.0.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/mesa-demos-9.0.0
+    sed -i -e "/dep_wl_scanner =/s@, native: true@@g"\
+           -e "/prog_wl_scanner =/s@find_program\(.*\)\$@find_program('wayland-scanner')@g" \
+           meson.build
+    mkdir cross-build
+    pushd cross-build
+        meson ${MESON_CONFIG} ..
+        eval ${NINJA_AND_INSTALL}
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/mesa-demos-9.0.0

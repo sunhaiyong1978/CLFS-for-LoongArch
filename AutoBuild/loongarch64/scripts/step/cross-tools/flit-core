@@ -1,0 +1,15 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=flit-core
+export PACKAGE_VERSION=3.12.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/flit-core/3.12.0/
+rm -rf ${BUILD_DIRECTORY}/flit_core-3.12.0
+tar xvf ${DOWNLOADDIR}/flit_core-3.12.0.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/flit_core-3.12.0
+	
+	${CROSSTOOLS_DIR}/bin/pip3 wheel -w dist --no-build-isolation --no-deps ${PWD}
+        ${CROSSTOOLS_DIR}/bin/pip3 install --no-index --find-links dist --no-cache-dir --no-deps --force-reinstall --no-user flit-core
+popd 
+rm -rf ${BUILD_DIRECTORY}/flit_core-3.12.0

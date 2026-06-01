@@ -1,0 +1,15 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=PyQt5
+export PACKAGE_VERSION=
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/PyQt5//
+for bin_file in qmake moc uic rcc lrelease
+do
+        if [ -f ${SYSROOT_DIR}/usr/bin/${bin_file} ]; then
+                mv ${SYSROOT_DIR}/usr/bin/${bin_file}{,.orig}
+                echo "qemu-${ARCH_NAME} ${SYSROOT_DIR}/usr/bin/${bin_file}.orig \"\$@\"" > ${SYSROOT_DIR}/usr/bin/${bin_file}
+		chmod +x ${SYSROOT_DIR}/usr/bin/${bin_file}
+        fi
+done

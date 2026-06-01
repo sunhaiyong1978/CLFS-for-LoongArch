@@ -1,0 +1,24 @@
+From 6f7382477e158c3a424fbc0e660d7f16b0cb93b9 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Wed, 24 May 2023 14:51:55 +0000
+Subject: [PATCH 1/2] Fix for cross build.
+
+---
+ libfrog/randbytes.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/libfrog/randbytes.c b/libfrog/randbytes.c
+index f22da0d..2023b60 100644
+--- a/libfrog/randbytes.c
++++ b/libfrog/randbytes.c
+@@ -6,7 +6,6 @@
+  *
+  * This is the buffer of random bytes used for self tests.
+  */
+-#include "platform_defs.h"
+ #include "libfrog/randbytes.h"
+ 
+ /* 4096 random bytes */
+-- 
+2.31.1
+

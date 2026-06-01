@@ -1,0 +1,30 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=gcc
+export PACKAGE_VERSION=16.1.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/gcc/16.1.0/
+rm -rf ${BUILD_DIRECTORY}/gcc-16.1.0
+tar xvf ${DOWNLOADDIR}/gcc-16.1.0.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/gcc-16.1.0
+	 
+	mkdir -p tools-build-all
+	pushd tools-build-all
+		../configure --prefix=${CROSSTOOLS_DIR} --build=${CROSS_HOST} \
+		             --host=${CROSS_HOST} --target=${CROSS_TARGET} \
+		             --with-sysroot=${SYSROOT_DIR} --with-mpfr=${CROSSTOOLS_DIR} \
+		             --with-gmp=${CROSSTOOLS_DIR} --with-mpc=${CROSSTOOLS_DIR} \
+			     --with-mpfr-lib=${CROSSTOOLS_DIR}/lib${LIB_SUFF} \
+			     --with-gmp-lib=${CROSSTOOLS_DIR}/lib${LIB_SUFF} --with-mpc-lib=${CROSSTOOLS_DIR}/lib${LIB_SUFF} \
+		             --enable-__cxa_atexit --enable-threads=posix --with-system-zlib \
+		             --enable-libstdcxx-time --enable-checking=release --disable-multilib \
+			     --enable-linker-build-id --with-linker-hash-style=gnu --enable-gnu-unique-object --enable-initfini-array --enable-gnu-indirect-function \
+		             --enable-default-pie \
+		             --enable-languages=c,c++,fortran,objc,obj-c++,lto
+		make -j${JOBS}
+		make install-strip
+		ln -sf ${CROSS_TARGET}-gcc ${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-cc
+	popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/gcc-16.1.0

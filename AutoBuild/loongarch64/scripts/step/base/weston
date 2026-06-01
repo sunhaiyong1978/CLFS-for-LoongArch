@@ -1,0 +1,22 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=weston
+export PACKAGE_VERSION=15.0.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/weston/15.0.1/
+rm -rf ${BUILD_DIRECTORY}/weston-15.0.1
+tar xvf ${DOWNLOADDIR}/weston-15.0.1.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/weston-15.0.1
+    sed -i -e "/dep_scanner =/s@, native: true@@g" \
+           -e "/prog_scanner =/s@find_program\(.*\)\$@find_program('wayland-scanner')@g" \
+           protocol/meson.build
+    mkdir cross-build
+    pushd cross-build
+        meson ${MESON_CONFIG} \
+              -Ddoc=false -Dbackend-rdp=false -Dbackend-vnc=false -Drenderer-vulkan=false \
+              ..
+	eval ${NINJA_AND_INSTALL}
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/weston-15.0.1

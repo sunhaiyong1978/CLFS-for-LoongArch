@@ -1,0 +1,7 @@
+# file system        mount-point    type     options     dump  fsck_order
+
+# /dev/<root_dev>      /            xfs      defaults     0       0
+# /dev/<boot_dev>      /boot        ext2     defaults     0       0
+# /dev/<efi_dev>       /boot/efi    vfat     defaults     0       0
+# /dev/<swap_dev>      swap         swap     pri=1        0       0
+

@@ -1,0 +1,20 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=usbutils
+export PACKAGE_VERSION=019
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/usbutils/019/
+rm -rf ${BUILD_DIRECTORY}/usbutils-019
+tar xvf ${DOWNLOADDIR}/usbutils-019.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/usbutils-019
+	
+	mkdir cross-build
+	pushd cross-build
+		meson ${MESON_CONFIG}  \
+                      ..
+		eval ${NINJA_AND_INSTALL}
+	popd
+	rm -f ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/usbutils-019

@@ -1,0 +1,25 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=wayland
+export PACKAGE_VERSION=1.25.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/wayland/1.25.0/
+rm -rf ${BUILD_DIRECTORY}/wayland-1.25.0
+tar xvf ${DOWNLOADDIR}/wayland-1.25.0.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/wayland-1.25.0
+    sed -i "/wayland_scanner_for_build =/s@find\(.*\)\$@'${CROSSTOOLS_DIR}/host-tools/bin/wayland-scanner'@g" src/meson.build
+    sed -i -e "/scanner_dep = dependency('wayland-scanner'/d" src/meson.build
+    mkdir cross-build
+    pushd cross-build
+	meson ${MESON_CONFIG} -Ddocumentation=false \
+              ..
+	eval ${NINJA_AND_INSTALL}
+    popd
+echo "#!/bin/bash -e
+qemu-${ARCH_NAME} ${SYSROOT_DIR}/usr/bin/wayland-scanner \"\$@\"" \
+                > ${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-wayland-scanner
+chmod +x ${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-wayland-scanner
+cp -v ${CROSSTOOLS_DIR}/bin/{${CROSS_TARGET}-,}wayland-scanner
+popd 
+rm -rf ${BUILD_DIRECTORY}/wayland-1.25.0

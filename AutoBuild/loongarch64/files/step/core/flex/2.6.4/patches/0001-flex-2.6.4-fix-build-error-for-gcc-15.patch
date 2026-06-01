@@ -1,0 +1,26 @@
+From 1e61d505e741476a7ff52b34346e1b7a218208d8 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Wed, 30 Apr 2025 11:12:41 +0000
+Subject: [PATCH] flex 2.6.4 fix build error for gcc 15.
+
+---
+ lib/malloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/malloc.c b/lib/malloc.c
+index 75e8ef9..69ee173 100755
+--- a/lib/malloc.c
++++ b/lib/malloc.c
+@@ -2,8 +2,8 @@
+      #undef malloc
+      
+      #include <sys/types.h>
++     #include <stdlib.h>
+      
+-     void *malloc ();
+      
+      /* Allocate an N-byte block of memory from the heap.
+         If N is zero, allocate a 1-byte block.  */
+-- 
+2.31.1
+

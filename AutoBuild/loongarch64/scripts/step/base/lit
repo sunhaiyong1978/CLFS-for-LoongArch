@@ -1,0 +1,15 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=lit
+export PACKAGE_VERSION=18.1.8
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/lit/18.1.8/
+rm -rf ${BUILD_DIRECTORY}/lit-18.1.8
+tar xvf ${DOWNLOADDIR}/lit-18.1.8.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/lit-18.1.8
+    ${CROSSTOOLS_DIR}/bin/python3 setup.py build
+    ${CROSSTOOLS_DIR}/bin/python3 setup.py install --root=${SYSROOT_DIR} --prefix=/usr
+    sed -i "s@${CROSSTOOLS_DIR}@@g" ${SYSROOT_DIR}/bin/lit
+popd 
+rm -rf ${BUILD_DIRECTORY}/lit-18.1.8

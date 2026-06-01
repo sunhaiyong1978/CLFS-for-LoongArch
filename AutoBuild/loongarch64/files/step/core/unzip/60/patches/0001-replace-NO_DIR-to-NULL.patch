@@ -1,0 +1,25 @@
+From 5c7aae9fc9005da5c510999cb9e0b68f0b3d4c0a Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Sun, 10 Dec 2023 12:33:49 +0000
+Subject: [PATCH] replace NO_DIR to NULL.
+
+---
+ unix/unix.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/unix/unix.c b/unix/unix.c
+index efa97fc..850e26f 100644
+--- a/unix/unix.c
++++ b/unix/unix.c
+@@ -125,7 +125,7 @@ static ZCONST char CannotSetTimestamps[] =
+ 
+ 
+ #ifndef SFX
+-#ifdef NO_DIR                  /* for AT&T 3B1 */
++#if 0                  /* for AT&T 3B1 */
+ 
+ #define opendir(path) fopen(path,"r")
+ #define closedir(dir) fclose(dir)
+-- 
+2.31.1
+

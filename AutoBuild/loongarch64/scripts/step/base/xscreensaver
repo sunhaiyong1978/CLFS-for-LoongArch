@@ -1,0 +1,27 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=xscreensaver
+export PACKAGE_VERSION=6.15
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/xscreensaver/6.15/
+rm -rf ${BUILD_DIRECTORY}/xscreensaver-6.15
+tar xvf ${DOWNLOADDIR}/xscreensaver-6.15.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/xscreensaver-6.15
+    
+    cp -a -f $(automake --print-libdir)/config.{sub,guess} ./
+    sed -i "s@\/usr\/bin\/perl@${CROSSTOOLS_DIR}/bin/perl@g" hacks/glx/xshadertoy-compile.pl
+    ./configure $COMMON_CONFIG --includedir=${SYSROOT_DIR}/usr/include
+    make -j${JOBS} GTK_DATADIR=/usr/share GLIB_COMPILE_RESOURCES=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-glib-compile-resources
+    make DESTDIR=${SYSROOT_DIR} GTK_DATADIR=/usr/share install
+popd 
+rm -rf ${BUILD_DIRECTORY}/xscreensaver-6.15
+
+cat > ${SYSROOT_DIR}/etc/pam.d/xscreensaver << "EOF"
+## Begin /etc/pam.d/xscreensaver
+
+auth    include system-auth
+account include system-account
+
+## End /etc/pam.d/xscreensaver
+EOF

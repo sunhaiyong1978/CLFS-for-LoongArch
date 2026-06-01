@@ -1,0 +1,37 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=libical
+export PACKAGE_VERSION=3.0.20
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/libical/3.0.20/
+rm -rf ${BUILD_DIRECTORY}/libical-3.0.20
+tar xvf ${DOWNLOADDIR}/libical-3.0.20.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/libical-3.0.20
+    sed -i "s@COMMAND \${ical-glib-src-generator_EXE}@COMMAND qemu-${ARCH_NAME} ../../bin/ical-glib-src-generator@g" \
+           src/libical-glib/CMakeLists.txt
+    mkdir cross-prebuild
+    pushd cross-prebuild
+        CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
+        cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_INSTALL_PREFIX=/usr \
+              -DSHARED_ONLY=yes -DICAL_BUILD_DOCS=false \
+              -DGOBJECT_INTROSPECTION=false \
+              -DICAL_GLIB_VAPI=false ..
+	eval ${MAKE_AND_INSTALL}
+    popd
+    mkdir cross-build
+    pushd cross-build
+        CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
+        cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_INSTALL_PREFIX=/usr \
+              -DSHARED_ONLY=yes -DICAL_BUILD_DOCS=false \
+              -DGObjectIntrospection_SCANNER=${CROSS_TARGET}-g-ir-scanner \
+              -DGObjectIntrospection_COMPILER=${CROSS_TARGET}-g-ir-compiler \
+              -DVAPIGEN=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-vapigen \
+              -DGOBJECT_INTROSPECTION=true \
+              -DICAL_GLIB_VAPI=true ..
+	eval ${MAKE_AND_INSTALL}
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/libical-3.0.20

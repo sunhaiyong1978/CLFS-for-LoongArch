@@ -1,0 +1,20 @@
+source env/host-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=host-tools
+export STEP_PACKAGENAME=glslang
+export PACKAGE_VERSION=16.3.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/host-tools/glslang/16.3.0/
+rm -rf ${BUILD_DIRECTORY}/glslang-16.3.0
+tar xvf ${DOWNLOADDIR}/glslang-16.3.0.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/glslang-16.3.0
+    
+    mkdir -p native-build
+    pushd native-build
+	CC="gcc" CXX="g++" \
+        cmake -DCMAKE_INSTALL_PREFIX=${CROSSTOOLS_DIR} -DENABLE_OPT=0 \
+              -DCMAKE_BUILD_TYPE=Release ..
+	eval ${MAKE_AND_INSTALL}
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/glslang-16.3.0

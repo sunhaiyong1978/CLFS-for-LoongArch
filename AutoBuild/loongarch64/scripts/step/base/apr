@@ -1,0 +1,29 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=apr
+export PACKAGE_VERSION=1.7.6
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/apr/1.7.6/
+rm -rf ${BUILD_DIRECTORY}/apr-1.7.6
+tar xvf ${DOWNLOADDIR}/apr-1.7.6.tar.bz2 -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/apr-1.7.6
+    sed -e "/shift/i \
+            \    if (xt->tm_mon < 0 || xt->tm_mon >= 12) return APR_EBADDATE;" \
+        -i.orig time/unix/time.c
+    cp -a -f $(automake --print-libdir)/config.{sub,guess} build/
+    sed -i.orig -e "/hasposixser/s@0@1@g" \
+           -e "/hasprocpthreadser/s@0@1@g" \
+           -e "/have_iovec/s@0@1@g" \
+           -e "/havemmapzero/s@0@1@g" configure
+    ./configure $COMMON_CONFIG \
+            --disable-static \
+            --with-installbuilddir=/usr/share/apr-1/build \
+            ac_cv_file__dev_zero=yes ac_cv_func_setpgrp_void=yes apr_cv_process_shared_works=yes \
+            apr_cv_mutex_robust_shared=yes apr_cv_tcp_nodelay_with_cork=yes ac_cv_sizeof_pid_t=4 \
+            ac_cv_o_nonblock_inherited=no ac_cv_struct_rlimit=yes
+    eval ${MAKE_AND_INSTALL}
+    cp -v ${SYSROOT_DIR}/usr/bin/apr-1-config ${CROSSTOOLS_DIR}/bin/
+    sed -i "/APR_TARGET_DIR=/s@APR_TARGET_DIR=.*@APR_TARGET_DIR=${SYSROOT_DIR};@g" ${CROSSTOOLS_DIR}/bin/apr-1-config
+popd 
+rm -rf ${BUILD_DIRECTORY}/apr-1.7.6

@@ -1,0 +1,20 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=slang
+export PACKAGE_VERSION=2.3.3
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/slang/2.3.3/
+rm -rf ${BUILD_DIRECTORY}/slang-2.3.3
+tar xvf ${DOWNLOADDIR}/slang-2.3.3.tar.bz2 -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/slang-2.3.3
+    for config_i in $(find -name "config.sub")
+    do
+            cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+    done
+
+    ./configure ${COMMON_CONFIG} --with-readline=gnu
+    make -j1
+    make DESTDIR=${SYSROOT_DIR} install
+popd 
+rm -rf ${BUILD_DIRECTORY}/slang-2.3.3

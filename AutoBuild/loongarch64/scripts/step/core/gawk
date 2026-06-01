@@ -1,0 +1,15 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=gawk
+export PACKAGE_VERSION=5.4.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/gawk/5.4.0/
+rm -rf ${BUILD_DIRECTORY}/gawk-5.4.0
+tar xvf ${DOWNLOADDIR}/gawk-5.4.0.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/gawk-5.4.0
+	sed -i 's/extras//' Makefile.in
+	./configure --prefix=/usr  --libdir=/usr/lib${LIB_SUFF} --build=${CROSS_HOST} --host=${CROSS_TARGET}
+	eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/gawk-5.4.0

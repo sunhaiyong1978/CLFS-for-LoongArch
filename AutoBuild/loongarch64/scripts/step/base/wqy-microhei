@@ -1,0 +1,14 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=wqy-microhei
+export PACKAGE_VERSION=0.2.0-beta
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/wqy-microhei/0.2.0-beta/
+rm -rf ${BUILD_DIRECTORY}/wqy-microhei
+tar xvf ${DOWNLOADDIR}/wqy-microhei-0.2.0-beta.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/wqy-microhei
+    mkdir -pv ${SYSROOT_DIR}/usr/share/fonts/wenquanyi/
+    cp -av wqy-microhei.ttc ${SYSROOT_DIR}/usr/share/fonts/wenquanyi/
+popd 
+rm -rf ${BUILD_DIRECTORY}/wqy-microhei

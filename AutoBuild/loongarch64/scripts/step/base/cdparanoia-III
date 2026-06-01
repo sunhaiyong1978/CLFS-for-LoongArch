@@ -1,0 +1,21 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=cdparanoia-III
+export PACKAGE_VERSION=10.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/cdparanoia-III/10.2/
+rm -rf ${BUILD_DIRECTORY}/cdparanoia-III-10.2
+tar xvf ${DOWNLOADDIR}/cdparanoia-III-10.2.src.tgz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/cdparanoia-III-10.2
+    patch -Np1 -i ${SYSDIR}/files/base/cdparanoia-III/10.2/patches/cdparanoia-III-10.2-gcc_fixes-1.patch 
+	patch -Np1 -i ${SYSDIR}/files/base/cdparanoia-III/10.2/patches/cdparanoia-10.2-install.patch 
+	patch -Np1 -i ${SYSDIR}/files/base/cdparanoia-III/10.2/patches/cdparanoia-10.2-add-pkgconfig.patch 
+	 
+    autoreconf -if
+    ./configure $COMMON_CONFIG --mandir=/usr/share/man
+    make -j1
+    # make prefix=${SYSROOT_DIR}/usr LIBDIR=${SYSROOT_DIR}/usr/lib64 MANDIR=${SYSROOT_DIR}/usr/share/man install
+    make DESTDIR=${SYSROOT_DIR} install
+popd 
+rm -rf ${BUILD_DIRECTORY}/cdparanoia-III-10.2

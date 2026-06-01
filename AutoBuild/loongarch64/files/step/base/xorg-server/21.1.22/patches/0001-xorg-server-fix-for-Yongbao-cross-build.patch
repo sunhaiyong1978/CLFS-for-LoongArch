@@ -1,0 +1,25 @@
+From fc144589bc04ac2d6a8938847ecb718d7b9e7a63 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Tue, 10 Oct 2023 07:42:30 +0000
+Subject: [PATCH] xorg-server fix for Yongbao cross build.
+
+---
+ configure | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure b/configure
+index 769e402..cf0e921 100755
+--- a/configure
++++ b/configure
+@@ -29284,7 +29284,7 @@ printf "%s\n" "#define BASE_FONT_PATH \"$ac_define_dir\"" >>confdefs.h
+   test "$prefix_NONE" && prefix=NONE
+   test "$exec_prefix_NONE" && exec_prefix=NONE
+ 
+-dridriverdir=`$PKG_CONFIG --variable=dridriverdir dri`
++dridriverdir=`PKG_CONFIG_SYSROOT_DIR= $PKG_CONFIG --variable=dridriverdir dri`
+ 
+   prefix_NONE=
+   exec_prefix_NONE=
+-- 
+2.31.1
+

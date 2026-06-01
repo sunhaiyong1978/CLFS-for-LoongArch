@@ -1,0 +1,32 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=PyQt5
+export PACKAGE_VERSION=5.15.10
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/PyQt5/5.15.10/
+rm -rf ${BUILD_DIRECTORY}/PyQt5-5.15.10
+tar xvf ${DOWNLOADDIR}/PyQt5-5.15.10.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/PyQt5-5.15.10
+    patch -Np1 -i ${SYSDIR}/files/base/PyQt5/5.15.10/patches/pyqt-5.15.6-cross_compiler.patch 
+	patch -Np1 -i ${SYSDIR}/files/base/PyQt5/5.15.10/patches/pyqt-5.15.6-fix-sip.patch 
+	patch -Np1 -i ${SYSDIR}/files/base/PyQt5/5.15.10/patches/0001-PyQt5-5.15.10-fix-for-sip4.patch 
+	 
+    sed -i "s,@MinimumSipVersion@,4.19.25," configure.py
+    sed -i "s@dbus.mainloop.__path__\[0\]@'/usr/lib/python$(get_package_version Python3)/site-packages/dbus/mainloop'@g" configure.py
+
+
+    ${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3 ./configure.py --confirm-license \
+              --bindir=/usr/bin --sipdir=/usr/share/sip/PyQt5 \
+              --destdir=/usr/lib64/python$(get_package_version Python3)/site-packages \
+              --stubsdir=/usr/lib64/python$(get_package_version Python3)/site-packages/PyQt5 \
+	      --qml-plugindir=/usr/lib64/qt5/plugins/PyQt5 \
+	      --designer-plugindir=/usr/lib64/qt5/plugins/designer \
+              --sip-incdir=${SYSROOT_DIR}/usr/include/python$(get_package_version Python3) \
+	      --qmake=${SYSROOT_DIR}/usr/bin/qmake
+    make -j${JOBS}
+    sed -i "s@${SYSROOT_DIR}/usr/bin/python3@${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3@g" Makefile
+    sed -i "s@/usr/bin/qmake.orig@/usr/bin/qmake@g" $(grep -rl "qmake.orig" $(find -name "*.mk" -name "Makefile"))
+    make INSTALL_ROOT=${SYSROOT_DIR} install
+popd 
+rm -rf ${BUILD_DIRECTORY}/PyQt5-5.15.10

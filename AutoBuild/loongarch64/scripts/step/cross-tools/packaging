@@ -1,0 +1,15 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=packaging
+export PACKAGE_VERSION=26.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/packaging/26.2/
+rm -rf ${BUILD_DIRECTORY}/packaging-26.2
+tar xvf ${DOWNLOADDIR}/packaging-26.2.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/packaging-26.2
+	
+	${CROSSTOOLS_DIR}/bin/pip3 wheel -w dist --no-build-isolation --no-deps ${PWD}
+        ${CROSSTOOLS_DIR}/bin/pip3 install --no-index --find-links dist --no-cache-dir --no-deps --force-reinstall --no-user packaging
+popd 
+rm -rf ${BUILD_DIRECTORY}/packaging-26.2

@@ -1,0 +1,29 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=qemu
+export PACKAGE_VERSION=11.0.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/qemu/11.0.1/
+rm -rf ${BUILD_DIRECTORY}/qemu-11.0.1
+tar xvf ${DOWNLOADDIR}/qemu-11.0.1.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/qemu-11.0.1
+    sed -i "/HAVE_OPENAT2_H/d" meson.build
+    mkdir -p build
+    pushd build
+	../configure --prefix=${CROSSTOOLS_DIR} \
+		     --target-list=${YONGBAO_TARGET_ARCH}-linux-user \
+		     --disable-docs
+        ninja
+        cp qemu-${YONGBAO_TARGET_ARCH} ${CROSSTOOLS_DIR}/bin/qemu-${YONGBAO_TARGET_ARCH}.bin
+    popd
+    echo "#!/bin/bash -e
+${CROSSTOOLS_DIR}/bin/qemu-${YONGBAO_TARGET_ARCH}.bin -L ${SYSROOT_DIR} -E LD_LIBRARY_PATH=.libs:${SYSROOT_DIR}/usr/lib${LIB_SUFF} \"\$@\"" \
+> ${CROSSTOOLS_DIR}/bin/qemu-${YONGBAO_TARGET_ARCH}
+    echo "#!/bin/bash -e
+${CROSSTOOLS_DIR}/bin/qemu-${YONGBAO_TARGET_ARCH}.bin -L ${SYSROOT_DIR} -E LD_TRACE_LOADED_OBJECTS=1 -E LD_LIBRARY_PATH=${SYSROOT_DIR}/usr/lib${LIB_SUFF} \"\$@\"" \
+> ${CROSSTOOLS_DIR}/bin/qemu-${YONGBAO_TARGET_ARCH}-ldd
+
+chmod +x ${CROSSTOOLS_DIR}/bin/qemu-${YONGBAO_TARGET_ARCH}{,-ldd}
+popd 
+rm -rf ${BUILD_DIRECTORY}/qemu-11.0.1

@@ -1,0 +1,95 @@
+From f6ab9772b1b63e85822ef17998b6dcdde565a3b0 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Mon, 16 Mar 2026 09:53:12 +0000
+Subject: [PATCH 9/9] UniVT: Support displaying UTF-8 text for 270 degree
+ rotation.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+支持显示内容进行270度旋转时显示UTF-8文字。
+---
+ drivers/video/fbdev/core/fbcon_ccw.c | 39 ++++++++++++++++++++++++++--
+ 1 file changed, 37 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/video/fbdev/core/fbcon_ccw.c b/drivers/video/fbdev/core/fbcon_ccw.c
+index 2f394b5a1..7a057d6eb 100644
+--- a/drivers/video/fbdev/core/fbcon_ccw.c
++++ b/drivers/video/fbdev/core/fbcon_ccw.c
+@@ -18,6 +18,8 @@
+ #include "fbcon.h"
+ #include "fbcon_rotate.h"
+ 
++extern u16 utf8_pos(struct vc_data *vc, const unsigned short *utf8);
++
+ /*
+  * Rotation 270 degrees
+  */
+@@ -104,13 +106,30 @@ static inline void ccw_putcs_aligned(struct vc_data *vc, struct fb_info *info,
+ 	u32 idx = (vc->vc_font.height + 7) >> 3;
+ 	u8 *src;
+ 
++	int utf8_c = 0;
+ 	while (cnt--) {
+-		src = par->fontbuffer + (scr_readw(s--) & charmask) * cellsize;
++		utf8_c = utf8_pos(vc, s);
++		if(((scr_readw(s) & charmask) == 0xff || (scr_readw(s) & charmask) == 0xfe ) &&  utf8_c != 0){
++			char dst[16];
++			utf8_c -= 128;
++			if((scr_readw(s) & charmask) == 0xff){
++				src = vc->vc_font.data + (utf8_c * 32);
++			}else{
++				src = vc->vc_font.data + (utf8_c * 32 + 16);
++			}
++			memset(dst, 0, 16);
++			rotate_ccw(src, dst, vc->vc_font.width,
++				  vc->vc_font.height);
++			src = dst;
++		}else{
++			src = par->fontbuffer + (scr_readw(s) & charmask) * cellsize;
++		}
+ 
+ 		if (attr) {
+ 			ccw_update_attr(buf, src, attr, vc);
+ 			src = buf;
+ 		}
++		s--;
+ 
+ 		if (likely(idx == 1))
+ 			__fb_pad_aligned_buffer(dst, d_pitch, src, idx,
+@@ -223,6 +242,7 @@ static void ccw_cursor(struct vc_data *vc, struct fb_info *info, bool enable,
+ 	struct fb_cursor cursor;
+ 	struct fbcon_par *par = info->fbcon_par;
+ 	unsigned short charmask = vc->vc_hi_font_mask ? 0x1ff : 0xff;
++	int c_extra;
+ 	int w = (vc->vc_font.height + 7) >> 3, c;
+ 	int y = real_y(par->p, vc->state.y);
+ 	int attribute, use_sw = vc->vc_cursor_type & CUR_SW;
+@@ -236,8 +256,23 @@ static void ccw_cursor(struct vc_data *vc, struct fb_info *info, bool enable,
+ 	cursor.set = 0;
+ 
+  	c = scr_readw((u16 *) vc->vc_pos);
++ 	c_extra = utf8_pos(vc, (u16 *) vc->vc_pos);
+ 	attribute = get_attribute(info, c);
+-	src = par->fontbuffer + ((c & charmask) * (w * vc->vc_font.width));
++	if(((c&charmask) == 0xff || (c & charmask) == 0xfe) && c_extra != 0){
++		char dst[16];
++		c_extra -= 128;
++		if((c & charmask) == 0xff){
++			src = vc->vc_font.data + (c_extra * 32);
++		}else{
++			src = vc->vc_font.data + (c_extra * 32 + 16);
++		}
++		memset(dst, 0, 16);
++		rotate_ccw(src, dst, vc->vc_font.width,
++			  vc->vc_font.height);
++		src = dst;
++	}else{
++		src = par->fontbuffer + ((c & charmask) * (w * vc->vc_font.width));
++	}
+ 
+ 	if (par->cursor_state.image.data != src ||
+ 	    par->cursor_reset) {
+-- 
+2.31.1
+

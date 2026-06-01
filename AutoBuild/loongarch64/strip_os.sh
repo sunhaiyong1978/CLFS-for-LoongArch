@@ -1,0 +1,1 @@
+../gongju/bin/strip_os.sh

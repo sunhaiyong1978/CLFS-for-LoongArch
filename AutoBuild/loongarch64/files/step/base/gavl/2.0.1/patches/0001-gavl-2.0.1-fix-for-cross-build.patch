@@ -1,0 +1,46 @@
+From 926de78bc0c55e9e1de3a0c98cc1daa1d6db3a13 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Fri, 6 Mar 2026 01:52:39 +0000
+Subject: [PATCH] gavl 2.0.1 fix for cross-build
+
+---
+ configure.ac     | 8 --------
+ gavl/Makefile.am | 3 +--
+ 2 files changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 3fe5fc4..bd77581 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -139,14 +139,6 @@ AC_CHECK_DECLS([MSG_NOSIGNAL, SO_NOSIGPIPE],,,
+ 
+ AC_CHECK_FUNCS([memalign posix_memalign strdup vasprintf isatty sched_setaffinity])
+ 
+-dnl
+-dnl getaddrinfo_a
+-dnl
+-ANL_LIBS=""
+-OLD_LIBS=$LIBS
+-LIBS="$LIBS -lanl"
+-AC_CHECK_FUNC(getaddrinfo_a, LIBGAVL_LIBS="${LIBGAVL_LIBS} -lanl", AC_MSG_ERROR("getaddrinfo_a not found in libanl"))
+-LIBS=$OLD_LIBS
+ 
+ 
+ 
+diff --git a/gavl/Makefile.am b/gavl/Makefile.am
+index e46f51d..fa08387 100644
+--- a/gavl/Makefile.am
++++ b/gavl/Makefile.am
+@@ -73,8 +73,7 @@ AM_CFLAGS = \
+ @DRM_CFLAGS@ \
+ $(hw_libva_cflags) \
+ $(hw_gl_cflags) \
+-$(hw_egl_cflags) \
+--I/usr/include
++$(hw_egl_cflags)
+ 
+ SUBDIRS = \
+ hq \
+-- 
+2.31.1
+

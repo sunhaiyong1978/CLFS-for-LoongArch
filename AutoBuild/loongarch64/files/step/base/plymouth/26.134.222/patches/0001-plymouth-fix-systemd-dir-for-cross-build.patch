@@ -1,0 +1,27 @@
+From 19af2eca3067368230d8575f236619f5c643b574 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Sat, 6 Jan 2024 08:51:15 +0000
+Subject: [PATCH] plymouth fix systemd dir for cross build.
+
+---
+ meson.build | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 2678906..946d197 100644
+--- a/meson.build
++++ b/meson.build
+@@ -41,8 +41,8 @@ xkeyboard_config_dep = dependency('xkeyboard-config')
+ 
+ if get_option('systemd-integration')
+   systemd_dep = dependency('systemd')
+-  systemd_unit_dir = systemd_dep.get_variable('systemdsystemunitdir',
+-    pkgconfig_define: [ 'rootprefix', get_option('prefix') ],
++  systemd_unit_dir = systemd_dep.get_variable('systemd_user_unit_dir',
++    pkgconfig_define: [ 'prefix', get_option('prefix') ],
+   )
+   systemd_ask_password_agent = find_program('systemd-tty-ask-password-agent')
+ endif
+-- 
+2.31.1
+

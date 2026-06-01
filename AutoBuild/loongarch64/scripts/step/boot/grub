@@ -1,0 +1,21 @@
+source env/boot/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=boot
+export STEP_PACKAGENAME=grub
+export PACKAGE_VERSION=2.14
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/boot/grub/2.14/
+rm -rf ${BUILD_DIRECTORY}/grub-2.14
+tar xvf ${DOWNLOADDIR}/grub-2.14.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/grub-2.14
+	
+	mkdir cross-build
+	pushd cross-build
+                mkdir -p grub-core
+		touch grub-core/extra_deps.lst
+		PYTHON=${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-python3 ../configure ${COMMON_CONFIG} --with-platform=efi \
+		             --with-utils=host --disable-werror
+		eval ${MAKE_AND_INSTALL}
+	popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/grub-2.14

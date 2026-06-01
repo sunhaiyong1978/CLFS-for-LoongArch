@@ -1,0 +1,30 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=gcc_nolibc
+export PACKAGE_VERSION=16.1.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/gcc_nolibc/16.1.0/
+rm -rf ${BUILD_DIRECTORY}/gcc-16.1.0
+tar xvf ${DOWNLOADDIR}/gcc-16.1.0.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/gcc-16.1.0
+	
+	mkdir -p tools-build
+	pushd tools-build
+		../configure --prefix=${CROSSTOOLS_DIR} --build=${CROSS_HOST} --host=${CROSS_HOST} \
+		             --target=${CROSS_TARGET} --disable-nls \
+		             --with-mpfr=${CROSSTOOLS_DIR} --with-gmp=${CROSSTOOLS_DIR} \
+		             --with-mpc=${CROSSTOOLS_DIR} \
+			     --with-mpfr-lib=${CROSSTOOLS_DIR}/lib${LIB_SUFF} --with-gmp-lib=${CROSSTOOLS_DIR}/lib${LIB_SUFF} \
+                             --with-mpc-lib=${CROSSTOOLS_DIR}/lib${LIB_SUFF} \
+		             --with-newlib --disable-shared --with-sysroot=${SYSROOT_DIR} \
+		             --disable-decimal-float --disable-libgomp --disable-libitm \
+		             --disable-libsanitizer --disable-libquadmath --disable-threads \
+		             --disable-target-zlib --with-system-zlib --enable-checking=release \
+		             --enable-default-pie \
+		             --enable-languages=c
+		make -j${JOBS} all-gcc all-target-libgcc
+		make install-strip-gcc install-strip-target-libgcc
+	popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/gcc-16.1.0

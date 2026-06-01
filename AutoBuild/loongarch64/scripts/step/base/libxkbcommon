@@ -1,0 +1,20 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=libxkbcommon
+export PACKAGE_VERSION=xkbcommon-1.13.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/libxkbcommon/xkbcommon-1.13.1/
+rm -rf ${BUILD_DIRECTORY}/libxkbcommon-xkbcommon-1.13.1
+tar xvf ${DOWNLOADDIR}/libxkbcommon-xkbcommon-1.13.1.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/libxkbcommon-xkbcommon-1.13.1
+    sed -i -e "/wayland_scanner_dep =/s@, native: true@@g" \
+           -e "/wayland_scanner =/s@find_program\(.*\)\$@find_program('wayland-scanner')@g" \
+           meson.build
+    mkdir cross-build
+    pushd cross-build
+        meson ${MESON_CONFIG} -Dxkb-config-root=/usr/share/X11/xkb -Dbash-completion-path=/usr/share/bash-completion/completions ..
+	eval ${NINJA_AND_INSTALL}
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/libxkbcommon-xkbcommon-1.13.1

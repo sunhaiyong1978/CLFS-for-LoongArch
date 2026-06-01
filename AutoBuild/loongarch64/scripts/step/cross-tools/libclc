@@ -1,0 +1,36 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=libclc
+export PACKAGE_VERSION=22.1.6
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/libclc/22.1.6/
+rm -rf ${BUILD_DIRECTORY}/llvm-project-22.1.6.src
+tar xvf ${DOWNLOADDIR}/llvm-project-22.1.6.src.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/llvm-project-22.1.6.src
+pushd libclc
+    mkdir -p native-build
+    pushd native-build
+        LDFLAGS="" PKG_CONFIG_SYSROOT_DIR="" \
+        cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX:PATH=${CROSSTOOLS_DIR} \
+                 -DCMAKE_CXX_COMPILER="clang++" -DCMAKE_C_COMPILER="clang" \
+		 -DCMAKE_C_FLAGS="-DNDEBUG --target=${CROSS_HOST} --sysroot=/" -DCMAKE_CXX_FLAGS="-DNDEBUG --target=${CROSS_HOST} --sysroot=/" \
+                  -DLLVM_CLANG="${CROSSTOOLS_DIR}/bin/clang" \
+                  -DLLVM_AS="${CROSSTOOLS_DIR}/bin/llvm-as" \
+                  -DLLVM_LINK="${CROSSTOOLS_DIR}/bin/llvm-link" \
+                  -DLLVM_OPT="${CROSSTOOLS_DIR}/bin/opt" \
+                  -DLLVM_SPIRV="${CROSSTOOLS_DIR}/bin/llvm-spirv" \
+                  -DCMAKE_AR="${CROSSTOOLS_DIR}/bin/llvm-ar" \
+                  -DCMAKE_RANLIB="${CROSSTOOLS_DIR}/bin/llvm-ranlib" \
+                 -DBUILD_SHARED_LIBS:BOOL=OFF \
+                 -DCMAKE_BUILD_TYPE=Release \
+                 -DCMAKE_INSTALL_RPATH="${CROSSTOOLS_DIR}/lib64;\\\${ORIGIN}/../lib64" \
+                 -DLLVM_LIBDIR_SUFFIX=64  \
+                 -DLLVM_INSTALL_TOOLCHAIN_ONLY:BOOL=OFF \
+                 -DLLVM_HOST_TRIPLE=${CROSS_HOST} \
+                 -DDEFAULT_SYSROOT:PATH="${SYSROOT_DIR}"
+        ninja
+        ninja install
+popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/llvm-project-22.1.6.src

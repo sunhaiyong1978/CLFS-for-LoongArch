@@ -1,0 +1,20 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=pyzy
+export PACKAGE_VERSION=0.1.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/pyzy/0.1.0/
+rm -rf ${BUILD_DIRECTORY}/pyzy-0.1.0
+tar xvf ${DOWNLOADDIR}/pyzy-0.1.0.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/pyzy-0.1.0
+    for config_i in $(find -name "config.sub")
+    do
+            cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+    done
+
+    cp ${RESOURCEDIR}/files/pyzy-database-1.0.0.tar.bz2 data/db/open-phrase
+    ./configure ${COMMON_CONFIG} --enable-db-open-phrase --disable-db-android
+    eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/pyzy-0.1.0

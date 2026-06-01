@@ -1,0 +1,22 @@
+source env/host-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=host-tools
+export STEP_PACKAGENAME=sqlite
+export PACKAGE_VERSION=3.53.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/host-tools/sqlite/3.53.1/
+rm -rf ${BUILD_DIRECTORY}/sqlite-version-3.53.1
+tar xvf ${DOWNLOADDIR}/sqlite-3.53.1.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/sqlite-version-3.53.1
+	
+        for config_i in $(find -name "config.sub")
+        do
+                cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+        done
+        if [ ! -f configure ]; then
+                autoreconf -ifv
+        fi
+	 ./configure --prefix=${CROSSTOOLS_DIR} --libdir=${CROSSTOOLS_DIR}/lib${LIB_SUFF} --enable-fts5 --disable-tcl CPPFLAGS="-DSQLITE_ENABLE_FTS3=1  -DSQLITE_ENABLE_FTS4=1  -DSQLITE_ENABLE_COLUMN_METADATA=1  -DSQLITE_ENABLE_UNLOCK_NOTIFY=1  -DSQLITE_ENABLE_DBSTAT_VTAB=1  -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1"
+	eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/sqlite-version-3.53.1

@@ -1,0 +1,21 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=perl
+export PACKAGE_VERSION=5.42.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/perl/5.42.2/
+rm -rf ${BUILD_DIRECTORY}/perl-5.42.2
+tar xvf ${DOWNLOADDIR}/perl-5.42.2.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/perl-5.42.2
+    sed -i "s@/usr/include@${CROSSTOOLS_DIR}/include@g" ext/Errno/Errno_pm.PL
+    CFLAGS="-D_LARGEFILE64_SOURCE" ./configure.gnu --prefix=${CROSSTOOLS_DIR} \
+    	             -Dprivlib=${CROSSTOOLS_DIR}/lib/perl5/5.4x/core_perl \
+	             -Darchlib=${CROSSTOOLS_DIR}/lib64/perl5/5.4x/core_perl \
+	             -Dsitelib=${CROSSTOOLS_DIR}/lib/perl5/5.4x/site_perl \
+	             -Dsitearch=${CROSSTOOLS_DIR}/lib64/perl5/5.4x/site_perl \
+	             -Dvendorlib=${CROSSTOOLS_DIR}/lib/perl5/5.4x/vendor_perl \
+	             -Dvendorarch=${CROSSTOOLS_DIR}/lib64/perl5/5.4x/vendor_perl
+    eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/perl-5.42.2

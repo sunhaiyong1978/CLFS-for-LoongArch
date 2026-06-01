@@ -1,0 +1,20 @@
+source env/host-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=host-tools
+export STEP_PACKAGENAME=doxygen
+export PACKAGE_VERSION=1.17.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/host-tools/doxygen/1.17.0/
+rm -rf ${BUILD_DIRECTORY}/doxygen-1.17.0
+tar xvf ${DOWNLOADDIR}/doxygen-1.17.0.src.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/doxygen-1.17.0
+    
+    mkdir -p native-build
+    pushd native-build
+	CC="gcc" CXX="g++" \
+        cmake -DCMAKE_INSTALL_PREFIX=${CROSSTOOLS_DIR}  \
+              -DCMAKE_BUILD_TYPE=Release ..
+	eval ${MAKE_AND_INSTALL}
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/doxygen-1.17.0

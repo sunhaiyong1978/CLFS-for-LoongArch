@@ -1,0 +1,42 @@
+From 6d0a6edc051a7d39a51e7c6a939072c7f3de48ff Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Mon, 10 Mar 2025 06:20:34 +0000
+Subject: [PATCH] librsvg 2.59.91 fix for cross build.
+
+---
+ gdk-pixbuf-loader/meson.build | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/gdk-pixbuf-loader/meson.build b/gdk-pixbuf-loader/meson.build
+index 6fa10a6..4fb9ebe 100644
+--- a/gdk-pixbuf-loader/meson.build
++++ b/gdk-pixbuf-loader/meson.build
+@@ -5,13 +5,15 @@ pixbufloader_sources = files(
+ 
+ prefix = get_option('prefix')
+ 
++gdk_pixbuf_binarydir = pixbuf_dep.get_variable(pkgconfig: 'gdk_pixbuf_binarydir', pkgconfig_define: ['libdir', get_option('libdir')])
++
+ pixbufloader = custom_target(
+   'pixbufloader-svg',
+   build_by_default: true,
+   output: ['@0@pixbufloader_svg.@1@'.format(cargo_dylib_prefix, ext_dynamic)],
+   console: true,
+   install: true,
+-  install_dir: pixbuf_dep.get_variable(pkgconfig: 'gdk_pixbuf_moduledir', pkgconfig_define: ['prefix', prefix]),
++  install_dir: pixbuf_dep.get_variable(pkgconfig: 'gdk_pixbuf_moduledir', pkgconfig_define: ['gdk_pixbuf_binarydir', gdk_pixbuf_binarydir]),
+   depends: librsvg_rust_dep,
+   depend_files: pixbufloader_sources,
+   env: extra_env,
+@@ -42,7 +44,7 @@ endif
+ 
+ pixbufloader_svg_install_args = [
+   '--gdk-pixbuf-moduledir',
+-  pixbuf_dep.get_variable(pkgconfig: 'gdk_pixbuf_moduledir', pkgconfig_define: ['prefix', prefix]),
++  pixbuf_dep.get_variable(pkgconfig: 'gdk_pixbuf_moduledir', pkgconfig_define: ['gdk_pixbuf_binarydir', gdk_pixbuf_binarydir]),
+   gdk_pixbuf_query_loaders,
+   pixbuf_dep.get_variable(pkgconfig: 'gdk_pixbuf_cache_file', pkgconfig_define: ['prefix', prefix])
+ ]
+-- 
+2.31.1
+

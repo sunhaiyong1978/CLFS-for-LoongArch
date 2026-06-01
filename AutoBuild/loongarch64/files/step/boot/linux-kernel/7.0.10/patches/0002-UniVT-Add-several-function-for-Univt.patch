@@ -1,0 +1,60 @@
+From 77d0d10616e513a07318c3b4e3bd36f9252b3400 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Mon, 16 Mar 2026 09:44:55 +0000
+Subject: [PATCH 2/9] UniVT: Add several function for Univt.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+定义一些与Univt操作相关的函数。
+---
+ drivers/tty/vt/vt.c                |  7 +++++++
+ drivers/video/fbdev/core/bitblit.c | 14 ++++++++++++++
+ 2 files changed, 21 insertions(+)
+
+diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+index 4ac7614fc..c5cdc8f85 100644
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -288,6 +288,13 @@ static inline u16 *screenpos(const struct vc_data *vc, unsigned int offset,
+ 	return (u16 *)(origin + offset);
+ }
+ 
++static inline u16 *screenpos_utf8(const struct vc_data *vc, int offset, bool viewed)
++{
++	unsigned long origin = viewed ? vc->vc_visible_origin : vc->vc_origin;
++
++	return (u16 *)(origin + offset + vc->vc_screenbuf_size);
++}
++
+ static void con_putc(struct vc_data *vc, u16 ca, unsigned int y, unsigned int x)
+ {
+ 	if (vc->vc_sw->con_putc)
+diff --git a/drivers/video/fbdev/core/bitblit.c b/drivers/video/fbdev/core/bitblit.c
+index 085ffb44c..e0ea1dc08 100644
+--- a/drivers/video/fbdev/core/bitblit.c
++++ b/drivers/video/fbdev/core/bitblit.c
+@@ -43,6 +43,20 @@ static void update_attr(u8 *dst, u8 *src, int attribute,
+ 	}
+ }
+ 
++u16 utf8_pos(struct vc_data *vc, const unsigned short *utf8)
++{
++	unsigned long p = (long)utf8;
++	if (vc->vc_font.charcount <= 512) return 0;
++	if (p >= vc->vc_origin && p < vc->vc_scr_end) {
++		return scr_readw((unsigned short *)(p + vc->vc_screenbuf_size));
++	} else {
++		u16 extra_c;
++		int c = *(int*)utf8;
++		extra_c = (c >> 16 ) & 0x0000ffff;
++		return extra_c;
++	}
++}
++
+ static void bit_bmove(struct vc_data *vc, struct fb_info *info, int sy,
+ 		      int sx, int dy, int dx, int height, int width)
+ {
+-- 
+2.31.1
+

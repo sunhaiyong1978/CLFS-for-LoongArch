@@ -1,0 +1,23 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=cups
+export PACKAGE_VERSION=2.4.19
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/cups/2.4.19/
+rm -rf ${BUILD_DIRECTORY}/cups-2.4.19
+tar xvf ${DOWNLOADDIR}/cups-2.4.19-source.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/cups-2.4.19
+    sed -i 's#@CUPS_HTMLVIEW@#firefox#' desktop/cups.desktop.in
+    ./configure ${COMMON_CONFIG} --with-rcdir=/tmp/cupsinit   \
+            --with-system-groups=lpadmin --with-systemd=/usr/lib/systemd/system
+    eval ${MAKE_AND_INSTALL}
+    rm -rf ${SYSROOT_DIR}/tmp/cupsinit
+    echo "ServerName /run/cups/cups.sock" > ${SYSROOT_DIR}/etc/cups/client.conf
+
+cp -a ${SYSROOT_DIR}/bin/cups-config ${CROSSTOOLS_DIR}/bin/${CROSS_TARGET}-cups-config
+sed -i "s@${SYSROOT_DIR}@@g" ${SYSROOT_DIR}/usr/bin/cups-config
+popd 
+rm -rf ${BUILD_DIRECTORY}/cups-2.4.19
+
+set_strip_step "/usr/lib/cups" "0"

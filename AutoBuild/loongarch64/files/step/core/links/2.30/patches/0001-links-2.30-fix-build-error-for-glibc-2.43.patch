@@ -1,0 +1,25 @@
+From df91d2e1224faa83a7213ad822032b7d13749f18 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Tue, 27 Jan 2026 01:22:48 +0000
+Subject: [PATCH] links 2.30 fix build error for glibc 2.43
+
+---
+ ftp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ftp.c b/ftp.c
+index 7a8d05d..8ab7f38 100644
+--- a/ftp.c
++++ b/ftp.c
+@@ -768,7 +768,7 @@ do {								\
+ } while (0)
+ 		A(ftp_head);
+ 		ud = stracpy(get_url_data(c->url));
+-		if (strchr(cast_const_char ud, POST_CHAR)) *strchr(cast_const_char ud, POST_CHAR) = 0;
++		if (strchr(cast_const_char ud, POST_CHAR)) *strchr(ud, POST_CHAR) = 0;
+ 		s0 = init_str();
+ 		s0l = 0;
+ 		add_conv_str(&s0, &s0l, ud, (int)strlen(cast_const_char ud), -1);
+-- 
+2.31.1
+

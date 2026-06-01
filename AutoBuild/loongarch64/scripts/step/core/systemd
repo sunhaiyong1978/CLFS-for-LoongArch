@@ -1,0 +1,34 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=systemd
+export PACKAGE_VERSION=260.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/systemd/260.1/
+rm -rf ${BUILD_DIRECTORY}/systemd-260.1
+tar xvf ${DOWNLOADDIR}/systemd-260.1.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/systemd-260.1
+	
+        pushd src/include/override/sys
+                ./generate-syscall.py syscall.h syscall-list.txt syscalls-*.txt
+        popd
+        sed -i -e 's/GROUP="render"/GROUP="video"/' \
+           -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
+
+	mkdir -p build
+	pushd build
+		meson ${MESON_CONFIG} \
+		      -Ddefault-dnssec=no -Dfirstboot=false \
+		      -Dinstall-tests=false -Dldconfig=false -Dsysusers=false \
+		      -Drpmmacrosdir=no -Dhomed=false -Duserdb=false -Dman=false -Dmode=release -Dlogind=true \
+		      -Dpamconfdir=/etc/pam.d \
+		      -Ddbuspolicydir=/usr/share/dbus-1/system.d -Ddbussessionservicedir=/usr/share/dbus-1/services -Ddbussystemservicedir=/usr/share/dbus-1/system-services \
+		      -Dbashcompletiondir=/usr/share/bash-completion/completions \
+		      ..
+		eval ${NINJA_AND_INSTALL}
+	popd
+
+popd 
+rm -rf ${BUILD_DIRECTORY}/systemd-260.1
+
+set_strip_step "/usr/lib/systemd" "0"

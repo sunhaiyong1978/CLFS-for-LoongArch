@@ -1,0 +1,100 @@
+From 43bb5a0a3097386ca39f389365c83bbebd70ba41 Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Mon, 16 Mar 2026 09:45:40 +0000
+Subject: [PATCH 3/9] UniVT: Fix charcount limit.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+扩展charcount的限制。
+---
+ drivers/tty/vt/vt.c              |  4 +---
+ drivers/video/fbdev/core/fbcon.c | 15 +++++----------
+ 2 files changed, 6 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+index c5cdc8f85..d5bb12250 100644
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -4812,7 +4812,7 @@ void reset_palette(struct vc_data *vc)
+ #define max_font_width	64
+ #define max_font_height	128
+ #define max_font_glyphs	512
+-#define max_font_size	(max_font_glyphs*max_font_width*max_font_height)
++#define max_font_size	(max_font_glyphs*max_font_width*max_font_height >= 65536 * 2 * 8 * 16 ? max_font_glyphs*max_font_width*max_font_height : 65536 * 2 * 8 * 16)
+ 
+ static int con_font_get(struct vc_data *vc, struct console_font_op *op)
+ {
+@@ -4867,8 +4867,6 @@ static int con_font_set(struct vc_data *vc, const struct console_font_op *op)
+ 
+ 	if (!op->data)
+ 		return -EINVAL;
+-	if (op->charcount > max_font_glyphs)
+-		return -EINVAL;
+ 	if (op->width <= 0 || op->width > max_font_width || !op->height ||
+ 	    op->height > max_font_height)
+ 		return -EINVAL;
+diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
+index 666261ae5..3b1f87aa5 100644
+--- a/drivers/video/fbdev/core/fbcon.c
++++ b/drivers/video/fbdev/core/fbcon.c
+@@ -1104,7 +1104,7 @@ static void fbcon_init(struct vc_data *vc, bool init)
+ 
+ 	vc->vc_can_do_color = (fb_get_color_depth(&info->var, &info->fix)!=1);
+ 	vc->vc_complement_mask = vc->vc_can_do_color ? 0x7700 : 0x0800;
+-	if (vc->vc_font.charcount == 256) {
++	if (vc->vc_font.charcount == 256 || vc->vc_font.charcount > 512) {
+ 		vc->vc_hi_font_mask = 0;
+ 	} else {
+ 		vc->vc_hi_font_mask = 0x100;
+@@ -1427,7 +1427,7 @@ static void fbcon_set_disp(struct fb_info *info, struct fb_var_screeninfo *var,
+ 	par->var = info->var;
+ 	vc->vc_can_do_color = (fb_get_color_depth(&info->var, &info->fix)!=1);
+ 	vc->vc_complement_mask = vc->vc_can_do_color ? 0x7700 : 0x0800;
+-	if (vc->vc_font.charcount == 256) {
++	if (vc->vc_font.charcount == 256 || vc->vc_font.charcount > 512) {
+ 		vc->vc_hi_font_mask = 0;
+ 	} else {
+ 		vc->vc_hi_font_mask = 0x100;
+@@ -2183,7 +2183,7 @@ static bool fbcon_switch(struct vc_data *vc)
+ 	vc->vc_can_do_color = (fb_get_color_depth(&info->var, &info->fix)!=1);
+ 	vc->vc_complement_mask = vc->vc_can_do_color ? 0x7700 : 0x0800;
+ 
+-	if (vc->vc_font.charcount > 256)
++	if (vc->vc_font.charcount > 256 && vc->vc_font.charcount <= 512)
+ 		vc->vc_complement_mask <<= 1;
+ 
+ 	updatescrollmode(p, info, vc);
+@@ -2294,7 +2294,7 @@ static int fbcon_get_font(struct vc_data *vc, struct console_font *font, unsigne
+ 	font->height = vc->vc_font.height;
+ 	if (font->height > vpitch)
+ 		return -ENOSPC;
+-	font->charcount = vc->vc_hi_font_mask ? 512 : 256;
++	font->charcount = vc->vc_font.charcount;
+ 	if (!font->data)
+ 		return 0;
+ 
+@@ -2432,7 +2432,7 @@ static int fbcon_do_set_font(struct vc_data *vc, int w, int h, int charcount,
+ 	vc->vc_font.width = w;
+ 	vc->vc_font.height = h;
+ 	vc->vc_font.charcount = charcount;
+-	if (vc->vc_hi_font_mask && charcount == 256)
++	if (vc->vc_hi_font_mask && (charcount == 256 || charcount > 512))
+ 		set_vc_hi_font(vc, false);
+ 	else if (!vc->vc_hi_font_mask && charcount == 512)
+ 		set_vc_hi_font(vc, true);
+@@ -2491,11 +2491,6 @@ static int fbcon_set_font(struct vc_data *vc, const struct console_font *font,
+ 	u8 *new_data, *data = font->data;
+ 	int pitch = PITCH(font->width);
+ 
+-	/* Is there a reason why fbconsole couldn't handle any charcount >256?
+-	 * If not this check should be changed to charcount < 256 */
+-	if (charcount != 256 && charcount != 512)
+-		return -EINVAL;
+-
+ 	/* font bigger than screen resolution ? */
+ 	if (w > FBCON_SWAP(info->var.rotate, info->var.xres, info->var.yres) ||
+ 	    h > FBCON_SWAP(info->var.rotate, info->var.yres, info->var.xres))
+-- 
+2.31.1
+

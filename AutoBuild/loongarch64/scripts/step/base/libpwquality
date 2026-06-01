@@ -1,0 +1,23 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=libpwquality
+export PACKAGE_VERSION=1.4.5
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/libpwquality/1.4.5/
+rm -rf ${BUILD_DIRECTORY}/libpwquality-1.4.5
+tar xvf ${DOWNLOADDIR}/libpwquality-1.4.5.tar.bz2 -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/libpwquality-1.4.5
+    cp -a -f $(automake --print-libdir)/config.{sub,guess} ./
+    _PYTHON_HOST_PLATFORM=linux-loongarch64 \
+    _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
+    ./configure ${COMMON_CONFIG} --with-securedir=/usr/lib/security \
+                --with-python-binary=python3
+    _PYTHON_HOST_PLATFORM=linux-loongarch64 \
+    _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
+    make -j${JOBS}
+    _PYTHON_HOST_PLATFORM=linux-loongarch64 \
+    _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_${CROSS_TARGET} \
+    make DESTDIR=${SYSROOT_DIR} install
+popd 
+rm -rf ${BUILD_DIRECTORY}/libpwquality-1.4.5

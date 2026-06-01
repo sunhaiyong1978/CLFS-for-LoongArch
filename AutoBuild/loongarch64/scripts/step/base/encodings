@@ -1,0 +1,25 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=encodings
+export PACKAGE_VERSION=1.1.0
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/encodings/1.1.0/
+rm -rf ${BUILD_DIRECTORY}/encodings-1.1.0
+tar xvf ${DOWNLOADDIR}/encodings-1.1.0.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/encodings-1.1.0
+	
+	for config_i in $(find -name "config.sub")
+	do
+		cp -a -f $(automake --print-libdir)/config.{sub,guess} $(dirname ${config_i})/
+	done
+	if [ ! -f configure ]; then
+		autoreconf -ifv
+	fi
+	 ./configure ${COMMON_CONFIG} --with-fontrootdir=/usr/share/fonts/X11 --enable-malloc0returnsnull
+	CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" make -j${JOBS}
+	run_step_package_check check
+        make DESTDIR=${SYSROOT_DIR} install
+	rm -f ${SYSROOT_DIR}/usr/lib${LIB_SUFF}/*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/encodings-1.1.0

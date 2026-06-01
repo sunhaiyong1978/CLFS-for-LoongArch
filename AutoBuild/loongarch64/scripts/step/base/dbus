@@ -1,0 +1,22 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=dbus
+export PACKAGE_VERSION=1.16.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/dbus/1.16.2/
+rm -rf ${BUILD_DIRECTORY}/dbus-1.16.2
+tar xvf ${DOWNLOADDIR}/dbus-1.16.2.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/dbus-1.16.2
+        
+        mkdir cross-build
+        pushd cross-build
+                meson ${MESON_CONFIG} -Dsystemd_system_unitdir=/usr/lib/systemd/system -Dsystemd_user_unitdir=/usr/lib/systemd/user \
+                      ..
+                sed -i "s@gi-docgen \(index\|generate\|gen-index\|gen-deps\|search\|check\|serve\) @& --add-include-path ${SYSROOT_DIR}/usr/share/gir-1.0/ @g" build.ninja
+                eval ${NINJA_AND_INSTALL}
+        popd
+        rm -f ${SYSROOT_DIR}/usr/lib64/*.la
+	chmod -v 4750 ${SYSROOT_DIR}/usr/libexec/dbus-daemon-launch-helper
+popd 
+rm -rf ${BUILD_DIRECTORY}/dbus-1.16.2

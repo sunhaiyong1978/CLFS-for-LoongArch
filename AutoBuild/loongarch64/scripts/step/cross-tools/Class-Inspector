@@ -1,0 +1,15 @@
+source env/cross-tools/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=cross-tools
+export STEP_PACKAGENAME=Class-Inspector
+export PACKAGE_VERSION=1.36
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/cross-tools/Class-Inspector/1.36/
+rm -rf ${BUILD_DIRECTORY}/Class-Inspector-1.36
+tar xvf ${DOWNLOADDIR}/Class-Inspector-1.36.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/Class-Inspector-1.36
+	
+	${CROSSTOOLS_DIR}/bin/perl Makefile.PL
+	eval ${MAKE_AND_INSTALL}
+popd 
+rm -rf ${BUILD_DIRECTORY}/Class-Inspector-1.36

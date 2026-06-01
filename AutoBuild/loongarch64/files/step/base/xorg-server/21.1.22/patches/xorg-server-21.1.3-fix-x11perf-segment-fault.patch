@@ -1,0 +1,14 @@
+diff -Nurp xorg-server-21.1.3.orig/render/picture.c xorg-server-21.1.3/render/picture.c
+--- xorg-server-21.1.3.orig/render/picture.c	2022-01-02 22:41:56.000000000 +0000
++++ xorg-server-21.1.3/render/picture.c	2022-03-11 07:34:21.945802767 +0000
+@@ -188,6 +188,10 @@ PictureCreateDefaultFormats(ScreenPtr pS
+                                            PICT_TYPE_A, 8, 0, 0, 0);
+     formats[nformats].depth = 8;
+     nformats++;
++    formats[nformats].format = PICT_FORMAT(BitsPerPixel(4),
++                                           PICT_TYPE_A, 4, 0, 0, 0);
++    formats[nformats].depth = 4;
++    nformats++;
+     formats[nformats].format = PICT_a8r8g8b8;
+     formats[nformats].depth = 32;
+     nformats++;

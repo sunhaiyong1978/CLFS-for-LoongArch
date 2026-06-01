@@ -1,0 +1,19 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=xfsprogs
+export PACKAGE_VERSION=7.0.1
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/xfsprogs/7.0.1/
+rm -rf ${BUILD_DIRECTORY}/xfsprogs-7.0.1
+tar xvf ${DOWNLOADDIR}/xfsprogs-7.0.1.tar.xz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/xfsprogs-7.0.1
+        patch -Np1 -i ${SYSDIR}/files/core/xfsprogs/7.0.1/patches/0001-Fix-for-cross-build.patch 
+	patch -Np1 -i ${SYSDIR}/files/core/xfsprogs/7.0.1/patches/0002-Fix-for-gcc-13.patch 
+	 
+        CC=${CROSS_TARGET}-gcc ./configure ${COMMON_CONFIG} --with-systemd-unit-dir=/usr/lib/systemd/system --with-udev-rule-dir=/usr/lib/udev/rules.d
+        CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" make -j
+        make DESTDIR=${SYSROOT_DIR} install
+        rm -f ${SYSROOT_DIR}/usr/lib64/*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/xfsprogs-7.0.1

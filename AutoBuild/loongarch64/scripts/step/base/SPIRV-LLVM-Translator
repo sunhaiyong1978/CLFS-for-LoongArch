@@ -1,0 +1,38 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=SPIRV-LLVM-Translator
+export PACKAGE_VERSION=22.1.2
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/SPIRV-LLVM-Translator/22.1.2/
+rm -rf ${BUILD_DIRECTORY}/SPIRV-LLVM-Translator-22.1.2
+tar xvf ${DOWNLOADDIR}/SPIRV-LLVM-Translator-22.1.2.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/SPIRV-LLVM-Translator-22.1.2
+        
+	tar xvf ${RESOURCEDIR}/files/SPIRV-LLVM-Translator-headers_git.tar.gz
+        mkdir cross-build
+        pushd cross-build
+                CC="${CROSS_TARGET}-gcc" CXX="${CROSS_TARGET}-g++" \
+                cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_CROSSCOMPILING_EMULATOR=qemu-loongarch64 \
+                      -DPKG_CONFIG_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-pkg-config \
+                      -DCMAKE_SYSROOT=${SYSDIR}/sysroot \
+                      -DCMAKE_FIND_ROOT_PATH=${SYSDIR}/sysroot/usr \
+                      -DGETTEXT_MSGFMT_EXECUTABLE=/bin/msgfmt \
+                      -DGETTEXT_MSGMERGE_EXECUTABLE=/bin/msgmerge \
+                      -DPython_EXECUTABLE=${CROSSTOOLS_DIR}/bin/python3 \
+                      -DPYTHON_EXECUTABLE=${CROSSTOOLS_DIR}/bin/python3 \
+                      -DPYTHON3_EXECUTABLE=${CROSSTOOLS_DIR}/bin/python3 \
+                      -DPERL_EXECUTABLE=${SYSDIR}/cross-tools/bin/${CROSS_TARGET}-perl \
+                      -DRuby_EXECUTABLE=${SYSDIR}/cross-tools/bin/ruby \
+                      -DGPERF_EXECUTABLE=/bin/gperf \
+                      -DDOXYGEN_EXECUTABLE=/bin/doxygen \
+                      -DCMAKE_INSTALL_LIBDIR=/usr/lib64 -DLIB_SUFFIX=64 \
+                      -DCMAKE_INSTALL_PREFIX=/usr \
+                      -DBUILD_SHARED_LIBS=OFF -DCCACHE_ALLOWED=OFF -DBASE_LLVM_VERSION="$(get_package_version target_base_llvm-project)" \
+                      -DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${PWD}/../SPIRV-LLVM-Translator-headers_git \
+		      -Wno-dev ..
+                eval ${MAKE_AND_INSTALL}
+        popd
+        rm -f ${SYSROOT_DIR}/usr/lib64/*.la
+popd 
+rm -rf ${BUILD_DIRECTORY}/SPIRV-LLVM-Translator-22.1.2

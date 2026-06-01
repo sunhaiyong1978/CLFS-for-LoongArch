@@ -1,0 +1,19 @@
+source env/core/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=core
+export STEP_PACKAGENAME=readline
+export PACKAGE_VERSION=8.3
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/core/readline/8.3/
+rm -rf ${BUILD_DIRECTORY}/readline-8.3
+tar xvf ${DOWNLOADDIR}/readline-8.3.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/readline-8.3
+	sed -i '/MV.*old/d' Makefile.in
+	sed -i '/{OLDSUFF}/c:' support/shlib-install
+	cp -a -f $(automake --print-libdir)/config.{sub,guess} ./support/
+	./configure --prefix=/usr --libdir=/usr/lib${LIB_SUFF} --build=${CROSS_HOST} --host=${CROSS_TARGET} \
+				--disable-static --with-curses
+	make -j${JOBS} SHLIB_LIBS="-lncursesw"
+	make SHLIB_LIBS="-lncursesw" DESTDIR=${SYSROOT_DIR} install
+popd 
+rm -rf ${BUILD_DIRECTORY}/readline-8.3

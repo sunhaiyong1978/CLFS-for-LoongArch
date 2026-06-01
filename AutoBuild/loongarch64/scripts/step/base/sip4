@@ -1,0 +1,23 @@
+source env/base/config
+source env/distro.info
+source env/function.sh
+export STEP_BUILDNAME=base
+export STEP_PACKAGENAME=sip4
+export PACKAGE_VERSION=4.19.25
+export RESOURCEDIR=${NEW_TARGET_SYSDIR}/files/base/sip4/4.19.25/
+rm -rf ${BUILD_DIRECTORY}/sip-4.19.25
+tar xvf ${DOWNLOADDIR}/sip-4.19.25.tar.gz -C ${BUILD_DIRECTORY} 
+pushd ${BUILD_DIRECTORY}/sip-4.19.25
+    patch -Np1 -i ${SYSDIR}/files/base/sip4/4.19.25/patches/sip-add-loongarch64.patch 
+	patch -Np1 -i ${SYSDIR}/files/base/sip4/4.19.25/patches/sip-4.19.25-pyframe_getback.patch 
+	 
+    mkdir cross-build
+    pushd cross-build
+        ${CROSSTOOLS_DIR}/bin/python3 \
+        ../configure.py --platform=linux-loongarch64-gnu-g++ \
+                     --sysroot=${SYSROOT_DIR}/usr
+	make -j${JOBS}
+        make install
+    popd
+popd 
+rm -rf ${BUILD_DIRECTORY}/sip-4.19.25
